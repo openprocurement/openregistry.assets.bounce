@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from schematics.types import StringType
-from schematics.types.loki import ListType, ModelType
+from schematics.types.compound import ListType, ModelType
 from zope.interface import implementer
 
 from openregistry.assets.core.models import (
