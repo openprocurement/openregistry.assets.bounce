@@ -5,7 +5,7 @@ from copy import deepcopy
 from openregistry.assets.core.tests.base import (
     BaseAssetWebTest as BaseAWT
 )
-from openprocurement.api.tests.blanks.json_data import test_asset_loki_data
+from json_data import test_asset_loki_data
 
 
 class BaseAssetWebTest(BaseAWT):

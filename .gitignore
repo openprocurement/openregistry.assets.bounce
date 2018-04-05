@@ -91,7 +91,8 @@ ENV/
 # Buildout
 bin/
 src/
-
+# vim
+*.swp
 # Local developer configuration
 .mr.developer.cfg
 
