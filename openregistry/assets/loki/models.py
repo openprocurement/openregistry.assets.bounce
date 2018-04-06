@@ -7,6 +7,8 @@ from schematics.types.compound import ListType, ModelType
 from schematics.exceptions import ValidationError
 from schematics.types.serializable import serializable
 
+from pyramid.security import Allow
+
 from zope.interface import implementer
 
 from openregistry.assets.core.models import (
@@ -32,7 +34,10 @@ from openregistry.assets.loki.roles import (
 )
 from openprocurement.api.models.registry_models.ocds import (
     lokiDocument as Document,
-    lokiItem as Item
+    lokiItem as Item,
+    AssetHolder,
+    AssetCustodian,
+    Decision
 )
 from openprocurement.api.constants import DOCUMENT_TYPES
 
@@ -51,15 +56,18 @@ DOCUMENT_TYPES += [LOKI_ASSET_DOC_TYPE, 'cancellationDetails']
 
 
 class Document(Document):
-    documentType = StringType(choices=DOCUMENT_TYPES)
-    format = StringType(regex='^[-\w]+/[-\.\w\+]+$')
+    documentOf = StringType(choices=['asset', 'item'])
 
 
 @implementer(ILokiAsset)
 class Asset(BaseAsset):
+    description = StringType(required=True)
     assetType = StringType(default="loki")
+    assetHolder= ModelType(AssetHolder)
+    assetCustodian = ModelType(AssetCustodian, required=True)
     rectificationPeriod = ModelType(Period)
-    items = ListType(ModelType(Item))
+    items = ListType(ModelType(Item), default=list())
+    decisions = ListType(ModelType(Decision))
     documents = ListType(ModelType(Document), default=list())   # All documents and attachments
                                                                 # related to the asset.
     class Options:
@@ -93,6 +101,14 @@ class Asset(BaseAsset):
             'default': schematics_default_role,
         }
 
+    def __acl__(self):
+        acl = [
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_asset'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_documents'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items'),
+        ]
+        return acl
+
     @serializable(serialized_name='rectificationPeriod')
     def rectificationPeriod_serializable(self):
         if self.status == 'pending' and not self.rectificationPeriod:
@@ -106,7 +122,8 @@ class Asset(BaseAsset):
     def validate_status(self, data, value):
         can_be_deleted = any([doc.documentType == 'cancellationDetails' for doc in data['documents']])
         if value == 'deleted' and not can_be_deleted:
-            raise ValidationError('You can set deleted status only when asset have at least one document with \'cancellationDetails\' documentType')
+            raise ValidationError(u"You can set deleted status"
+                                  u"only when asset have at least one document with \'cancellationDetails\' documentType")
 
     def validate_documents(self, data, docs):
         if not docs:
