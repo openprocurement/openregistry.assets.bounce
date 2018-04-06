@@ -2,9 +2,14 @@
 from pyramid.events import subscriber
 from openregistry.assets.core.events import AssetInitializeEvent
 from openprocurement.api.utils import get_now
+from openregistry.assets.loki.constants import (
+    INFORMATION_DETAILS
+)
 
 
 @subscriber(AssetInitializeEvent, assetType="loki")
 def tender_init_handler(event):
     """ initialization handler for loki assets """
-    event.asset.date = get_now()
+    asset = event.asset
+    asset.date = get_now()
+    asset.documents.append(type(asset).documents.model_class(INFORMATION_DETAILS))

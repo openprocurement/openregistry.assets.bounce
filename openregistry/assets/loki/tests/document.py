@@ -2,17 +2,18 @@
 import unittest
 from copy import deepcopy
 
-from openprocurement.api.tests.blanks.mixins import ResourceDocumentTestMixin
 from openregistry.assets.loki.tests.base import (
     AssetContentWebTest
 )
 from openprocurement.api.tests.blanks.json_data import test_document_data
 
-from openprocurement.api.constants import DOCUMENT_TYPES
+from openregistry.assets.loki.constants import ASSET_LOKI_DOCUMENT_TYPES
+from blanks.mixins import AssetLokiResourceDocumentTestMixin
 
-class AssetDocumentWithDSResourceTest(AssetContentWebTest, ResourceDocumentTestMixin):
+
+class AssetDocumentWithDSResourceTest(AssetContentWebTest, AssetLokiResourceDocumentTestMixin):
     docservice = True
-    document_types = DOCUMENT_TYPES
+    document_types = ASSET_LOKI_DOCUMENT_TYPES
 
     # status, in which operations with asset documents (adding, updating) are forbidden
     forbidden_document_modification_actions_status = 'active'
