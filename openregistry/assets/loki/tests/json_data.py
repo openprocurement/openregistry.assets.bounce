@@ -2,14 +2,21 @@
 from copy import deepcopy
 from openprocurement.api.tests.blanks.json_data import (
     test_organization,
-    test_item_data_with_schema
+    schema_properties,
+    test_loki_item_data
 )
+from openprocurement.api.constants import IS_SCHEMAS_PROPERTIES_ENABLED_LOKI
 
+test_item_data = deepcopy(test_loki_item_data)
+
+if IS_SCHEMAS_PROPERTIES_ENABLED_LOKI:
+    test_loki_item_data['schema_properties'] = schema_properties
 
 test_asset_loki_data = {
     "title": u"Земля для космодрому",
+    "description": u"Опис землі для космодрому",
     "assetType": "loki",
-    "items": [test_item_data_with_schema, test_item_data_with_schema],
+    "items": [test_item_data, test_item_data],
     "assetCustodian": deepcopy(test_organization),
     "classification": {
         "scheme": u"CAV",

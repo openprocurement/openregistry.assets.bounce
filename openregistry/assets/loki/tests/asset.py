@@ -8,19 +8,32 @@ from openprocurement.api.tests.blanks.mixins import ResourceTestMixin
 from openregistry.assets.core.tests.blanks.asset import patch_decimal_item_quantity
 from openregistry.assets.core.tests.blanks.mixins import AssetResourceTestMixin
 
-from openregistry.assets.loki.models import Asset as AssetCompound
+from openregistry.assets.loki.models import Asset as AssetLoki
 from openregistry.assets.loki.tests.base import (
     test_asset_loki_data, BaseAssetWebTest
+)
+from openprocurement.api.constants import IS_SCHEMAS_PROPERTIES_ENABLED_LOKI
+from openregistry.assets.loki.tests.blanks.asset import (
+    patch_asset,
+    change_pending_asset,
+    administrator_change_delete_status
 )
 
 
 class AssetCompoundResourceTest(BaseAssetWebTest, ResourceTestMixin, AssetResourceTestMixin):
-    asset_model = AssetCompound
+    asset_model = AssetLoki
+    docservice = True
     initial_data = test_asset_loki_data
     initial_status = 'pending'
+    precision = 4
 
+    test_08_patch_asset = snitch(patch_asset)
+    test_10_administrator_change_delete_status = snitch(administrator_change_delete_status)
+    test_13_check_pending_asset = snitch(change_pending_asset)
     test_19_patch_decimal_witt_items = snitch(patch_decimal_item_quantity)
 
+    @unittest.skipIf(not IS_SCHEMAS_PROPERTIES_ENABLED_LOKI,
+                     "not supported now")
     def test_create_compount_with_item_schemas(self):
         response = self.app.post_json('/', {'data': test_asset_loki_data})
         self.assertEqual(response.status, '201 Created')
@@ -36,6 +49,8 @@ class AssetCompoundResourceTest(BaseAssetWebTest, ResourceTestMixin, AssetResour
         self.assertEqual(response['items'][0]['unit'], test_asset_loki_data['items'][0]['unit'])
         self.assertEqual(response['items'][0]['quantity'], test_asset_loki_data['items'][0]['quantity'])
 
+    @unittest.skipIf(not IS_SCHEMAS_PROPERTIES_ENABLED_LOKI,
+                     "not supported now")
     def test_bad_item_schemas_code(self):
         bad_initial_data = deepcopy(test_asset_loki_data)
         bad_initial_data['items'][0]['classification']['id'] = "42124210-6"
@@ -52,6 +67,8 @@ class AssetCompoundResourceTest(BaseAssetWebTest, ResourceTestMixin, AssetResour
                              ]
                          }])
 
+    @unittest.skipIf(not IS_SCHEMAS_PROPERTIES_ENABLED_LOKI,
+                     "not supported now")
     def test_delete_item_schema(self):
         response = self.app.post_json('/', {'data': test_asset_loki_data})
         self.assertEqual(response.status, '201 Created')
