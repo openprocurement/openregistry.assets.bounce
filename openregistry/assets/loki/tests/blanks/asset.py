@@ -3,7 +3,7 @@
 from openprocurement.api.tests.base import create_blacklist
 from openregistry.assets.core.constants import STATUS_CHANGES, ASSET_STATUSES
 
-from uuid import uuid4
+from copy import deepcopy
 
 # AssetResourceTest
 
@@ -363,3 +363,38 @@ def administrator_change_delete_status(self):
     self.assertEqual(response.json['errors'][0]['name'], u'data')
     self.assertEqual(response.json['errors'][0]['location'], u'body')
     self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (deleted) status")
+
+
+def patch_decimal_item_quantity(self):
+    """ Testing different decimal quantity (decimal_numbers) at the root and items of assets."""
+    precision = self.precision if hasattr(self, 'precision') else 3
+    asset = self.create_resource()
+
+    response = self.app.post_json('/{}/items'.format(asset['id']),
+                                  headers=self.access_header,
+                                  params={'data': self.initial_item_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    item_id = response.json["data"]['id']
+    self.assertIn(item_id, response.headers['Location'])
+    self.assertEqual(self.initial_item_data['description'], response.json["data"]["description"])
+    self.assertEqual(self.initial_item_data['quantity'], response.json["data"]["quantity"])
+    self.assertEqual(self.initial_item_data['address'], response.json["data"]["address"])
+
+
+    for quantity in [3, '3', 7.658, '7.658', 2.3355, '2.3355']:
+        item_data = deepcopy(self.initial_item_data)
+        item_data['quantity'] = quantity
+        response = self.app.patch_json('/{}/items/{}'.format(asset['id'], item_id),
+                                       headers=self.access_header,
+                                       params={'data': item_data})
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+
+        response = self.app.get('/{}/items/{}'.format(asset['id'], item_id),
+                                       headers=self.access_header,
+                                       params={'data': item_data})
+
+        self.assertNotIsInstance(response.json['data']['quantity'], basestring)
+        rounded_quantity = round(float(quantity), precision)
+        self.assertEqual(response.json['data']['quantity'], rounded_quantity)

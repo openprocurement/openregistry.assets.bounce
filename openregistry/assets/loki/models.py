@@ -10,7 +10,7 @@ from schematics.types.serializable import serializable
 from pyramid.security import Allow
 
 from zope.interface import implementer
-
+from openprocurement.api.constants import DOCUMENT_TYPES
 from openregistry.assets.core.models import (
     IAsset, Asset as BaseAsset
 )
@@ -39,21 +39,14 @@ from openprocurement.api.models.registry_models.ocds import (
     AssetCustodian,
     Decision
 )
-from openprocurement.api.constants import DOCUMENT_TYPES
 
-from constants import INFORMATION_DETAILS, LOKI_ASSET_DOC_TYPE
+from constants import (
+    INFORMATION_DETAILS, LOKI_ASSET_DOC_TYPE, ASSET_LOKI_DOCUMENT_TYPES
+)
 
 
 class ILokiAsset(IAsset):
     """ Interface for loki assets """
-
-    def initialize():
-        """Add additional data to object then it creates"""
-        raise NotImplementedError
-
-
-DOCUMENT_TYPES += [LOKI_ASSET_DOC_TYPE, 'cancellationDetails']
-
 
 class Document(Document):
     documentOf = StringType(choices=['asset', 'item'])
@@ -116,8 +109,6 @@ class Asset(BaseAsset):
             self.rectificationPeriod.startDate = get_now()
             self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate, timedelta(1))
 
-    def initialize(self):
-        self.documents.append(type(self).documents.model_class(INFORMATION_DETAILS))
 
     def validate_status(self, data, value):
         can_be_deleted = any([doc.documentType == 'cancellationDetails' for doc in data['documents']])
