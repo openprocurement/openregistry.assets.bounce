@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 
 from openprocurement.api.tests.base import create_blacklist
 from openregistry.assets.core.constants import STATUS_CHANGES, ASSET_STATUSES
 
-from copy import deepcopy
 
 # AssetResourceTest
 
@@ -35,7 +35,6 @@ def add_cancellationDetails_document(self, asset):
     self.assertIn('Signature=', tender['documents'][-1]["url"])
     self.assertIn('KeyID=', tender['documents'][-1]["url"])
     self.assertNotIn('Expires=', tender['documents'][-1]["url"])
-
 
 
 def patch_asset(self):
