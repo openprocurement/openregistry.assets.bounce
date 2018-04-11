@@ -3,11 +3,9 @@ from schematics.types import StringType
 from schematics.types.compound import ListType, ModelType
 from schematics.exceptions import ValidationError
 from zope.interface import implementer
-from openprocurement.api.constants import DOCUMENT_TYPES
 from openregistry.assets.core.models import (
-    IAsset, Asset as BaseAsset, Item
+    IAsset, Asset as BaseAsset, Item, Document
 )
-from openprocurement.api.models.registry_models.ocds import Document
 
 from constants import (
     INFORMATION_DETAILS, LOKI_ASSET_DOC_TYPE, ASSET_LOKI_DOCUMENT_TYPES

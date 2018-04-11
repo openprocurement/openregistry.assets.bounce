@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
-from openprocurement.api.tests.blanks.json_data import (
+from openregistry.assets.core.tests.blanks.json_data import (
     test_organization,
     test_item_data_with_schema
 )

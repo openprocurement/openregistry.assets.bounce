@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from openprocurement.api.constants import DOCUMENT_TYPES
+
+from openregistry.assets.core.constants import DOCUMENT_TYPES
 
 
 LOKI_ASSET_DOC_TYPE = "informationDetails"

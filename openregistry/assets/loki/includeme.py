@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from pyramid.interfaces import IRequest
-from openprocurement.api.interfaces import IContentConfigurator
+from openregistry.assets.core.interfaces import IContentConfigurator
 from openregistry.assets.loki.models import Asset, ILokiAsset
 from openregistry.assets.loki.adapters import CompoundAssetConfigurator
 
