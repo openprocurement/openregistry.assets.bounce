@@ -433,4 +433,8 @@ def rectificationPeriod_workflow(self):
     response = self.app.patch_json('/{}'.format(asset['id']),
                                    headers=self.access_header,
                                    params={'data': {'title': ' PATCHED'}})
+    self.assertNotEqual(response.json['data']['title'], 'PATCHED')
     self.assertEqual(asset['title'], response.json['data']['title'])
+
+    add_cancellationDetails_document(self, asset)
+    check_patch_status_200(self, asset['id'], 'deleted', self.access_header)
