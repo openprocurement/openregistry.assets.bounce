@@ -10,7 +10,6 @@ from schematics.types.serializable import serializable
 from pyramid.security import Allow
 
 from zope.interface import implementer
-from openprocurement.api.constants import DOCUMENT_TYPES
 from openregistry.assets.core.models import (
     IAsset, Asset as BaseAsset
 )
@@ -38,6 +37,7 @@ from openprocurement.api.models.registry_models.ocds import (
     AssetHolder,
     AssetCustodian,
     Decision
+    # IAsset, Asset as BaseAsset, Item, Document
 )
 
 from constants import (
@@ -47,6 +47,7 @@ from constants import (
 
 class ILokiAsset(IAsset):
     """ Interface for loki assets """
+
 
 class Document(Document):
     documentOf = StringType(choices=['asset', 'item'])
@@ -102,13 +103,17 @@ class Asset(BaseAsset):
         ]
         return acl
 
-    @serializable(serialized_name='rectificationPeriod')
+    def __init__(self, *args, **kwargs):
+        super(Asset, self).__init__(*args, **kwargs)
+        if self.rectificationPeriod and self.rectificationPeriod.endDate < get_now():
+            self._options.roles['edit_pending'] = whitelist('status')
+
+    @serializable(serialized_name='rectificationPeriod', serialize_when_none=False)
     def rectificationPeriod_serializable(self):
         if self.status == 'pending' and not self.rectificationPeriod:
             self.rectificationPeriod = type(self).rectificationPeriod.model_class()
             self.rectificationPeriod.startDate = get_now()
             self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate, timedelta(1))
-
 
     def validate_status(self, data, value):
         can_be_deleted = any([doc.documentType == 'cancellationDetails' for doc in data['documents']])

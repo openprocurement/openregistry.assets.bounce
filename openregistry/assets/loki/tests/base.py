@@ -3,7 +3,7 @@ import os
 from copy import deepcopy
 
 from openregistry.assets.core.tests.base import (
-    BaseAssetWebTest as BaseAWT
+    BaseAssetWebTest as BaseAWT, snitch
 )
 from json_data import test_asset_loki_data
 

@@ -5,7 +5,7 @@ from copy import deepcopy
 from openregistry.assets.loki.tests.base import (
     AssetContentWebTest
 )
-from openprocurement.api.tests.blanks.json_data import test_document_data
+from openregistry.assets.core.tests.blanks.json_data import test_document_data
 
 from openprocurement.api.models.registry_models.ocds import LOKI_DOCUMENT_TYPES
 from blanks.mixins import AssetLokiResourceDocumentTestMixin
