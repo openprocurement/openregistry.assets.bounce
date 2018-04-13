@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
+from datetime import timedelta
 
 from openprocurement.api.tests.base import create_blacklist
 from openregistry.assets.core.constants import STATUS_CHANGES, ASSET_STATUSES
 
-
+from openprocurement.api.models.models import (
+    Period
+)
+from openprocurement.api.utils import (
+    get_now,
+    calculate_business_date
+)
 # AssetResourceTest
 
 def add_cancellationDetails_document(self, asset):
@@ -397,3 +404,33 @@ def patch_decimal_item_quantity(self):
         self.assertNotIsInstance(response.json['data']['quantity'], basestring)
         rounded_quantity = round(float(quantity), precision)
         self.assertEqual(response.json['data']['quantity'], rounded_quantity)
+
+
+def rectificationPeriod_workflow(self):
+    rectificationPeriod = Period()
+    rectificationPeriod.startDate = get_now() - timedelta(3)
+    rectificationPeriod.endDate = calculate_business_date(rectificationPeriod.startDate, timedelta(1))
+
+    asset = self.create_resource()
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.json['data']['id'], asset['id'])
+
+    fromdb = self.db.get(asset['id'])
+    fromdb = self.asset_model(fromdb)
+
+    fromdb.status = 'pending'
+    fromdb.rectificationPeriod = rectificationPeriod
+    fromdb = fromdb.store(self.db)
+
+    self.assertEqual(fromdb.id, asset['id'])
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.json['data']['id'], asset['id'])
+
+    response = self.app.patch_json('/{}'.format(asset['id']),
+                                   headers=self.access_header,
+                                   params={'data': {'title': ' PATCHED'}})
+    self.assertEqual(asset['title'], response.json['data']['title'])
