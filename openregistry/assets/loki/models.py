@@ -61,7 +61,7 @@ class Asset(BaseAsset):
     assetCustodian = ModelType(AssetCustodian, required=True)
     rectificationPeriod = ModelType(Period)
     items = ListType(ModelType(Item), default=list())
-    decisions = ListType(ModelType(Decision))
+    decisions = ListType(ModelType(Decision), min_size=1, max_size=1)
     documents = ListType(ModelType(Document), default=list())   # All documents and attachments
                                                                 # related to the asset.
     class Options:
