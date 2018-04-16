@@ -8,21 +8,21 @@ from openregistry.assets.core.models import (
 )
 
 from constants import (
-    INFORMATION_DETAILS, LOKI_ASSET_DOC_TYPE, ASSET_LOKI_DOCUMENT_TYPES
+    INFORMATION_DETAILS, BOUNCE_ASSET_DOC_TYPE, ASSET_BOUNCE_DOCUMENT_TYPES
 )
 
 
-class ILokiAsset(IAsset):
-    """ Interface for loki assets """
+class IBounceAsset(IAsset):
+    """ Interface for bounce assets """
 
 class Document(Document):
-    documentType = StringType(choices=ASSET_LOKI_DOCUMENT_TYPES)
+    documentType = StringType(choices=ASSET_BOUNCE_DOCUMENT_TYPES)
     format = StringType(regex='^[-\w]+/[-\.\w\+]+$')
 
 
-@implementer(ILokiAsset)
+@implementer(IBounceAsset)
 class Asset(BaseAsset):
-    assetType = StringType(default="loki")
+    assetType = StringType(default="bounce")
     items = ListType(ModelType(Item))
     documents = ListType(ModelType(Document), default=list())   # All documents and attachments
                                                                 # related to the asset.
@@ -31,7 +31,7 @@ class Asset(BaseAsset):
     def validate_documents(self, data, docs):
         if not docs:
             return
-        if docs[0].documentType != LOKI_ASSET_DOC_TYPE:
+        if docs[0].documentType != BOUNCE_ASSET_DOC_TYPE:
             raise ValidationError(u"First document should be "
                                   u"document with {}"
-                                  "documentType".format(LOKI_ASSET_DOC_TYPE))
+                                  "documentType".format(BOUNCE_ASSET_DOC_TYPE))

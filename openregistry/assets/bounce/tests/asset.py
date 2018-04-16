@@ -9,34 +9,34 @@ from openregistry.assets.core.tests.blanks.mixins import (
 
 from openregistry.assets.bounce.models import Asset as AssetCompound
 from openregistry.assets.bounce.tests.base import (
-    test_asset_loki_data, BaseAssetWebTest, snitch
+    test_asset_bounce_data, BaseAssetWebTest, snitch
 )
 
 
 class AssetCompoundResourceTest(BaseAssetWebTest, ResourceTestMixin, AssetResourceTestMixin):
     asset_model = AssetCompound
-    initial_data = test_asset_loki_data
+    initial_data = test_asset_bounce_data
     initial_status = 'pending'
 
     test_19_patch_decimal_witt_items = snitch(patch_decimal_item_quantity)
 
     def test_create_compount_with_item_schemas(self):
-        response = self.app.post_json('/', {'data': test_asset_loki_data})
+        response = self.app.post_json('/', {'data': test_asset_bounce_data})
         self.assertEqual(response.status, '201 Created')
         self.assertEqual(response.content_type, 'application/json')
         response = response.json['data']
-        self.assertEqual(response['items'][0]['schema_properties']['properties'], test_asset_loki_data['items'][0]['schema_properties']['properties'])
-        self.assertEqual(response['items'][0]['schema_properties']['code'][0:2], test_asset_loki_data['items'][0]['schema_properties']['code'][:2])
-        self.assertEqual(response['items'][0]['description'], test_asset_loki_data['items'][0]['description'])
-        self.assertEqual(response['items'][0]['classification'], test_asset_loki_data['items'][0]['classification'])
-        self.assertEqual(response['items'][0]['additionalClassifications'], test_asset_loki_data['items'][0]['additionalClassifications'])
-        self.assertEqual(response['items'][0]['address'], test_asset_loki_data['items'][0]['address'])
-        self.assertEqual(response['items'][0]['id'], test_asset_loki_data['items'][0]['id'])
-        self.assertEqual(response['items'][0]['unit'], test_asset_loki_data['items'][0]['unit'])
-        self.assertEqual(response['items'][0]['quantity'], test_asset_loki_data['items'][0]['quantity'])
+        self.assertEqual(response['items'][0]['schema_properties']['properties'], test_asset_bounce_data['items'][0]['schema_properties']['properties'])
+        self.assertEqual(response['items'][0]['schema_properties']['code'][0:2], test_asset_bounce_data['items'][0]['schema_properties']['code'][:2])
+        self.assertEqual(response['items'][0]['description'], test_asset_bounce_data['items'][0]['description'])
+        self.assertEqual(response['items'][0]['classification'], test_asset_bounce_data['items'][0]['classification'])
+        self.assertEqual(response['items'][0]['additionalClassifications'], test_asset_bounce_data['items'][0]['additionalClassifications'])
+        self.assertEqual(response['items'][0]['address'], test_asset_bounce_data['items'][0]['address'])
+        self.assertEqual(response['items'][0]['id'], test_asset_bounce_data['items'][0]['id'])
+        self.assertEqual(response['items'][0]['unit'], test_asset_bounce_data['items'][0]['unit'])
+        self.assertEqual(response['items'][0]['quantity'], test_asset_bounce_data['items'][0]['quantity'])
 
     def test_bad_item_schemas_code(self):
-        bad_initial_data = deepcopy(test_asset_loki_data)
+        bad_initial_data = deepcopy(test_asset_bounce_data)
         bad_initial_data['items'][0]['classification']['id'] = "42124210-6"
         response = self.app.post_json('/', {'data': bad_initial_data},status=422)
         self.assertEqual(response.status, '422 Unprocessable Entity')
@@ -52,7 +52,7 @@ class AssetCompoundResourceTest(BaseAssetWebTest, ResourceTestMixin, AssetResour
                          }])
 
     def test_delete_item_schema(self):
-        response = self.app.post_json('/', {'data': test_asset_loki_data})
+        response = self.app.post_json('/', {'data': test_asset_bounce_data})
         self.assertEqual(response.status, '201 Created')
         resource = response.json['data']
         self.resource_token = response.json['access']['token']

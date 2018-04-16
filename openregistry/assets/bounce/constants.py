@@ -3,14 +3,14 @@
 from openregistry.assets.core.constants import DOCUMENT_TYPES
 
 
-LOKI_ASSET_DOC_TYPE = "informationDetails"
+BOUNCE_ASSET_DOC_TYPE = "informationDetails"
 
 INFORMATION_DETAILS = {
     'title': 'TODO',
     'url': 'TODO',
     'documentOf': "asset",
-    'documentType': LOKI_ASSET_DOC_TYPE
+    'documentType': BOUNCE_ASSET_DOC_TYPE
 }
 
 
-ASSET_LOKI_DOCUMENT_TYPES = DOCUMENT_TYPES + [LOKI_ASSET_DOC_TYPE, 'cancellationDetails']
+ASSET_BOUNCE_DOCUMENT_TYPES = DOCUMENT_TYPES + [BOUNCE_ASSET_DOC_TYPE, 'cancellationDetails']

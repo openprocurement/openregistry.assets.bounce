@@ -17,7 +17,7 @@ from .document import (
 )
 
 class AssetLokiResourceDocumentTestMixin(object):
-    """ Mixin with asset loki tests for Asset and Lot documents
+    """ Mixin with asset bounce tests for Asset and Lot documents
     """
 
     test_01_not_found = snitch(not_found)

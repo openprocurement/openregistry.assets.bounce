@@ -7,13 +7,13 @@ from openregistry.assets.bounce.tests.base import (
 )
 from openregistry.assets.core.tests.blanks.json_data import test_document_data
 
-from openregistry.assets.bounce.constants import ASSET_LOKI_DOCUMENT_TYPES
+from openregistry.assets.bounce.constants import ASSET_BOUNCE_DOCUMENT_TYPES
 from blanks.mixins import AssetLokiResourceDocumentTestMixin
 
 
 class AssetDocumentWithDSResourceTest(AssetContentWebTest, AssetLokiResourceDocumentTestMixin):
     docservice = True
-    document_types = ASSET_LOKI_DOCUMENT_TYPES
+    document_types = ASSET_BOUNCE_DOCUMENT_TYPES
 
     # status, in which operations with asset documents (adding, updating) are forbidden
     forbidden_document_modification_actions_status = 'active'

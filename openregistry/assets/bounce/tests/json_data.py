@@ -6,9 +6,9 @@ from openregistry.assets.core.tests.blanks.json_data import (
 )
 
 
-test_asset_loki_data = {
+test_asset_bounce_data = {
     "title": u"Земля для космодрому",
-    "assetType": "loki",
+    "assetType": "bounce",
     "items": [test_item_data_with_schema, test_item_data_with_schema],
     "assetCustodian": deepcopy(test_organization),
     "classification": {
