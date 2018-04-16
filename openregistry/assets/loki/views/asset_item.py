@@ -9,6 +9,9 @@ from openprocurement.api.utils import (
 from openregistry.assets.core.utils import (
     save_asset, opassetsresource, apply_patch,
 )
+from openregistry.assets.loki.validation import (
+    rectificationPeriod_item_validation
+)
 from openregistry.lots.loki.validation import (
     validate_item_data
 )
@@ -33,7 +36,7 @@ class LotItemResource(APIResource):
             ]).values(), key=lambda i: i['dateModified'])
         return {'data': collection_data}
 
-    @json_view(content_type="application/json", permission='upload_asset_items', validators=(validate_item_data, ))
+    @json_view(content_type="application/json", permission='upload_asset_items', validators=(validate_item_data, rectificationPeriod_item_validation))
     def collection_post(self):
         """Asset Item Upload"""
         item = self.request.validated['item']
@@ -53,7 +56,7 @@ class LotItemResource(APIResource):
         item_data = item.serialize("view")
         return {'data': item_data}
 
-    @json_view(content_type="application/json", permission='upload_asset_items', validators=(validate_item_data, ))
+    @json_view(content_type="application/json", permission='upload_asset_items', validators=(validate_item_data, rectificationPeriod_item_validation))
     def patch(self):
         """Asset Item Update"""
         if apply_patch(self.request, src=self.request.context.serialize()):
