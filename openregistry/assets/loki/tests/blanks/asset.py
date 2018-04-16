@@ -417,6 +417,7 @@ def rectificationPeriod_workflow(self):
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.json['data']['id'], asset['id'])
 
+    # Change rectification period in db
     fromdb = self.db.get(asset['id'])
     fromdb = self.asset_model(fromdb)
 

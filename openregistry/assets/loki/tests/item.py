@@ -13,7 +13,8 @@ from openregistry.assets.loki.tests.blanks.item import (
     patch_item,
     create_loki_with_item_schemas,
     bad_item_schemas_code,
-    delete_item_schema
+    delete_item_schema,
+    rectificationPeriod_item_workflow
 )
 
 class AssetItemResourceTest(AssetContentWebTest):
@@ -23,6 +24,7 @@ class AssetItemResourceTest(AssetContentWebTest):
     test_create_loki_with_item_schemas = snitch(create_loki_with_item_schemas)
     test_bad_item_schemas_code = snitch(bad_item_schemas_code)
     test_delete_item_schema = snitch(delete_item_schema)
+    test_rectificaionPeriod_item_workflow = snitch(rectificationPeriod_item_workflow)
 
 
 def suite():

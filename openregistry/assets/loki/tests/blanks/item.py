@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 import unittest
 from copy import deepcopy
+from datetime import timedelta
 
+from openprocurement.api.utils import get_now, calculate_business_date
+from openprocurement.api.models.models import (
+    Period
+)
 from openprocurement.api.constants import IS_SCHEMAS_PROPERTIES_ENABLED_LOKI
+from openregistry.assets.loki.models import Asset
 
 
 def create_item_resource(self):
@@ -118,3 +124,61 @@ def delete_item_schema(self):
                             params={'data': updated_item_data})
     # TODO add schema props delete
     # self.assertEqual(response.json['data']['schema_properties'], None)
+
+
+def rectificationPeriod_item_workflow(self):
+    rectificationPeriod = Period()
+    rectificationPeriod.startDate = get_now() - timedelta(3)
+    rectificationPeriod.endDate = calculate_business_date(rectificationPeriod.startDate, timedelta(1))
+
+    asset = self.create_resource()
+
+    response = self.app.post_json('/{}/items'.format(asset['id']),
+                                  headers=self.access_header,
+                                  params={'data': self.initial_item_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    item_id = response.json["data"]['id']
+    self.assertIn(item_id, response.headers['Location'])
+    self.assertEqual(self.initial_item_data['description'], response.json["data"]["description"])
+    self.assertEqual(self.initial_item_data['quantity'], response.json["data"]["quantity"])
+    self.assertEqual(self.initial_item_data['address'], response.json["data"]["address"])
+    item_id = response.json['data']['id']
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.json['data']['id'], asset['id'])
+
+    # Change rectification period in db
+    fromdb = self.db.get(asset['id'])
+    fromdb = Asset(fromdb)
+
+    fromdb.status = 'pending'
+    fromdb.rectificationPeriod = rectificationPeriod
+    fromdb = fromdb.store(self.db)
+
+    self.assertEqual(fromdb.id, asset['id'])
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.json['data']['id'], asset['id'])
+
+    response = self.app.post_json('/{}/items'.format(asset['id']),
+                                   headers=self.access_header,
+                                   params={'data': self.initial_item_data},
+                                   status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.json['errors'][0]['description'], 'You can\'t change items after rectification period')
+
+
+    self.assertEqual(response.json['errors'][0]['description'], 'You can\'t change items after rectification period')
+    response = self.app.patch_json('/{}/items/{}'.format(asset['id'], item_id),
+                                   headers=self.access_header,
+                                   params={'data': self.initial_item_data},
+                                   status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.json['errors'][0]['description'], 'You can\'t change items after rectification period')
+
+
+
+

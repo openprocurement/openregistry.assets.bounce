@@ -22,7 +22,8 @@ from openprocurement.api.tests.blanks.document import (
 from .document import (
     create_resource_document_json,
     put_resource_document_json,
-    patch_resource_document
+    patch_resource_document,
+    rectificationPeriod_document_workflow
 )
 
 class AssetLokiResourceDocumentTestMixin(object):
@@ -37,3 +38,4 @@ class AssetLokiResourceDocumentTestMixin(object):
     test_06_create_resource_document_json_invalid = snitch(create_resource_document_json_invalid)
     test_07_create_resource_document_json = snitch(create_resource_document_json)
     test_08_put_resource_document_json = snitch(put_resource_document_json)
+    test_rectificationPeriod_document_workflow = snitch(rectificationPeriod_document_workflow)
