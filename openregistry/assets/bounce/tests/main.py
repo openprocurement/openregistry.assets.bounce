@@ -2,7 +2,7 @@
 
 import unittest
 
-from openregistry.assets.loki.tests import asset, document
+from openregistry.assets.bounce.tests import asset, document
 
 
 def suite():

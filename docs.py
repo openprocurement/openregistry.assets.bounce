@@ -2,7 +2,7 @@
 from uuid import uuid4
 
 from openregistry.assets.core.tests.base import DumpsTestAppwebtest, PrefixedRequestClass
-from openregistry.assets.loki.tests.base import BaseAssetWebTest
+from openregistry.assets.bounce.tests.base import BaseAssetWebTest
 
 
 class AssetResourceTest(BaseAssetWebTest):

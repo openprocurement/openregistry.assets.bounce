@@ -7,8 +7,8 @@ from openregistry.assets.core.tests.blanks.mixins import (
     AssetResourceTestMixin, ResourceTestMixin
 )
 
-from openregistry.assets.loki.models import Asset as AssetCompound
-from openregistry.assets.loki.tests.base import (
+from openregistry.assets.bounce.models import Asset as AssetCompound
+from openregistry.assets.bounce.tests.base import (
     test_asset_loki_data, BaseAssetWebTest, snitch
 )
 

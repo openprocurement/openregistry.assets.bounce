@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from openregistry.assets.loki.tests.base import snitch
+from openregistry.assets.bounce.tests.base import snitch
 
 from openregistry.assets.core.tests.blanks.document import (
     not_found,

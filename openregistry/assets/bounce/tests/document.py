@@ -2,12 +2,12 @@
 import unittest
 from copy import deepcopy
 
-from openregistry.assets.loki.tests.base import (
+from openregistry.assets.bounce.tests.base import (
     AssetContentWebTest
 )
 from openregistry.assets.core.tests.blanks.json_data import test_document_data
 
-from openregistry.assets.loki.constants import ASSET_LOKI_DOCUMENT_TYPES
+from openregistry.assets.bounce.constants import ASSET_LOKI_DOCUMENT_TYPES
 from blanks.mixins import AssetLokiResourceDocumentTestMixin
 
 
