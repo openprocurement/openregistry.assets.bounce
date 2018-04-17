@@ -1,7 +1,19 @@
 # -*- coding: utf-8 -*-
 from openprocurement.api.utils import (
-    get_now
+    get_now,
+    update_logging_context
 )
+from openprocurement.api.validation import (
+    validate_data
+)
+
+
+def validate_item_data(request, error_handler, **kwargs):
+    update_logging_context(request, {'item_id': '__new__'})
+    context = request.context if 'items' in request.context else request.context.__parent__
+    model = type(context).items.model_class
+    validate_data(request, model)
+
 
 def rectificationPeriod_item_validation(request, error_handler, **kwargs):
     if request.validated['asset'].rectificationPeriod and request.validated['asset'].rectificationPeriod.endDate < get_now():

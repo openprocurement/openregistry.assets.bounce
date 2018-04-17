@@ -10,9 +10,7 @@ from openregistry.assets.core.utils import (
     save_asset, opassetsresource, apply_patch,
 )
 from openregistry.assets.bounce.validation import (
-    rectificationPeriod_item_validation
-)
-from openregistry.lots.loki.validation import (
+    rectificationPeriod_item_validation,
     validate_item_data
 )
 
