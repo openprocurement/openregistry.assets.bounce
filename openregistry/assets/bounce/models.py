@@ -10,35 +10,28 @@ from schematics.types.serializable import serializable
 from pyramid.security import Allow
 
 from zope.interface import implementer
+
 from openregistry.assets.core.models import (
-    IAsset, Asset as BaseAsset
-)
-
-from openprocurement.api.models.models import (
-    Period
-)
-from openprocurement.api.utils import (
-    get_now,
-    calculate_business_date
-)
-
-from openprocurement.api.models.registry_models.roles import schematics_default_role, plain_role, listing_role
-from openregistry.assets.bounce.roles import (
-    create_role,
-    edit_role,
-    view_role,
-    plain_role,
-    Administrator_role,
-    concierge_role
-)
-from openprocurement.api.models.registry_models.ocds import (
+    IAsset,
+    Asset as BaseAsset,
+    Period,
     LokiDocument as Document,
     LokiItem as Item,
     AssetHolder,
     AssetCustodian,
-    Decision
-    # IAsset, Asset as BaseAsset, Item, Document
+    Decision,
+    schematics_default_role,
+    listing_role
 )
+from openregistry.assets.core.utils import (
+    get_now,
+    calculate_business_date
+)
+
+from openregistry.assets.bounce.roles import (
+    asset_roles
+)
+
 
 from constants import (
     INFORMATION_DETAILS, BOUNCE_ASSET_DOC_TYPE, ASSET_BOUNCE_DOCUMENT_TYPES
@@ -65,35 +58,7 @@ class Asset(BaseAsset):
     documents = ListType(ModelType(Document), default=list())   # All documents and attachments
                                                                 # related to the asset.
     class Options:
-        roles = {
-            'create': create_role,
-            # draft role
-            'draft': view_role,
-            'edit_draft': edit_role,
-            'plain': plain_role,
-            'edit': edit_role,
-            # pending role
-            'edit_pending': edit_role,
-            'pending': view_role,
-            # verification role
-            'verification': view_role,
-            'edit_verification': whitelist(),
-            # active role
-            'active': view_role,
-            'edit_active': whitelist(),
-            'view': view_role,
-            'listing': listing_role,
-            'Administrator': Administrator_role,
-            # complete role
-            'complete': view_role,
-            'edit_complete': blacklist('revisions'),
-            # deleted role  # TODO: replace with 'delete' view for asset, temporary solution for tests
-            'deleted': view_role,
-            'edit_deleted': blacklist('revisions'),
-            # concierge_role
-            'concierge': concierge_role,
-            'default': schematics_default_role,
-        }
+        roles = asset_roles
 
     def __acl__(self):
         acl = [
