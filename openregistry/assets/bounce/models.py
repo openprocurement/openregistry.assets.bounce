@@ -32,8 +32,8 @@ from openregistry.assets.bounce.roles import (
     concierge_role
 )
 from openprocurement.api.models.registry_models.ocds import (
-    lokiDocument as Document,
-    lokiItem as Item,
+    LokiDocument as Document,
+    LokiItem as Item,
     AssetHolder,
     AssetCustodian,
     Decision
