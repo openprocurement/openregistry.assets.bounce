@@ -2,12 +2,12 @@
 import unittest
 from copy import deepcopy
 
-from openprocurement.api.tests.base import snitch
+from openregistry.assets.core.tests.base import snitch
 
 from openregistry.assets.bounce.tests.base import (
     AssetContentWebTest
 )
-from openprocurement.api.tests.blanks.json_data import test_loki_item_data
+from openregistry.assets.core.tests.blanks.json_data import test_loki_item_data
 from openregistry.assets.bounce.tests.blanks.item import (
     create_item_resource,
     patch_item,

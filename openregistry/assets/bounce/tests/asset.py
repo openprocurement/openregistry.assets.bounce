@@ -2,7 +2,7 @@
 import unittest
 from copy import deepcopy
 
-from openprocurement.api.tests.base import snitch
+from openregistry.assets.core.tests.base import snitch
 
 from openregistry.assets.core.tests.blanks.mixins import (
     AssetResourceTestMixin, ResourceTestMixin

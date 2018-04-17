@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from openprocurement.api.utils import (
+from openregistry.assets.core.utils import (
     get_now,
     update_logging_context
 )
-from openprocurement.api.validation import (
+from openregistry.assets.core.validation import (
     validate_data
 )
 

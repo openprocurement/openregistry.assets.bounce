@@ -2,12 +2,12 @@
 from openregistry.assets.core.views.mixins import AssetDocumentResource
 from openregistry.assets.core.utils import opassetsresource
 
-from openprocurement.api.validation import (
+from openregistry.assets.core.validation import (
     validate_file_upload,
     validate_document_data,
     validate_patch_document_data,
 )
-from openprocurement.api.utils import (
+from openregistry.assets.core.utils import (
     json_view,
 )
 

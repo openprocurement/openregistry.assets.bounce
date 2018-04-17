@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 
-from openprocurement.api.utils import get_now, calculate_business_date
-from openprocurement.api.models.models import (
+from openregistry.assets.core.utils import get_now, calculate_business_date
+from openregistry.assets.core.models import (
     Period
 )
 

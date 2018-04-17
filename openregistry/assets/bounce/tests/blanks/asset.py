@@ -2,13 +2,13 @@
 from copy import deepcopy
 from datetime import timedelta
 
-from openprocurement.api.tests.base import create_blacklist
+from openregistry.assets.core.tests.base import create_blacklist
 from openregistry.assets.core.constants import STATUS_CHANGES, ASSET_STATUSES
 
-from openprocurement.api.models.models import (
+from openregistry.assets.core.models import (
     Period
 )
-from openprocurement.api.utils import (
+from openregistry.assets.core.utils import (
     get_now,
     calculate_business_date
 )

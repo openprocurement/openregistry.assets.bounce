@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
-# from openregistry.assets.core.tests.blanks.json_data import (
-#     test_organization,
-#     schema_properties,
-#     test_bounce_item_data
-# )
-from openprocurement.api.tests.blanks.json_data import (
+from openregistry.assets.core.tests.blanks.json_data import (
     test_organization,
     schema_properties,
     test_loki_item_data
+)
+from openregistry.assets.core.utils import (
+    get_now
 )
 
 test_item_data = deepcopy(test_loki_item_data)
@@ -41,7 +39,11 @@ test_asset_bounce_data = {
     "value": {
         "amount": 100,
         "currency": u"UAH"
-    }
+    },
+    "decisions": [{
+        'decisionDate': get_now().isoformat(),
+        'decisionID': '1111-4'
+    }]
 }
 
 
