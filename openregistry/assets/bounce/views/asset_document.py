@@ -37,7 +37,6 @@ patch_document_validators = (
     rectificationPeriod_document_validation
 )
 
-
 @opassetsresource(name='bounce:Asset Documents',
                   collection_path='/assets/{asset_id}/documents',
                   path='/assets/{asset_id}/documents/{document_id}',

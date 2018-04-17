@@ -184,6 +184,7 @@ def put_resource_document_json(self):
                      "Can't update document in current ({}) {} status".format(self.forbidden_document_modification_actions_status, self.resource_name[:-1]))
 
 
+
 def patch_resource_document(self):
     response = self.app.post_json('/{}/documents'.format(self.resource_id),
                                   headers=self.access_header,
@@ -343,5 +344,4 @@ def rectificationPeriod_document_workflow(self):
                                   )
     self.assertEqual(response.status, '403 Forbidden')
     self.assertEqual(response.json['errors'][0]['description'], 'You can\'t change documents after rectification period')
-
 
