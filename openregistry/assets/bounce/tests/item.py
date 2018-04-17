@@ -21,9 +21,9 @@ class AssetItemResourceTest(AssetContentWebTest):
     initial_item_data = deepcopy(test_loki_item_data)
     test_create_item_resource = snitch(create_item_resource)
     test_patch_item_resource = snitch(patch_item)
-    test_create_bounce_with_item_schemas = snitch(create_bounce_with_item_schemas)
-    test_bad_item_schemas_code = snitch(bad_item_schemas_code)
-    test_delete_item_schema = snitch(delete_item_schema)
+    # test_create_bounce_with_item_schemas = snitch(create_bounce_with_item_schemas)
+    # test_bad_item_schemas_code = snitch(bad_item_schemas_code)
+    # test_delete_item_schema = snitch(delete_item_schema)
     test_rectificaionPeriod_item_workflow = snitch(rectificationPeriod_item_workflow)
 
 

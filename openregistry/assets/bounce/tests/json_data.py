@@ -10,12 +10,10 @@ from openprocurement.api.tests.blanks.json_data import (
     schema_properties,
     test_loki_item_data
 )
-from openprocurement.api.constants import IS_SCHEMAS_PROPERTIES_ENABLED_LOKI
 
 test_item_data = deepcopy(test_loki_item_data)
 
-if IS_SCHEMAS_PROPERTIES_ENABLED_LOKI:
-    test_loki_item_data['schema_properties'] = schema_properties
+# test_loki_item_data['schema_properties'] = schema_properties
 
 test_asset_bounce_data = {
     "title": u"Земля для космодрому",

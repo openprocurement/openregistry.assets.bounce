@@ -7,7 +7,6 @@ from openprocurement.api.utils import get_now, calculate_business_date
 from openprocurement.api.models.models import (
     Period
 )
-from openprocurement.api.constants import IS_SCHEMAS_PROPERTIES_ENABLED_LOKI
 from openregistry.assets.bounce.models import Asset
 
 
@@ -64,7 +63,6 @@ def list_item_resource(self):
     pass
 
 
-@unittest.skipIf(not IS_SCHEMAS_PROPERTIES_ENABLED_LOKI, "not supported now")
 def create_bounce_with_item_schemas(self):
     asset = self.create_resource()
 
@@ -83,7 +81,6 @@ def create_bounce_with_item_schemas(self):
     self.assertEqual(response['quantity'], self.initial_item_data['quantity'])
 
 
-@unittest.skipIf(not IS_SCHEMAS_PROPERTIES_ENABLED_LOKI, "not supported now")
 def bad_item_schemas_code(self):
     asset = self.create_resource()
 
@@ -102,7 +99,6 @@ def bad_item_schemas_code(self):
                      }])
 
 
-@unittest.skipIf(not IS_SCHEMAS_PROPERTIES_ENABLED_LOKI, "not supported now")
 def delete_item_schema(self):
     asset = self.create_resource()
 
