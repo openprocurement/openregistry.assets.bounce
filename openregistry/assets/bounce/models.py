@@ -20,8 +20,6 @@ from openregistry.assets.core.models import (
     AssetHolder,
     AssetCustodian,
     Decision,
-    schematics_default_role,
-    listing_role
 )
 from openregistry.assets.core.utils import (
     get_now,
@@ -34,7 +32,7 @@ from openregistry.assets.bounce.roles import (
 
 
 from constants import (
-    INFORMATION_DETAILS, BOUNCE_ASSET_DOC_TYPE, ASSET_BOUNCE_DOCUMENT_TYPES
+    BOUNCE_ASSET_DOC_TYPE, RECTIFICATION_PERIOD_DURATION
 )
 
 
@@ -78,7 +76,8 @@ class Asset(BaseAsset):
         if self.status == 'pending' and not self.rectificationPeriod:
             self.rectificationPeriod = type(self).rectificationPeriod.model_class()
             self.rectificationPeriod.startDate = get_now()
-            self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate, timedelta(1))
+            self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate,
+                                                                       RECTIFICATION_PERIOD_DURATION)
 
     def validate_status(self, data, value):
         can_be_deleted = any([doc.documentType == 'cancellationDetails' for doc in data['documents']])
