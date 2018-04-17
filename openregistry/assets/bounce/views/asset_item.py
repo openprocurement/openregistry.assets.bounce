@@ -9,7 +9,7 @@ from openprocurement.api.utils import (
 from openregistry.assets.core.utils import (
     save_asset, opassetsresource, apply_patch,
 )
-from openregistry.assets.loki.validation import (
+from openregistry.assets.bounce.validation import (
     rectificationPeriod_item_validation
 )
 from openregistry.lots.loki.validation import (
@@ -20,7 +20,7 @@ from openregistry.lots.loki.validation import (
 @opassetsresource(name='assets:Asset Items',
                 collection_path='/assets/{asset_id}/items',
                 path='/assets/{asset_id}/items/{item_id}',
-                assetType='loki',
+                assetType='bounce',
                 description="Asset related items")
 class LotItemResource(APIResource):
 

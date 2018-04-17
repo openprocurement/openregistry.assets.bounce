@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# from openregistry.assets.loki.tests.base import snitch
+# from openregistry.assets.bounce.tests.base import snitch
 
 from openprocurement.api.tests.base import snitch
 
@@ -26,8 +26,8 @@ from .document import (
     rectificationPeriod_document_workflow
 )
 
-class AssetLokiResourceDocumentTestMixin(object):
-    """ Mixin with asset loki tests for Asset and Lot documents
+class AssetBounceResourceDocumentTestMixin(object):
+    """ Mixin with asset bounce tests for Asset and Lot documents
     """
 
     test_01_not_found = snitch(not_found)

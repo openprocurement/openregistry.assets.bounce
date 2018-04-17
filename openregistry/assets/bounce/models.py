@@ -23,7 +23,7 @@ from openprocurement.api.utils import (
 )
 
 from openprocurement.api.models.registry_models.roles import schematics_default_role, plain_role, listing_role
-from openregistry.assets.loki.roles import (
+from openregistry.assets.bounce.roles import (
     create_role,
     edit_role,
     view_role,
@@ -41,22 +41,22 @@ from openprocurement.api.models.registry_models.ocds import (
 )
 
 from constants import (
-    INFORMATION_DETAILS, LOKI_ASSET_DOC_TYPE, ASSET_LOKI_DOCUMENT_TYPES
+    INFORMATION_DETAILS, BOUNCE_ASSET_DOC_TYPE, ASSET_BOUNCE_DOCUMENT_TYPES
 )
 
 
-class ILokiAsset(IAsset):
-    """ Interface for loki assets """
+class IBounceAsset(IAsset):
+    """ Interface for bounce assets """
 
 
 class Document(Document):
     documentOf = StringType(choices=['asset', 'item'])
 
 
-@implementer(ILokiAsset)
+@implementer(IBounceAsset)
 class Asset(BaseAsset):
     description = StringType(required=True)
-    assetType = StringType(default="loki")
+    assetType = StringType(default="bounce")
     assetHolder= ModelType(AssetHolder)
     assetCustodian = ModelType(AssetCustodian, required=True)
     rectificationPeriod = ModelType(Period)
@@ -124,7 +124,7 @@ class Asset(BaseAsset):
     def validate_documents(self, data, docs):
         if not docs:
             return
-        if docs[0].documentType != LOKI_ASSET_DOC_TYPE:
+        if docs[0].documentType != BOUNCE_ASSET_DOC_TYPE:
             raise ValidationError(u"First document should be "
                                   u"document with {}"
-                                  "documentType".format(LOKI_ASSET_DOC_TYPE))
+                                  "documentType".format(BOUNCE_ASSET_DOC_TYPE))

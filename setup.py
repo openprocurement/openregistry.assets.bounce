@@ -5,10 +5,10 @@ version = '0.1'
 
 entry_points = {
     'openregistry.assets.core.plugins': [
-        'assets.loki = openregistry.assets.loki.includeme:includeme'
+        'assets.bounce = openregistry.assets.bounce.includeme:includeme'
     ],
     'openregistry.tests': [
-        'assets.loki = openregistry.assets.loki.tests.main:suite'
+        'assets.bounce = openregistry.assets.bounce.tests.main:suite'
     ]
 }
 
@@ -22,7 +22,7 @@ docs_requires = requires + [
     'sphinxcontrib-httpdomain',
 ]
 
-setup(name='openregistry.assets.loki',
+setup(name='openregistry.assets.bounce',
       version=version,
       description="",
       long_description=open("README.rst").read() + "\n" +
@@ -36,7 +36,7 @@ setup(name='openregistry.assets.loki',
       author='Quintagroup, Ltd.',
       author_email='info@quintagroup.com',
       license='Apache License 2.0',
-      url='https://github.com/openprocurement/openregistry.assets.loki',
+      url='https://github.com/openprocurement/openregistry.assets.bounce',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['openregistry', 'openregistry.assets'],
       include_package_data=True,

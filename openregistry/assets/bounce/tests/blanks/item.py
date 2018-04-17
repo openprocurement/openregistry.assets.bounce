@@ -8,7 +8,7 @@ from openprocurement.api.models.models import (
     Period
 )
 from openprocurement.api.constants import IS_SCHEMAS_PROPERTIES_ENABLED_LOKI
-from openregistry.assets.loki.models import Asset
+from openregistry.assets.bounce.models import Asset
 
 
 def create_item_resource(self):
@@ -65,7 +65,7 @@ def list_item_resource(self):
 
 
 @unittest.skipIf(not IS_SCHEMAS_PROPERTIES_ENABLED_LOKI, "not supported now")
-def create_loki_with_item_schemas(self):
+def create_bounce_with_item_schemas(self):
     asset = self.create_resource()
 
     response = self.app.post_json('/{}/items'.format(asset['id']), {'data': self.initial_item_data})

@@ -5,7 +5,7 @@ from copy import deepcopy
 from openregistry.assets.core.tests.base import (
     BaseAssetWebTest as BaseAWT, #snitch
 )
-from json_data import test_asset_loki_data
+from json_data import test_asset_bounce_data
 
 
 class BaseAssetWebTest(BaseAWT):
@@ -13,7 +13,7 @@ class BaseAssetWebTest(BaseAWT):
     relative_to = os.path.dirname(__file__)
 
     def setUp(self):
-        self.initial_data = deepcopy(test_asset_loki_data)
+        self.initial_data = deepcopy(test_asset_bounce_data)
         super(BaseAssetWebTest, self).setUp()
 
 

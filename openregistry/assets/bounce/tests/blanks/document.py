@@ -6,7 +6,7 @@ from openprocurement.api.models.models import (
     Period
 )
 
-from openregistry.assets.loki.models import Asset
+from openregistry.assets.bounce.models import Asset
 
 
 def create_resource_document_json(self):
