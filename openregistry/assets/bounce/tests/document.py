@@ -5,7 +5,6 @@ from copy import deepcopy
 from openregistry.assets.bounce.tests.base import (
     AssetContentWebTest
 )
-# from openregistry.assets.core.tests.blanks.json_data import test_document_data
 from openregistry.assets.core.tests.blanks.json_data import test_document_data
 
 from openregistry.assets.core.models import LOKI_DOCUMENT_TYPES
