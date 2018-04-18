@@ -27,7 +27,8 @@ from openregistry.assets.core.utils import (
 )
 
 from openregistry.assets.bounce.roles import (
-    asset_roles
+    asset_roles,
+    edit_role
 )
 
 
@@ -70,6 +71,8 @@ class Asset(BaseAsset):
         super(Asset, self).__init__(*args, **kwargs)
         if self.rectificationPeriod and self.rectificationPeriod.endDate < get_now():
             self._options.roles['edit_pending'] = whitelist('status')
+        else:
+            self._options.roles['edit_pending'] = edit_role
 
     @serializable(serialized_name='rectificationPeriod', serialize_when_none=False)
     def rectificationPeriod_serializable(self):
