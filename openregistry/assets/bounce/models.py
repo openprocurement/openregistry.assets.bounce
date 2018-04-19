@@ -1,32 +1,96 @@
 # -*- coding: utf-8 -*-
-from schematics.types import StringType
+from datetime import timedelta
+
+from schematics.types import StringType, URLType, IntType
+from schematics.transforms import whitelist, blacklist
 from schematics.types.compound import ListType, ModelType
 from schematics.exceptions import ValidationError
+from schematics.types.serializable import serializable
+
+from pyramid.security import Allow
+
 from zope.interface import implementer
+
 from openregistry.assets.core.models import (
-    IAsset, Asset as BaseAsset, Item, Document
+    IAsset,
+    Asset as BaseAsset,
+    Period,
+    LokiDocument as Document,
+    LokiItem as Item,
+    AssetHolder,
+    AssetCustodian,
+    Decision,
+)
+from openregistry.assets.core.utils import (
+    get_now,
+    calculate_business_date
 )
 
+from openregistry.assets.bounce.roles import (
+    asset_roles,
+    edit_role
+)
+
+
 from constants import (
-    INFORMATION_DETAILS, BOUNCE_ASSET_DOC_TYPE, ASSET_BOUNCE_DOCUMENT_TYPES
+    BOUNCE_ASSET_DOC_TYPE, RECTIFICATION_PERIOD_DURATION
 )
 
 
 class IBounceAsset(IAsset):
     """ Interface for bounce assets """
 
+
 class Document(Document):
-    documentType = StringType(choices=ASSET_BOUNCE_DOCUMENT_TYPES)
-    format = StringType(regex='^[-\w]+/[-\.\w\+]+$')
+    documentOf = StringType(choices=['asset', 'item'])
 
 
 @implementer(IBounceAsset)
 class Asset(BaseAsset):
+    description = StringType(required=True)
     assetType = StringType(default="bounce")
-    items = ListType(ModelType(Item))
+    assetHolder= ModelType(AssetHolder)
+    assetCustodian = ModelType(AssetCustodian, required=True)
+    rectificationPeriod = ModelType(Period)
+    items = ListType(ModelType(Item), default=list())
+    decisions = ListType(ModelType(Decision), min_size=1, max_size=1, required=True)
     documents = ListType(ModelType(Document), default=list())   # All documents and attachments
                                                                 # related to the asset.
+    class Options:
+        roles = asset_roles
 
+    def __acl__(self):
+        acl = [
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_asset'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_documents'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items'),
+        ]
+        return acl
+
+    def get_role(self):
+        root = self.__parent__
+        request = root.request
+        if request.authenticated_role == 'Administrator':
+            role = 'Administrator'
+        elif request.authenticated_role == 'concierge':
+            role = 'concierge'
+        else:
+            after_rectificationPeriod = bool(
+                request.context.rectificationPeriod and
+                request.context.rectificationPeriod.endDate < get_now()
+            )
+            if request.context.status == 'pending' and after_rectificationPeriod:
+                return 'edit_pendingAfterRectificationPeriod'
+            role = 'edit_{}'.format(request.context.status)
+        return role
+
+    @serializable(serialized_name='rectificationPeriod', serialize_when_none=False)
+    def rectificationPeriod_serializable(self):
+        if self.status == 'pending' and not self.rectificationPeriod:
+            self.rectificationPeriod = type(self).rectificationPeriod.model_class()
+            self.rectificationPeriod.startDate = get_now()
+            self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate,
+                                                                       RECTIFICATION_PERIOD_DURATION)
 
     def validate_documents(self, data, docs):
         if not docs:
