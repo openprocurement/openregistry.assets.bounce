@@ -1,15 +1,16 @@
 Overview
 ========
 
-openregistry.assets.basic contains the description of the Registry Data Base.
+openregistry.assets.bounce contains the description of the Registry Data Base.
 
 Features
 --------
 
-* Basic asset is a representation of an item.
-* Procedure can be switched from *draft* status to *pending*.
-* Basic assets are combined in lot, being marked as attached to that lot.
-* The only currency (*Value.currency*) to be used is hryvnia (UAH).
+* Asset represents the initial information of an object to be privatized.
+* The object to be created should be switched from `draft` to `pending`.
+* Asset is being created with the automatically added `documentType: cancellationDetails`. 
+* Asset is a complicated entity the components of which are marked as items.
+* For the asset to be deleted, the specific document (`documentType: cancellationDetails`) has to be attached.
 
 Conventions
 -----------
@@ -42,7 +43,7 @@ Project status
 The project has pre alpha status.
 
 The source repository for this project is on GitHub: 
-https://github.com/openprocurement/openprocurement.api  
+https://github.com/openprocurement/openregistry.assets.bounce  
 
 Documentation of related packages
 ---------------------------------
