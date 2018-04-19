@@ -67,12 +67,22 @@ class Asset(BaseAsset):
         ]
         return acl
 
-    def __init__(self, *args, **kwargs):
-        super(Asset, self).__init__(*args, **kwargs)
-        if self.rectificationPeriod and self.rectificationPeriod.endDate < get_now():
-            self._options.roles['edit_pending'] = whitelist('status')
+    def get_role(self):
+        root = self.__parent__
+        request = root.request
+        if request.authenticated_role == 'Administrator':
+            role = 'Administrator'
+        elif request.authenticated_role == 'concierge':
+            role = 'concierge'
         else:
-            self._options.roles['edit_pending'] = edit_role
+            after_rectificationPeriod = bool(
+                request.context.rectificationPeriod and
+                request.context.rectificationPeriod.endDate < get_now()
+            )
+            if request.context.status == 'pending' and after_rectificationPeriod:
+                return 'edit_pendingAfterRectificationPeriod'
+            role = 'edit_{}'.format(request.context.status)
+        return role
 
     @serializable(serialized_name='rectificationPeriod', serialize_when_none=False)
     def rectificationPeriod_serializable(self):
