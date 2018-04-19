@@ -31,8 +31,8 @@ def create_resource_document_json(self):
     response = self.app.get('/{}/documents'.format(self.resource_id))
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(doc_id, response.json["data"][2]["id"])
-    self.assertEqual(u'укр.doc', response.json["data"][2]["title"])
+    self.assertEqual(doc_id, response.json["data"][1]["id"])
+    self.assertEqual(u'укр.doc', response.json["data"][1]["title"])
 
     response = self.app.get('/{}/documents/{}'.format(self.resource_id, doc_id),
                             params={'download': 'some_id'}, status=404)
@@ -125,8 +125,8 @@ def put_resource_document_json(self):
     response = self.app.get('/{}/documents'.format(self.resource_id), params={'all': 'true'})
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(dateModified, response.json["data"][2]['dateModified'])
-    self.assertEqual(dateModified2, response.json["data"][3]['dateModified'])
+    self.assertEqual(dateModified, response.json["data"][1]['dateModified'])
+    self.assertEqual(dateModified2, response.json["data"][2]['dateModified'])
 
     response = self.app.post_json('/{}/documents'.format(self.resource_id),
         headers=self.access_header, params={
@@ -145,8 +145,8 @@ def put_resource_document_json(self):
     response = self.app.get('/{}/documents'.format(self.resource_id))
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(dateModified2, response.json["data"][2]['dateModified'])
-    self.assertEqual(dateModified, response.json["data"][3]['dateModified'])
+    self.assertEqual(dateModified2, response.json["data"][1]['dateModified'])
+    self.assertEqual(dateModified, response.json["data"][2]['dateModified'])
 
     response = self.app.put_json('/{}/documents/{}'.format(self.resource_id, doc_id),
                                  headers=self.access_header,
