@@ -136,15 +136,15 @@ def patch_asset(self):
     self.assertEqual(response.json['errors'][0]['location'], u'body')
     self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (pending) status")
 
-    # Move status from Pending to Deleted 422
+    # Move status from Pending to Deleted 403
     response = self.app.patch_json('/{}'.format(asset['id']),
                                    headers=self.access_header,
                                    params={'data': {'status': 'deleted'}},
-                                   status=422)
-    self.assertEqual(response.status, '422 Unprocessable Entity')
+                                   status=403)
+    self.assertEqual(response.status, '403 Forbidden')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
-    self.assertEqual(response.json['errors'][0]['description'][0],
+    self.assertEqual(response.json['errors'][0]['description'],
                     u"You can set deleted status"
                     u"only when asset have at least one document with \'cancellationDetails\' documentType")
 

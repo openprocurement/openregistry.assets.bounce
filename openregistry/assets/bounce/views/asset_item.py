@@ -20,7 +20,7 @@ from openregistry.assets.bounce.validation import (
                 path='/assets/{asset_id}/items/{item_id}',
                 assetType='bounce',
                 description="Asset related items")
-class LotItemResource(APIResource):
+class AssetBounceItemResource(APIResource):
 
     @json_view(permission='view_asset')
     def collection_get(self):
