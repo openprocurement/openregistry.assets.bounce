@@ -95,7 +95,7 @@ Schema
 
     :unknown: 
         Default value.
-    :proceed:
+    :registering:
         Item is still registering.
     :complete:
         Item has already been registered.

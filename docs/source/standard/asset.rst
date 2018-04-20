@@ -93,6 +93,16 @@ Schema
 :item:
     :ref:`item`, required
 
+:mode:
+    optional
+
+    The additional parameter with a value `test`.
+
+:assetType:
+    string, auto-generated, read-only
+
+    Type of the given asset. The only value is bounce.
+
 .. _decisions:
 
 Decisions
