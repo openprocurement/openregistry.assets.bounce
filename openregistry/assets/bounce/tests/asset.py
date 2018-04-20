@@ -5,7 +5,7 @@ from copy import deepcopy
 from openregistry.assets.core.tests.base import snitch
 
 from openregistry.assets.core.tests.blanks.mixins import (
-    AssetResourceTestMixin, ResourceTestMixin
+    BaseAssetResourceTestMixin, ResourceTestMixin
 )
 
 from openregistry.assets.bounce.models import Asset as AssetBounce
@@ -23,7 +23,7 @@ from openregistry.assets.bounce.tests.blanks.asset import (
 )
 
 
-class AssetBounceResourceTest(BaseAssetWebTest, ResourceTestMixin, AssetResourceTestMixin):
+class AssetBounceResourceTest(BaseAssetWebTest, ResourceTestMixin, BaseAssetResourceTestMixin):
     asset_model = AssetBounce
     docservice = True
     initial_data = test_asset_bounce_data
@@ -36,6 +36,7 @@ class AssetBounceResourceTest(BaseAssetWebTest, ResourceTestMixin, AssetResource
     test_13_check_pending_asset = snitch(change_pending_asset)
     test_19_patch_decimal_with_items = snitch(patch_decimal_item_quantity)
     test_rectificationPeriod_workflow = snitch(rectificationPeriod_workflow)
+
 
 def suite():
     tests = unittest.TestSuite()
