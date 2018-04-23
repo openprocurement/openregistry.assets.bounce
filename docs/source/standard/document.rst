@@ -17,7 +17,8 @@ Schema
 :documentType:
     string
 
-
+    Type of the document.
+    
 :title:
     string, multilingual
     
@@ -66,9 +67,15 @@ Schema
     Possible values are:
 
     * `asset`
-    * `lot`
+    * `item`
 
 :relatedItem:
     string
 
-    Id of related :ref:`lot` or :ref:`item`.
+    Id of related :ref:`asset` or :ref:`item`.
+
+:index:
+    integer
+
+    |ocdsDescription|
+    Sorting (display order) parameter used for illustrations. The smaller number is, the higher illustration is in the sorting. If index is not specified, illustration will be displayed the last. If two illustrations have the same index, they will be sorted depending on their publishing date.

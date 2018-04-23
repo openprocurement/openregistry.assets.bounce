@@ -13,7 +13,7 @@ from zope.interface import implementer
 
 from openregistry.assets.core.models import (
     IAsset,
-    Asset as BaseAsset,
+    BaseAsset,
     Period,
     LokiDocument as Document,
     LokiItem as Item,
