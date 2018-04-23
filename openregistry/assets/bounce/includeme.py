@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from pyramid.interfaces import IRequest
-from openregistry.assets.core.interfaces import IContentConfigurator
+from openregistry.assets.core.interfaces import IContentConfigurator, IAssetManager
 from openregistry.assets.bounce.models import Asset, IBounceAsset
-from openregistry.assets.bounce.adapters import BounceAssetConfigurator
+from openregistry.assets.bounce.adapters import BounceAssetConfigurator, BounceAssetManagerAdapter
 
 
 def includeme(config, plugin_config=None):
@@ -12,3 +12,6 @@ def includeme(config, plugin_config=None):
     config.registry.registerAdapter(BounceAssetConfigurator,
                                     (IBounceAsset, IRequest),
                                     IContentConfigurator)
+    config.registry.registerAdapter(BounceAssetManagerAdapter,
+                                    (IBounceAsset,),
+                                    IAssetManager)
