@@ -5,7 +5,7 @@ from openregistry.assets.bounce.models import Asset, IBounceAsset
 from openregistry.assets.bounce.adapters import BounceAssetConfigurator
 
 
-def includeme(config):
+def includeme(config, plugin_config=None):
     config.add_assetType(Asset)
     config.scan("openregistry.assets.bounce.views")
     config.scan("openregistry.assets.bounce.subscribers")
