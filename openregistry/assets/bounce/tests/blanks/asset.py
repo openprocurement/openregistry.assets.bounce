@@ -145,7 +145,7 @@ def patch_asset(self):
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
     self.assertEqual(response.json['errors'][0]['description'],
-                    u"You can set deleted status"
+                    u"You can set deleted status "
                     u"only when asset have at least one document with \'cancellationDetails\' documentType")
 
     add_cancellationDetails_document(self, asset)

@@ -46,7 +46,7 @@ def validate_deleted_status(request, error_handler, **kwargs):
         request.errors.add(
             'body',
             'mode',
-            "You can set deleted status"
+            "You can set deleted status "
             "only when asset have at least one document with \'cancellationDetails\' documentType")
         request.errors.status = 403
         raise error_handler(request)
