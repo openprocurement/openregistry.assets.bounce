@@ -11,7 +11,7 @@ class BounceAssetConfigurator(AssetConfigurator):
 
 
 class BounceAssetManagerAdapter(AssetManagerAdapter):
-    name = "Asset Manager for compound asset"
+    name = "Asset Manager for bounce asset"
     context = None
     create_validation = []
 
