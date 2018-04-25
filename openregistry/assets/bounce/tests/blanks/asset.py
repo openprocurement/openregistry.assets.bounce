@@ -266,6 +266,13 @@ def create_asset_with_items(self):
     response = self.app.post_json('/', params={'data': data})
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
+    self.assertIn('id', response.json['data']['items'][0])
+    self.assertEqual(response.json['data']['items'][0]['unit'], data['items'][0]['unit'])
+    self.assertEqual(response.json['data']['items'][0]['classification'], data['items'][0]['classification'])
+    self.assertEqual(response.json['data']['items'][0]['address'], data['items'][0]['address'])
+    self.assertEqual(response.json['data']['items'][0]['quantity'], data['items'][0]['quantity'])
+    self.assertEqual(response.json['data']['items'][0]['additionalClassifications'], data['items'][0]['additionalClassifications'])
+
 
     del data['items'][0]['unit']
 
