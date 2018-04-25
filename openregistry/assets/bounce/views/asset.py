@@ -19,9 +19,8 @@ patch_asset_validators = (
 @opassetsresource(name='bounce:Asset',
                   path='/assets/{asset_id}',
                   assetType='bounce',
-                  description="Open Contracting compatible data exchange format.")
+                  description="Bounce Asset View.")
 class AssetBounceResource(AssetResource):
-
 
     @json_view(content_type="application/json",
                validators=patch_asset_validators,
