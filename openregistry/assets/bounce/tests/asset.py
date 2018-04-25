@@ -19,7 +19,8 @@ from openregistry.assets.bounce.tests.blanks.asset import (
     change_pending_asset,
     administrator_change_delete_status,
     patch_decimal_item_quantity,
-    rectificationPeriod_workflow
+    rectificationPeriod_workflow,
+    create_asset_with_items
 )
 
 
@@ -36,6 +37,7 @@ class AssetBounceResourceTest(BaseAssetWebTest, ResourceTestMixin, BaseAssetReso
     test_13_check_pending_asset = snitch(change_pending_asset)
     test_19_patch_decimal_with_items = snitch(patch_decimal_item_quantity)
     test_rectificationPeriod_workflow = snitch(rectificationPeriod_workflow)
+    test_create_asset_with_items = snitch(create_asset_with_items)
 
 
 def suite():

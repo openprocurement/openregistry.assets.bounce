@@ -17,7 +17,7 @@ test_asset_bounce_data = {
     "title": u"Земля для космодрому",
     "description": u"Опис землі для космодрому",
     "assetType": "bounce",
-    "items": [test_item_data, test_item_data],
+    # "items": [test_item_data, test_item_data],
     "assetCustodian": deepcopy(test_organization),
     "decisions": [{
         'decisionDate': get_now().isoformat(),
