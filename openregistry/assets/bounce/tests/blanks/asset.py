@@ -3,6 +3,7 @@ from copy import deepcopy
 from datetime import timedelta
 
 from openregistry.assets.core.tests.base import create_blacklist
+from openregistry.assets.core.tests.blanks.json_data import test_loki_item_data
 from openregistry.assets.core.constants import STATUS_CHANGES, ASSET_STATUSES
 
 from openregistry.assets.core.models import (
@@ -256,6 +257,29 @@ def check_patch_status_403(self, asset_id, asset_status, headers=None):
     self.assertEqual(response.status, '403 Forbidden')
     self.assertEqual(response.content_type, 'application/json')
     return response
+
+
+def create_asset_with_items(self):
+    data = deepcopy(self.initial_data)
+    data['items'] = [deepcopy(test_loki_item_data)]
+
+    response = self.app.post_json('/', params={'data': data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertIn('id', response.json['data']['items'][0])
+    self.assertEqual(response.json['data']['items'][0]['unit'], data['items'][0]['unit'])
+    self.assertEqual(response.json['data']['items'][0]['classification'], data['items'][0]['classification'])
+    self.assertEqual(response.json['data']['items'][0]['address'], data['items'][0]['address'])
+    self.assertEqual(response.json['data']['items'][0]['quantity'], data['items'][0]['quantity'])
+    self.assertEqual(response.json['data']['items'][0]['additionalClassifications'], data['items'][0]['additionalClassifications'])
+
+
+    del data['items'][0]['unit']
+
+    response = self.app.post_json('/', params={'data': data}, status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['description'][0]['unit'], ['This field is required.'])
 
 
 def change_pending_asset(self):
