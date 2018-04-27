@@ -12,17 +12,17 @@ Schema
 ------
 
 :name:
-    string, multilingual
+    string, multilingual, optional
     
     Name of the organization.
     
 :identifier:
-    :ref:`Identifier`
+    :ref:`Identifier`, required
     
     The primary identifier for this organization. 
     
 :additionalIdentifiers:
-    List of :ref:`identifier` objects
+    List of :ref:`identifier` objects, optional
     
 :address:
     :ref:`Address`, required
@@ -42,7 +42,7 @@ Schema
 ------
 
 :scheme:
-   string
+   string, required
 
    |ocdsDescription|
    Organization identifiers be drawn from an existing identification scheme. 
@@ -63,7 +63,7 @@ Schema
    (EDRPOU and IPN).
 
 :legalName:
-   string, multilingual
+   string, multilingual, optional
 
    |ocdsDescription|
    The legally registered name of the organization.
@@ -71,7 +71,7 @@ Schema
    Full legal name (e.g. Nadra Bank).
 
 :uri:
-   uri
+   uri, optional
 
    |ocdsDescription|
    A URI to identify the organization, such as those provided by Open
@@ -91,25 +91,25 @@ Schema
 ------
 
 :streetAddress:
-    string
+    string, optional
     
     |ocdsDescription|
     The street address. For example, 1600 Amphitheatre Pkwy.
     
 :locality:
-    string
+    string, optional
     
     |ocdsDescription|
     The locality. For example, Mountain View.
     
 :region:
-    string
+    string, optional
     
     |ocdsDescription|
     The region. For example, CA.
     
 :postalCode:
-    string
+    string, optional
     
     |ocdsDescription|
     The postal code. For example, 94043.
@@ -138,28 +138,25 @@ Schema
     The name of the contact person, department, or contact point, for correspondence relating to this contracting process.
     
 :email:
-    email
+    email, optional
     
     |ocdsDescription|
     The e-mail address of the contact point/person.
     
 :telephone:
-    string
+    string, required
     
     |ocdsDescription|
     The telephone number of the contact point/person. This should include the international dialling code.
     
 :faxNumber:
-    string
+    string, optional
     
     |ocdsDescription|
     The fax number of the contact point/person. This should include the international dialling code.
     
 :url:
-    URL
+    URL, optional
     
     |ocdsDescription|
     A web address for the contact point/person.
-    
-
-Either `email` or `telephone` field has to be provided.

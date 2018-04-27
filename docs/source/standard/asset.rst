@@ -72,7 +72,7 @@ Schema
     * ``decription_ru`` (Russian) - Russian decription
     
 :documents:
-    :ref:`Documents`
+    array of :ref:`Documents`
     
     |ocdsDescription|
     All related documents and attachments.
@@ -83,15 +83,15 @@ Schema
    The entity managing the asset.
 
 :assetHolder:
-   :ref:`assetHolder`, required
+   :ref:`Organization`, optional
 
    The entity whom the asset was used to be owned by.
     
 :decisions:
-    :ref:`Decisions`, required
+    array of :ref:`Decisions`, required
 
 :item:
-    :ref:`item`, required
+    array of :ref:`item`, required
 
 :mode:
     optional

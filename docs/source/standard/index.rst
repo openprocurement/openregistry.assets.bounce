@@ -13,7 +13,6 @@ areas that were not covered by it.
 
    asset
    organization
-   document
+   documents
    item
-   assetHolder
    

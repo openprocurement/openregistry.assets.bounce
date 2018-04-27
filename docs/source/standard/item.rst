@@ -124,7 +124,7 @@ Schema
 ------
 
 :scheme:
-    string
+    string, required
 
     |ocdsDescription|
     A classification should be drawn from an existing scheme or list of
@@ -133,19 +133,19 @@ Schema
     should represent a known Item Classification Scheme wherever possible.
 
 :id:
-    string
+    string, required
 
     |ocdsDescription|
     The classification code drawn from the selected scheme.
 
 :description:
-    string
+    string, optional
 
     |ocdsDescription|
     A textual description or title for the code.
 
 :uri:
-    uri
+    uri, optional
 
     |ocdsDescription|
     A URI to identify the code. In the event individual URIs are not
