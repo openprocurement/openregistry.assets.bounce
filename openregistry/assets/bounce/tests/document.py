@@ -7,7 +7,7 @@ from openregistry.assets.bounce.tests.base import (
 )
 from openregistry.assets.core.tests.blanks.json_data import test_document_data
 
-from openregistry.assets.core.models import LOKI_DOCUMENT_TYPES
+from openregistry.assets.core.constants import LOKI_DOCUMENT_TYPES
 from blanks.mixins import AssetBounceResourceDocumentTestMixin
 
 
