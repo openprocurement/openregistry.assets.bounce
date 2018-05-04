@@ -50,3 +50,15 @@ def validate_deleted_status(request, error_handler, **kwargs):
             "only when asset have at least one document with \'cancellationDetails\' documentType")
         request.errors.status = 403
         raise error_handler(request)
+
+
+def validate_pending_status(request, error_handler, **kwargs):
+    if request.validated['data'].get('status') == 'pending' and request.context.status == 'draft':
+        if len(request.validated['asset'].items) == 0:
+            request.errors.add(
+                'body',
+                'data',
+                'Can\'t switch lot to pending status from draft until '
+                'asset will have at least one item.'
+            )
+            request.errors.status = 422

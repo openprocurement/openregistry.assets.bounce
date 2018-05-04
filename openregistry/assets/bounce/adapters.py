@@ -2,7 +2,10 @@
 from openregistry.assets.core.adapters import AssetConfigurator, AssetManagerAdapter
 from openregistry.assets.core.constants import STATUS_CHANGES
 
-from openregistry.assets.bounce.validation import validate_deleted_status
+from openregistry.assets.bounce.validation import (
+    validate_deleted_status,
+    validate_pending_status
+)
 
 
 class BounceAssetConfigurator(AssetConfigurator):
@@ -16,7 +19,10 @@ class BounceAssetManagerAdapter(AssetManagerAdapter):
     name = "Asset Manager for bounce asset"
     context = None
     create_validation = []
-    change_validation = [validate_deleted_status]
+    change_validation = (
+        validate_deleted_status,
+        validate_pending_status
+    )
 
     def __init__(self, context):
         self.context = context
