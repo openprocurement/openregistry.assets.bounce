@@ -355,6 +355,37 @@ def change_pending_asset(self):
     check_patch_status_200(self, asset['id'], 'verification')
 
 
+    self.app.authorization = ('Basic', ('broker', ''))
+    data = deepcopy(self.initial_data)
+    data['status'] = 'draft'
+    data['items'] = []
+    response = self.app.post_json('/', params={'data': data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'draft')
+    self.assertNotIn('items', response.json['data'])
+    asset = response.json['data']
+    token = response.json['access']['token']
+    access_header = {'X-Access-Token': str(token)}
+
+    response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header, status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['description'], 'Can\'t switch lot to pending status from draft until asset will have at least one item.')
+
+    response = self.app.post_json('/{}/items'.format(asset['id']),
+                                  headers=access_header,
+                                  params={'data': self.initial_item_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+
+    response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header)
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'pending')
+    self.assertEqual(len(response.json['data']['items']), 1)
+
+
 def administrator_change_delete_status(self):
     response = self.app.get('/')
     self.assertEqual(response.status, '200 OK')
