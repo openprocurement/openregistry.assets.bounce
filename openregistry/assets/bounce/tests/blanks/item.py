@@ -125,7 +125,9 @@ def delete_item_schema(self):
 def rectificationPeriod_item_workflow(self):
     rectificationPeriod = Period()
     rectificationPeriod.startDate = get_now() - timedelta(3)
-    rectificationPeriod.endDate = calculate_business_date(rectificationPeriod.startDate, timedelta(1))
+    rectificationPeriod.endDate = calculate_business_date(rectificationPeriod.startDate,
+                                                          timedelta(1),
+                                                          None)
 
     asset = self.create_resource()
 

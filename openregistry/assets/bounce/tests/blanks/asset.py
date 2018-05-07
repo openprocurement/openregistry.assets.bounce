@@ -433,7 +433,9 @@ def patch_decimal_item_quantity(self):
 def rectificationPeriod_workflow(self):
     rectificationPeriod = Period()
     rectificationPeriod.startDate = get_now() - timedelta(3)
-    rectificationPeriod.endDate = calculate_business_date(rectificationPeriod.startDate, timedelta(1))
+    rectificationPeriod.endDate = calculate_business_date(rectificationPeriod.startDate,
+                                                          timedelta(1),
+                                                          None)
 
     asset = self.create_resource()
 
