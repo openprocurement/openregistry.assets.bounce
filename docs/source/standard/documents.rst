@@ -91,7 +91,6 @@ Schema
     Possible values are:
 
     * `asset`
-    * `item`
 
 :relatedItem:
     string, optional
