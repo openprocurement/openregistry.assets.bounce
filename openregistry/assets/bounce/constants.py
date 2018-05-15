@@ -5,8 +5,8 @@ from datetime import timedelta
 BOUNCE_ASSET_DOC_TYPE = "informationDetails"
 
 INFORMATION_DETAILS = {
-    'title': 'TODO',
-    'url': 'TODO',
+    'title': 'Інформація про оприлюднення інформаційного повідомлення',
+    'url': 'https://prozorro.sale/info/ssp_details ',
     'documentOf': "asset",
     'documentType': BOUNCE_ASSET_DOC_TYPE
 }
