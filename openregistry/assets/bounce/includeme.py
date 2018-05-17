@@ -25,4 +25,4 @@ def includeme(config, plugin_config=None):
     for at in asset_types:
         config.add_assetType(Asset, at)
 
-    LOGGER.info("Included openregistry.lots.loki plugin", extra={'MESSAGE_ID': 'included_plugin'})
+    LOGGER.info("Included openregistry.assets.bounce plugin", extra={'MESSAGE_ID': 'included_plugin'})
