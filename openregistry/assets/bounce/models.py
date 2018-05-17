@@ -56,6 +56,10 @@ class Asset(BaseAsset):
     decisions = ListType(ModelType(Decision), min_size=1, max_size=1, required=True)
     documents = ListType(ModelType(Document), default=list())   # All documents and attachments
                                                                 # related to the asset.
+
+    create_accreditation = 3
+    edit_accreditation = 4
+
     class Options:
         roles = asset_roles
 
