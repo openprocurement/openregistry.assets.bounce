@@ -5,6 +5,8 @@ plugins:
       assets.core:
         plugins:
           assets.bounce:
+            aliases: [yoku]
+            use_default: True
 
 config:
   auth:
