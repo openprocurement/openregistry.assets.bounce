@@ -18,7 +18,7 @@ from openregistry.assets.bounce.validation import (
 @opassetsresource(name='assets:Asset Items',
                 collection_path='/assets/{asset_id}/items',
                 path='/assets/{asset_id}/items/{item_id}',
-                assetType='bounce',
+                  _internal_type='bounce',
                 description="Asset related items")
 class AssetBounceItemResource(APIResource):
 

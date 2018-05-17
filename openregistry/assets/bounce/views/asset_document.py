@@ -40,7 +40,7 @@ patch_document_validators = (
 @opassetsresource(name='bounce:Asset Documents',
                   collection_path='/assets/{asset_id}/documents',
                   path='/assets/{asset_id}/documents/{document_id}',
-                  assetType='bounce',
+                  _internal_type='bounce',
                   description="Asset related binary files (PDFs, etc.)")
 class AssetBounceDocumentResource(AssetDocumentResource):
 

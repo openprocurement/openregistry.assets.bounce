@@ -7,7 +7,7 @@ from openregistry.assets.bounce.constants import (
 )
 
 
-@subscriber(AssetInitializeEvent, assetType="bounce")
+@subscriber(AssetInitializeEvent, _internal_type="bounce")
 def tender_init_handler(event):
     """ initialization handler for bounce assets """
     asset = event.asset
