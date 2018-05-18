@@ -5,7 +5,7 @@ plugins:
       assets.core:
         plugins:
           assets.bounce:
-            aliases: [yoku]
+            aliases: [domain]
             use_default: True
 
 config:

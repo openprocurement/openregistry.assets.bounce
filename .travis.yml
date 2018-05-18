@@ -11,9 +11,9 @@ services:
 env:
   global:
     - TZ=Europe/Kiev
-    matrix:
+  matrix:
     - ASSET_TYPE=
-    - ASSET_TYPE=yoku
+    - ASSET_TYPE=domain
 cache:
   directories:
     - eggs
