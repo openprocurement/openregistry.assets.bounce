@@ -101,7 +101,12 @@ Schema
 :assetType:
     string, auto-generated, read-only
 
-    Type of the given asset. The only value is bounce.
+    Type of the given asset. The only value is domain.
+    
+:sandboxParameters:
+   string, optional
+
+   Parameter that accelerates auction periods. Set quick, accelerator=1440 as text value for `sandboxParameters` for the time frames to be reduced in 1440 times.
 
 .. _decisions:
 
