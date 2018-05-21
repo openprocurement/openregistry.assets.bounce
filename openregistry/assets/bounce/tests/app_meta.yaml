@@ -5,6 +5,8 @@ plugins:
       assets.core:
         plugins:
           assets.bounce:
+            aliases: [domain]
+            use_default: True
 
 config:
   auth:

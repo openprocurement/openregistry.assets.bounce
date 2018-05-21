@@ -48,6 +48,7 @@ class Document(Document):
 @implementer(IBounceAsset)
 class Asset(BaseAsset):
     description = StringType(required=True)
+    _internal_type = 'bounce'
     assetType = StringType(default="bounce")
     assetHolder= ModelType(AssetHolder)
     assetCustodian = ModelType(AssetCustodian, required=True)
