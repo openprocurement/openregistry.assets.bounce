@@ -1,38 +1,104 @@
-PATCH /api/0.1/assets/f7d85ded1544424d82a3473f9467f80f?acc_token=1803ee39a2164a3dacd9aee5e581aa7d HTTP/1.0
+PATCH /api/2.4/assets/5c8cd4c766c74f60b25b2b9cdbfb8ef7?acc_token=f9954df58b5c4f40a7ba11f1eae6063c HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 31
 Content-Type: application/json
-Host: lb.api-sandbox.registry.ea.openprocurement.net
-
+Host: lb.api-sandbox.registry.ea2.openprocurement.net
+DATA:
 {
   "data": {
     "status": "pending"
   }
 }
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json
 X-Content-Type-Options: nosniff
-
 {
   "data": {
     "status": "pending", 
-    "assetType": "basic", 
-    "classification": {
-      "scheme": "CAV",
-      "description": "Земельні ділянки", 
-      "id": "39513200-3"
+    "assetType": "bounce", 
+    "rectificationPeriod": {
+      "startDate": "2018-05-22T13:39:54.509530+03:00", 
+      "endDate": "2018-05-23T13:39:54.509530+03:00"
     }, 
+    "documents": [
+      {
+        "title": "Інформація про оприлюднення інформаційного повідомлення", 
+        "url": "https://prozorro.sale/info/ssp_details ", 
+        "documentOf": "asset", 
+        "datePublished": "2018-05-22T13:39:54.423035+03:00", 
+        "documentType": "informationDetails", 
+        "dateModified": "2018-05-22T13:39:54.423082+03:00", 
+        "id": "e5796e629edd4477a730aa732a425f9d"
+      }
+    ], 
+    "description": "Опис землі для космодрому", 
     "title": "Земля для космодрому", 
-    "assetID": "UA-2017-08-16-000001", 
-    "value": {
-      "currency": "UAH", 
-      "amount": 100.0, 
-      "valueAddedTaxIncluded": true
-    }, 
-    "dateModified": "2017-08-16T18:36:13.882146+03:00", 
+    "assetID": "UA-AR-DGF-2018-05-22-000001", 
+    "items": [
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "description": "Description", 
+          "id": "06121000-6"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "description": "папір і картон гофровані, паперова й картонна тара", 
+            "id": "17.21.1"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "ca254ba6052947539d7bb26aaa163e8d", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }, 
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "description": "Description", 
+          "id": "06121000-6"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "description": "папір і картон гофровані, паперова й картонна тара", 
+            "id": "17.21.1"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "1a1cf1d83a424e7284976caef828d680", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }
+    ], 
+    "dateModified": "2018-05-22T13:39:54.510132+03:00", 
     "owner": "broker", 
+    "date": "2018-05-22T13:39:54.509861+03:00", 
+    "decisions": [
+      {
+        "decisionDate": "2018-05-22T13:39:53.504199+03:00", 
+        "decisionID": "1111-4"
+      }
+    ], 
+    "id": "5c8cd4c766c74f60b25b2b9cdbfb8ef7", 
     "assetCustodian": {
       "contactPoint": {
         "name": "Державне управління справами", 
@@ -51,21 +117,7 @@ X-Content-Type-Options: nosniff
         "region": "м. Київ", 
         "locality": "м. Київ"
       }
-    }, 
-    "address": {
-      "postalCode": "79000", 
-      "countryName": "Україна", 
-      "streetAddress": "вул. Банкова 1", 
-      "region": "м. Київ", 
-      "locality": "м. Київ"
-    }, 
-    "date": "2017-08-16T18:36:13.882146+03:00", 
-    "id": "f7d85ded1544424d82a3473f9467f80f", 
-    "unit": {
-      "code": "39513200-3",
-      "name": "item"
-    }, 
-    "quantity": 5
+    }
   }
 }
 
