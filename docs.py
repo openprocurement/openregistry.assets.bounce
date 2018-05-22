@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
+from copy import deepcopy
 
 from openregistry.assets.core.tests.base import DumpsTestAppwebtest, PrefixedRequestClass
 from openregistry.assets.bounce.tests.base import BaseAssetWebTest
+from openregistry.assets.bounce.tests.json_data import test_asset_bounce_data
 
 
 class AssetResourceTest(BaseAssetWebTest):
@@ -14,6 +16,9 @@ class AssetResourceTest(BaseAssetWebTest):
         self.app.authorization = ('Basic', ('broker', ''))
         self.couchdb_server = self.app.app.registry.couchdb_server
         self.db = self.app.app.registry.db
+        self.initial_data = deepcopy(test_asset_bounce_data)
+        self.app.app.registry.docservice_url = 'http://localhost'
+        docservice = True
 
     def test_docs_tutorial(self):
         request_path = '/?opt_pretty=1'
@@ -39,6 +44,10 @@ class AssetResourceTest(BaseAssetWebTest):
         #
         with open('docs/source/tutorial/asset-post-2pc.http', 'w') as self.app.file_obj:
             response = self.app.post_json(request_path, {"data": self.initial_data})
+            asset = response.json['data']
+            self.resource_id = asset['id']
+            self.token = response.json['access']['token']
+            self.access_header = {'X-Access-Token': str(self.token)}
             self.assertEqual(response.status, '201 Created')
 
         asset_id = response.json['data']['id']
@@ -100,7 +109,22 @@ class AssetResourceTest(BaseAssetWebTest):
             response = self.app.get(request_path)
             self.assertEqual(response.status, '200 OK')
 
-
+        # Add cancellationDetails document
+        test_document_data = {
+            # 'url': self.generate_docservice_url(),
+            'title': u'укр.doc',
+            'hash': 'md5:' + '0' * 32,
+            'format': 'application/msword',
+            'documentType': 'cancellationDetails'
+        }
+        test_document_data['url'] = self.generate_docservice_url()
+        with open('docs/source/tutorial/add_cancellation_document.http', 'w') as self.app.file_obj:
+            response = self.app.post_json('/{}/documents'.format(asset['id']),
+                                          headers=self.access_header,
+                                          params={'data': test_document_data})
+            self.assertEqual(response.status, '201 Created')
+            self.assertEqual(response.content_type, 'application/json')
+            
         with open('docs/source/tutorial/delete-asset.http', 'w') as self.app.file_obj:
             response = self.app.patch_json('/{}?acc_token={}'.format(asset_id, owner_token),
                                            {'data': {"status": "deleted"}})

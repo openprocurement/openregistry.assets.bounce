@@ -1,33 +1,74 @@
-POST /api/0.1/assets?opt_pretty=1 HTTP/1.0
+POST /api/2.4/assets?opt_pretty=1 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 1516
+Content-Length: 2734
 Content-Type: application/json
-Host: lb.api-sandbox.registry.ea.openprocurement.net
-
+Host: lb.api-sandbox.registry.ea2.openprocurement.net
+DATA:
 {
   "data": {
-    "assetType": "basic", 
-    "classification": {
-      "scheme": "CAV",
-      "id": "39513200-3",
-      "description": "Земельні ділянки"
-    }, 
+    "assetType": "bounce", 
+    "description": "Опис землі для космодрому", 
     "title": "Земля для космодрому", 
-    "value": {
-      "currency": "UAH", 
-      "amount": 100
-    }, 
-    "unit": {
-      "code": "39513200-3",
-      "name": "item"
-    }, 
-    "address": {
-      "countryName": "Україна", 
-      "postalCode": "79000", 
-      "region": "м. Київ", 
-      "streetAddress": "вул. Банкова 1", 
-      "locality": "м. Київ"
-    }, 
+    "items": [
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "id": "06121000-6", 
+          "description": "Description"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "id": "17.21.1", 
+            "description": "папір і картон гофровані, паперова й картонна тара"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "0", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }, 
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "id": "06121000-6", 
+          "description": "Description"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "id": "17.21.1", 
+            "description": "папір і картон гофровані, паперова й картонна тара"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "0", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }
+    ], 
+    "decisions": [
+      {
+        "decisionDate": "2018-05-22T13:39:53.504199+03:00", 
+        "decisionID": "1111-4"
+      }
+    ], 
     "assetCustodian": {
       "contactPoint": {
         "name": "Державне управління справами", 
@@ -46,38 +87,99 @@ Host: lb.api-sandbox.registry.ea.openprocurement.net
         "streetAddress": "вул. Банкова, 11, корпус 1", 
         "locality": "м. Київ"
       }
-    }, 
-    "quantity": 5
+    }
   }
 }
 
-
-201 Created
+Response: 201 Created
 Content-Type: application/json
-Location: http://lb.api-sandbox.registry.ea.openprocurement.net/api/0.1/assets/bb2d3063c01346cb8a7f9f747dbd02b6
+Location: http://lb.api-sandbox.registry.ea2.openprocurement.net/api/2.4/assets/8a94b664b34740dfbb4d3109f1e2ec61
 X-Content-Type-Options: nosniff
-
 {
   "access": {
-    "token": "a14cec8e4d3f4888a27f31fb0b54ee25"
+    "token": "799ae2f90a16420ca7a32e9493fa2f20"
   }, 
   "data": {
     "status": "draft", 
-    "assetType": "basic", 
-    "classification": {
-      "scheme": "CAV",
-      "description": "Земельні ділянки", 
-      "id": "39513200-3"
-    }, 
+    "assetType": "bounce", 
+    "documents": [
+      {
+        "title": "Інформація про оприлюднення інформаційного повідомлення", 
+        "url": "https://prozorro.sale/info/ssp_details ", 
+        "documentOf": "asset", 
+        "datePublished": "2018-05-22T13:40:23.202137+03:00", 
+        "documentType": "informationDetails", 
+        "dateModified": "2018-05-22T13:40:23.202180+03:00", 
+        "id": "bfe3c9b7e55846859049aa9f00ffc54e"
+      }
+    ], 
+    "description": "Опис землі для космодрому", 
     "title": "Земля для космодрому", 
-    "assetID": "UA-2017-08-16-000002", 
-    "value": {
-      "currency": "UAH", 
-      "amount": 100.0, 
-      "valueAddedTaxIncluded": true
-    }, 
-    "dateModified": "2017-08-16T18:36:14.032506+03:00", 
+    "assetID": "UA-AR-DGF-2018-05-22-000002", 
+    "items": [
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "description": "Description", 
+          "id": "06121000-6"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "description": "папір і картон гофровані, паперова й картонна тара", 
+            "id": "17.21.1"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "7646155d79c049538715fc82837b0931", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }, 
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "description": "Description", 
+          "id": "06121000-6"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "description": "папір і картон гофровані, паперова й картонна тара", 
+            "id": "17.21.1"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "1c6b8c9b6ca2486aa765798fe199d806", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }
+    ], 
+    "dateModified": "2018-05-22T13:40:23.205533+03:00", 
     "owner": "broker", 
+    "date": "2018-05-22T13:40:23.201731+03:00", 
+    "decisions": [
+      {
+        "decisionDate": "2018-05-22T13:39:53.504199+03:00", 
+        "decisionID": "1111-4"
+      }
+    ], 
+    "id": "8a94b664b34740dfbb4d3109f1e2ec61", 
     "assetCustodian": {
       "contactPoint": {
         "name": "Державне управління справами", 
@@ -96,21 +198,7 @@ X-Content-Type-Options: nosniff
         "region": "м. Київ", 
         "locality": "м. Київ"
       }
-    }, 
-    "address": {
-      "postalCode": "79000", 
-      "countryName": "Україна", 
-      "streetAddress": "вул. Банкова 1", 
-      "region": "м. Київ", 
-      "locality": "м. Київ"
-    }, 
-    "date": "2017-08-16T18:36:14.030468+03:00", 
-    "id": "bb2d3063c01346cb8a7f9f747dbd02b6", 
-    "unit": {
-      "code": "39513200-3",
-      "name": "item"
-    }, 
-    "quantity": 5
+    }
   }
 }
 

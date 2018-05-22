@@ -12,6 +12,10 @@ Getting list of all assets
 
    **Example request**:
 
+   .. sourcecode:: http
+
+   GET /api/0/assets HTTP/1.0
+   Host: lb.api-sandbox.registry.ea2.openprocurement.net
 
    **Example response**:
 

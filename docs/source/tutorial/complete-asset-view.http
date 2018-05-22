@@ -1,31 +1,97 @@
-GET /api/0.1/assets/11ff5b04c97040c1882f0565ab43381a HTTP/1.0
-Authorization: Basic Ym90Og==
-Host: lb.api-sandbox.registry.ea.openprocurement.net
+GET /api/2.4/assets/7ca56d7436a1441da057379056a26840 HTTP/1.0
+Authorization: Basic Y29uY2llcmdlOg==
+Host: lb.api-sandbox.registry.ea2.openprocurement.net
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json
 X-Content-Type-Options: nosniff
-
 {
   "data": {
     "status": "complete", 
-    "relatedLot": "33f5b2a323034850bc268e4af669358b", 
-    "classification": {
-      "scheme": "CAV",
-      "description": "Земельні ділянки", 
-      "id": "39513200-3"
+    "relatedLot": "82900177353b4bf9963500218690f880", 
+    "rectificationPeriod": {
+      "startDate": "2018-05-22T13:40:23.777353+03:00", 
+      "endDate": "2018-05-23T13:40:23.777353+03:00"
     }, 
-    "assetType": "basic", 
-    "assetID": "UA-2017-08-16-000001", 
+    "documents": [
+      {
+        "title": "Інформація про оприлюднення інформаційного повідомлення", 
+        "url": "https://prozorro.sale/info/ssp_details ", 
+        "documentOf": "asset", 
+        "datePublished": "2018-05-22T13:40:23.714151+03:00", 
+        "documentType": "informationDetails", 
+        "dateModified": "2018-05-22T13:40:23.714189+03:00", 
+        "id": "e89331862c044d4ab8260d274ae7b862"
+      }
+    ], 
+    "description": "Опис землі для космодрому", 
     "title": "Земля для космодрому", 
-    "value": {
-      "currency": "UAH", 
-      "amount": 100.0, 
-      "valueAddedTaxIncluded": true
-    }, 
-    "dateModified": "2017-08-16T18:36:14.667379+03:00", 
+    "assetID": "UA-AR-DGF-2018-05-22-000001", 
+    "assetType": "bounce", 
+    "dateModified": "2018-05-22T13:40:24.192543+03:00", 
     "owner": "broker", 
+    "items": [
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "description": "Description", 
+          "id": "06121000-6"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "description": "папір і картон гофровані, паперова й картонна тара", 
+            "id": "17.21.1"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "dab50dde2a5843658f02d790fd3cf2e5", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }, 
+      {
+        "registrationDetails": {
+          "status": "unknown"
+        }, 
+        "description": "футляри до державних нагород", 
+        "classification": {
+          "scheme": "CAV-PS", 
+          "description": "Description", 
+          "id": "06121000-6"
+        }, 
+        "additionalClassifications": [
+          {
+            "scheme": "UA-EDR", 
+            "description": "папір і картон гофровані, паперова й картонна тара", 
+            "id": "17.21.1"
+          }
+        ], 
+        "address": {
+          "countryName": "Ukraine"
+        }, 
+        "id": "02079cb4c55943cfb5c4629aa0ee450b", 
+        "unit": {
+          "code": "code"
+        }, 
+        "quantity": 5.0001
+      }
+    ], 
+    "date": "2018-05-22T13:40:24.192312+03:00", 
+    "decisions": [
+      {
+        "decisionDate": "2018-05-22T13:39:53.504199+03:00", 
+        "decisionID": "1111-4"
+      }
+    ], 
+    "id": "7ca56d7436a1441da057379056a26840", 
     "assetCustodian": {
       "contactPoint": {
         "name": "Державне управління справами", 
@@ -44,21 +110,7 @@ X-Content-Type-Options: nosniff
         "region": "м. Київ", 
         "locality": "м. Київ"
       }
-    }, 
-    "address": {
-      "postalCode": "79000", 
-      "countryName": "Україна", 
-      "streetAddress": "вул. Банкова 1", 
-      "region": "м. Київ", 
-      "locality": "м. Київ"
-    }, 
-    "date": "2017-08-16T18:36:14.667379+03:00", 
-    "id": "11ff5b04c97040c1882f0565ab43381a", 
-    "unit": {
-      "code": "39513200-3",
-      "name": "item"
-    }, 
-    "quantity": 5
+    }
   }
 }
 
