@@ -122,19 +122,24 @@ Integration with lots
 
 As long as the lot is formed, the system should verify whether the asset can be attached to that lot. With the lot status being changed to `verification` the asset automatically reaches `verification` as well. 
 
-In case of the asset being available, its status becomes `active`.
+.. literalinclude:: tutorial/asset_switch_to_verification.http
+   :language: javascript
+
+In case of the asset being available, its status automatically becomes `active`.
 
 .. literalinclude:: tutorial/attached-to-lot-asset-view.http
    :language: javascript
 
-If the lot is formed incorrectly, the asset will receive `pending` status.
+If the lot is formed incorrectly, the asset will automatically receive `pending` status and so that the `relatedLot` field will be empty.
 
 .. literalinclude:: tutorial/detached-from-lot-asset-view.http
    :language: javascript
 
-As long as the lot status becomes either `pending.deleted` or `pending.dissolution`, the asset attached to that lot receives `pending` status.
 
-..............................
+As long as the lot status becomes either `pending.deleted` or `pending.dissolution`, the asset attached to that lot also receives `pending` status.
+
+.. literalinclude:: tutorial/detached-from-lot-asset-view.http
+   :language: javascript
 
 As long as the lot receives `pending.sold` status, the asset attached to that lot becomes `complete`.
 
