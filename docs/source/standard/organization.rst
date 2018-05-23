@@ -25,11 +25,21 @@ Schema
     List of :ref:`identifier` objects, optional
     
 :address:
-    :ref:`Address`, required
+    :ref:`Address`, required for assetCustodian
     
 :contactPoint:
-    :ref:`ContactPoint`, required
+    :ref:`ContactPoint`, required for assetCustodian
 
+:kind:
+    string, optional 
+    
+    Type of the organizer. 
+    Available only for assetCustodian.
+
+    Possible values:
+        - ``general`` - Organizer (general)
+        - ``special`` - Organizer that operates in certain spheres of economic activity
+        - ``other`` -  Legal persons that are not organizers in the sense of the Law, but are state, utility, public enterprises, economic partnerships or associations of enterprises in which state or public utility share is 50 percent or more
 
 .. index:: Company, id
 
@@ -138,13 +148,13 @@ Schema
     The name of the contact person, department, or contact point, for correspondence relating to this contracting process.
     
 :email:
-    email, optional
+    email
     
     |ocdsDescription|
     The e-mail address of the contact point/person.
     
 :telephone:
-    string, required
+    string
     
     |ocdsDescription|
     The telephone number of the contact point/person. This should include the international dialling code.
@@ -160,3 +170,5 @@ Schema
     
     |ocdsDescription|
     A web address for the contact point/person.
+
+Either `email` or `telephone` field has to be provided.
