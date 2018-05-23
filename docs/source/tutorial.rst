@@ -33,11 +33,12 @@ Error states that no `data` has been found in JSON body.
 Creating asset
 --------------
 
-
-Let's create asset with the minimal (only required) data set:
+Let's create asset with the minimal data set:
 
 .. literalinclude:: tutorial/asset-post-2pc.http
    :language: javascript
+
+The object you're trying to add initially receives `draft` status. For the asset to be created within the Registry, it should be manually switched to `pending` status (2 Phase Commit mechanism):
 
 .. literalinclude:: tutorial/asset-patch-2pc.http
    :language: javascript
@@ -66,11 +67,12 @@ Let's see what listing of assets reveals us:
 
 We do see the internal `id` of a asset (that can be used to construct full URL by prepending `http://lb.api-sandbox.registry.ea2.openprocurement.net/api/<api_version>/assets/`) and its `dateModified` datestamp.
 
-The previous asset contained only required fields. Let's try creating asset with more data
-(asset has status `created`):
+Let's create another asset:
 
 .. literalinclude:: tutorial/create-second-asset.http
    :language: javascript
+
+..........................................................
 
 And again we have `201 Created` response code, `Location` header and body with extra `id`, `assetID`, and `dateModified` properties.
 
@@ -91,7 +93,9 @@ Let's update asset description:
 
 .. XXX body is empty for some reason (printf fails)
 
-We see the added properies have merged with existing asset data. Additionally, the `dateModified` property was updated to reflect the last modification datestamp.
+We see the added properties have merged with existing asset data. Additionally, the `dateModified` property was updated to reflect the last modification date stamp.
+
+`Note` that the asset can be modified only within the rectification period (up to `rectificationPeriod.endDate`).
 
 Checking the listing again reflects the new modification date:
 
@@ -101,7 +105,9 @@ Checking the listing again reflects the new modification date:
 Deleting Asset
 --------------
 
-Let's delete asset. First you need to add canellationDetails document:
+Let's delete asset. 
+
+Firstly, you need to add a document with the `documentType: canellationDetails`:
 
 .. literalinclude:: tutorial/add_cancellation_document.http
    :language: javascript
@@ -114,19 +120,28 @@ And now asset can be easily deleted:
 Integration with lots
 ---------------------
 
-Automatic switch to verification
+As long as the lot is formed, the system should verify whether the asset can be attached to that lot. With the lot status being changed to `verification` the asset automatically reaches `verification` as well. 
 
 .. literalinclude:: tutorial/asset_switch_to_verification.http
    :language: javascript
 
-Asset is attached to the lot. Related lot information can be seen
+In case of the asset being available, its status automatically becomes `active`.
+
 .. literalinclude:: tutorial/attached-to-lot-asset-view.http
    :language: javascript
 
-Asset detached from lot
+If the lot is formed incorrectly, the asset will automatically receive `pending` status and so that the `relatedLot` field will be empty.
+
 .. literalinclude:: tutorial/detached-from-lot-asset-view.http
    :language: javascript
 
-Completed asset
+
+As long as the lot status becomes either `pending.deleted` or `pending.dissolution`, the asset attached to that lot also receives `pending` status.
+
+.. literalinclude:: tutorial/detached-from-lot-asset-view.http
+   :language: javascript
+
+As long as the lot receives `pending.sold` status, the asset attached to that lot becomes `complete`.
+
 .. literalinclude:: tutorial/complete-asset-view.http
       :language: javascript

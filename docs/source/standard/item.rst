@@ -30,8 +30,8 @@ Schema
     `itemClassificationScheme` to identify preferred classification lists,
     including CAV and GSIN.
 
-    It is required for `classification.scheme` to be `CAV`. The
-    `classification.id` should be valid CAV code.
+    It is required for `classification.scheme` to be `CAV-PS` or `CPV`. The
+    `classification.id` should be valid `CAV-PS` or `CPV` code.
 
 :additionalClassifications:
     List of :ref:`Classification` objects, optional
@@ -42,7 +42,7 @@ Schema
     This may also be used to present codes from an internal classification
     scheme.
 
-    It is required to have at least one item with `ДКПП` as `scheme`.
+    E.g.`CPVS` and `DK018` can be chosen from the list.
 
 :unit:
     :ref:`Unit`, required
@@ -139,7 +139,7 @@ Schema
     The classification code drawn from the selected scheme.
 
 :description:
-    string, optional
+    string, required
 
     |ocdsDescription|
     A textual description or title for the code.
@@ -166,7 +166,7 @@ Schema
     UN/CEFACT Recommendation 20 unit code.
 
 :name:
-    string
+    string, optional
 
     |ocdsDescription|
     Name of the unit

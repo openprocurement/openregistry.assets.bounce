@@ -5,11 +5,17 @@ plugins:
       assets.core:
         plugins:
           assets.bounce:
+            aliases: [domain]
+            use_default: True
 
 config:
   auth:
     type: file
     src: auth.ini
-  database:
-    couchdb.db_name: tests
-    couchdb.url: http://op:op@localhost:5984/
+  db:
+    type: couchdb
+    db_name: tests
+    url: localhost:5984
+    writer:
+      name: op
+      password: op

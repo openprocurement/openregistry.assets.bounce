@@ -12,7 +12,7 @@ def validate_item_data(request, error_handler, **kwargs):
     update_logging_context(request, {'item_id': '__new__'})
     context = request.context if 'items' in request.context else request.context.__parent__
     model = type(context).items.model_class
-    validate_data(request, model)
+    validate_data(request, model, "item")
 
 
 def rectificationPeriod_item_validation(request, error_handler, **kwargs):

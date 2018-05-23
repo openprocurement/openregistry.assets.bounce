@@ -21,6 +21,7 @@ class AssetDocumentWithDSResourceTest(AssetContentWebTest, AssetBounceResourceDo
     def setUp(self):
         super(AssetDocumentWithDSResourceTest, self).setUp()
         self.initial_document_data = deepcopy(test_document_data)
+        self.initial_document_data['documentType'] = 'notice'
         self.initial_document_data['url'] = self.generate_docservice_url()
 
 
