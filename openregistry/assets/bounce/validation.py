@@ -58,7 +58,7 @@ def validate_pending_status(request, error_handler, **kwargs):
             request.errors.add(
                 'body',
                 'data',
-                'Can\'t switch lot to pending status from draft until '
-                'asset will have at least one item.'
+                'You cannot switch the asset status from draft to pending '
+                'unless at least one item has been added.'
             )
             request.errors.status = 422
