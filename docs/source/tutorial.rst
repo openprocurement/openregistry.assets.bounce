@@ -72,11 +72,7 @@ Let's create another asset:
 .. literalinclude:: tutorial/create-second-asset.http
    :language: javascript
 
-..........................................................
-
-And again we have `201 Created` response code, `Location` header and body with extra `id`, `assetID`, and `dateModified` properties.
-
-Let's check what asset registry contains:
+After switching  this object to `pending`, let's check what assets registry contains:
 
 .. literalinclude:: tutorial/listing-with-some-assets.http
    :language: javascript
@@ -107,7 +103,7 @@ Deleting Asset
 
 Let's delete asset. 
 
-Firstly, you need to add a document with the `documentType: canellationDetails`:
+Firstly, a document with the `documentType: canellationDetails` has to be added:
 
 .. literalinclude:: tutorial/add_cancellation_document.http
    :language: javascript
