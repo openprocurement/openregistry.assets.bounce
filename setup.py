@@ -18,6 +18,8 @@ requires = [
     'openregistry.assets.core'
 ]
 
+test_requires = requires + []
+
 docs_requires = requires + [
     'sphinxcontrib-httpdomain',
 ]
@@ -41,7 +43,7 @@ setup(name='openregistry.assets.bounce',
       namespace_packages=['openregistry', 'openregistry.assets'],
       include_package_data=True,
       zip_safe=False,
-      extras_require={'docs': docs_requires},
+      extras_require={'docs': docs_requires, 'test': test_requires},
       install_requires=requires,
       entry_points=entry_points,
       )
