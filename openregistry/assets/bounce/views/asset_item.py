@@ -18,20 +18,14 @@ from openregistry.assets.bounce.validation import (
 @opassetsresource(name='assets:Asset Items',
                 collection_path='/assets/{asset_id}/items',
                 path='/assets/{asset_id}/items/{item_id}',
-                  _internal_type='bounce',
+                _internal_type='bounce',
                 description="Asset related items")
 class AssetBounceItemResource(APIResource):
 
     @json_view(permission='view_asset')
     def collection_get(self):
         """Asset Item List"""
-        if self.request.params.get('all', ''):
-            collection_data = [i.serialize("view") for i in self.context.items]
-        else:
-            collection_data = sorted(dict([
-                (i.id, i.serialize("view"))
-                for i in self.context.items
-            ]).values(), key=lambda i: i['dateModified'])
+        collection_data = [i.serialize("view") for i in self.context.items]
         return {'data': collection_data}
 
     @json_view(content_type="application/json", permission='upload_asset_items', validators=(validate_item_data, rectificationPeriod_item_validation))
