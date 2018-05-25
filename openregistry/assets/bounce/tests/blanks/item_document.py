@@ -313,7 +313,7 @@ def patch_item_document(self):
 
     for status in self.forbidden_item_document_statuses_modification:
         self.set_status(status)
-        response = self.app.post_json('/{}/items/{}/documents}'.format(self.resource_id, item_id),
+        response = self.app.post_json('/{}/items/{}/documents'.format(self.resource_id, item_id),
             headers=self.access_header, params={
                 "data": self.initial_document_data
             }, status=403)
