@@ -45,19 +45,19 @@ def update_items_in_forbidden(self):
     self.assertEqual(self.initial_item_data['quantity'], response.json["data"]["quantity"])
     self.assertEqual(self.initial_item_data['address'], response.json["data"]["address"])
 
+    data = self.initial_item_data
+    data['quantity'] = 99.9999
     for status in self.forbidden_item_statuses_modification:
         self.set_status(status)
         response = self.app.patch_json('/{}/items/{}'.format(self.resource_id, item_id),
             headers=self.access_header, params={
-                "data": {
-                    "description": "item description"
-                }}, status=403)
+                "data": data}, status=403)
         self.assertEqual(response.status, '403 Forbidden')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['errors'][0]["description"],
-                         "Can't update document of item in current ({}) {} status".format(status, self.resource_name[:-1]))
+                         "Can't update or create item in current ({}) {} status".format(status, self.resource_name[:-1]))
 
-    for status in self.forbidden_item_document_statuses_modification:
+    for status in self.forbidden_item_statuses_modification:
         self.set_status(status)
         response = self.app.post_json('/{}/items'.format(self.resource_id),
             headers=self.access_header, params={
@@ -66,7 +66,7 @@ def update_items_in_forbidden(self):
         self.assertEqual(response.status, '403 Forbidden')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['errors'][0]["description"],
-                         "Can't update document of item in current ({}) {} status".format(status, self.resource_name[:-1]))
+                         "Can't update or create item in current ({}) {} status".format(status, self.resource_name[:-1]))
 
 
 def create_item_resource(self):

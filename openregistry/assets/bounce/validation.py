@@ -70,7 +70,7 @@ def validate_update_item_in_not_allowed_status(request, error_handler, **kwargs)
             raise_operation_error(
                 request,
                 error_handler,
-                'Can\'t update item in current ({}) asset status'.format(request.validated['asset_status'])
+                'Can\'t update or create item in current ({}) asset status'.format(request.validated['asset_status'])
             )
 
 
