@@ -2,6 +2,7 @@
 import unittest
 from copy import deepcopy
 
+from openregistry.assets.core.constants import ASSET_STATUSES
 from openregistry.assets.core.tests.base import snitch
 
 from openregistry.assets.bounce.tests.base import (
@@ -14,6 +15,8 @@ from openregistry.assets.bounce.tests.blanks.item import (
     create_bounce_with_item_schemas,
     bad_item_schemas_code,
     delete_item_schema,
+    item_listing,
+    update_items_in_forbidden,
     rectificationPeriod_item_workflow
 )
 
@@ -21,11 +24,14 @@ class AssetItemResourceTest(AssetContentWebTest):
     initial_item_data = deepcopy(test_loki_item_data)
     test_create_item_resource = snitch(create_item_resource)
     test_patch_item_resource = snitch(patch_item)
+    test_item_listing = snitch(item_listing)
+    test_update_items_in_forbidden = snitch(update_items_in_forbidden)
     # test_create_bounce_with_item_schemas = snitch(create_bounce_with_item_schemas)
     # test_bad_item_schemas_code = snitch(bad_item_schemas_code)
     # test_delete_item_schema = snitch(delete_item_schema)
     test_rectificaionPeriod_item_workflow = snitch(rectificationPeriod_item_workflow)
 
+    forbidden_item_statuses_modification = ASSET_STATUSES[2:]
 
 def suite():
     suite = unittest.TestSuite()
