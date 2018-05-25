@@ -11,30 +11,35 @@ from openregistry.assets.core.utils import (
 )
 from openregistry.assets.bounce.validation import (
     rectificationPeriod_item_validation,
-    validate_item_data
+    validate_item_data,
+    validate_update_item_in_not_allowed_status
 )
 
+post_validators = [
+    validate_item_data,
+    rectificationPeriod_item_validation,
+    validate_update_item_in_not_allowed_status
+]
+patch_validators = [
+    validate_item_data,
+    rectificationPeriod_item_validation,
+    validate_update_item_in_not_allowed_status
+]
 
 @opassetsresource(name='assets:Asset Items',
                 collection_path='/assets/{asset_id}/items',
                 path='/assets/{asset_id}/items/{item_id}',
-                  _internal_type='bounce',
+                _internal_type='bounce',
                 description="Asset related items")
 class AssetBounceItemResource(APIResource):
 
     @json_view(permission='view_asset')
     def collection_get(self):
         """Asset Item List"""
-        if self.request.params.get('all', ''):
-            collection_data = [i.serialize("view") for i in self.context.items]
-        else:
-            collection_data = sorted(dict([
-                (i.id, i.serialize("view"))
-                for i in self.context.items
-            ]).values(), key=lambda i: i['dateModified'])
+        collection_data = [i.serialize("view") for i in self.context.items]
         return {'data': collection_data}
 
-    @json_view(content_type="application/json", permission='upload_asset_items', validators=(validate_item_data, rectificationPeriod_item_validation))
+    @json_view(content_type="application/json", permission='upload_asset_items', validators=post_validators)
     def collection_post(self):
         """Asset Item Upload"""
         item = self.request.validated['item']
@@ -54,7 +59,7 @@ class AssetBounceItemResource(APIResource):
         item_data = item.serialize("view")
         return {'data': item_data}
 
-    @json_view(content_type="application/json", permission='upload_asset_items', validators=(validate_item_data, rectificationPeriod_item_validation))
+    @json_view(content_type="application/json", permission='upload_asset_items', validators=patch_validators)
     def patch(self):
         """Asset Item Update"""
         if apply_patch(self.request, src=self.request.context.serialize()):

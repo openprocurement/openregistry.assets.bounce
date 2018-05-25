@@ -4,7 +4,7 @@ import os
 from copy import deepcopy
 from openregistry.assets.core.tests.blanks.json_data import (
     test_organization_loki,
-    schema_properties,
+    # schema_properties,
     test_loki_item_data
 )
 from openregistry.assets.core.utils import (
