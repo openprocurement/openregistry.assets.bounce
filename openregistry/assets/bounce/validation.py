@@ -6,6 +6,7 @@ from openregistry.assets.core.utils import (
 from openregistry.assets.core.validation import (
     validate_data
 )
+from openregistry.assets.core.utils import raise_operation_error
 
 
 def validate_item_data(request, error_handler, **kwargs):
@@ -62,3 +63,12 @@ def validate_pending_status(request, error_handler, **kwargs):
                 'unless at least one item has been added.'
             )
             request.errors.status = 422
+
+
+def validate_update_item_in_not_allowed_status(request, error_handler, **kwargs):
+    if request.validated['asset_status'] not in ['draft', 'pending']:
+            raise_operation_error(
+                request,
+                error_handler,
+                'Can\'t update or create item in current ({}) asset status'.format(request.validated['asset_status'])
+            )
