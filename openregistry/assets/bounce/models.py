@@ -45,6 +45,10 @@ class Document(Document):
     documentOf = StringType(choices=['asset', 'item'])
 
 
+class Item(Item):
+    documents = ListType(ModelType(Document), default=list())
+
+
 @implementer(IBounceAsset)
 class Asset(BaseAsset):
     description = StringType(required=True)
@@ -69,6 +73,7 @@ class Asset(BaseAsset):
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_asset'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_documents'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_item_documents'),
         ]
         return acl
 
