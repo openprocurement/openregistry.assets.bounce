@@ -6,6 +6,7 @@ from openregistry.assets.core.utils import (
 from openregistry.assets.core.validation import (
     validate_data
 )
+from  openregistry.assets.core.utils import raise_operation_error
 
 
 def validate_item_data(request, error_handler, **kwargs):
@@ -16,7 +17,7 @@ def validate_item_data(request, error_handler, **kwargs):
 
 
 def rectificationPeriod_item_validation(request, error_handler, **kwargs):
-    asset = request.context if 'documents' in request.context else request.context.__parent__
+    asset = request.context if 'items' in request.context else request.context.__parent__
     if asset.rectificationPeriod and asset.rectificationPeriod.endDate < get_now():
         request.errors.add('body', 'mode', 'You can\'t change items after rectification period')
         request.errors.status = 403
@@ -62,3 +63,41 @@ def validate_pending_status(request, error_handler, **kwargs):
                 'unless at least one item has been added.'
             )
             request.errors.status = 422
+
+
+def validate_update_item_in_not_allowed_status(request, error_handler, **kwargs):
+    if request.validated['asset_status'] not in ['draft', 'pending']:
+            raise_operation_error(
+                request,
+                error_handler,
+                'Can\'t update item in current ({}) asset status'.format(request.validated['asset_status'])
+            )
+
+
+def validate_update_item_document_in_not_allowed_status(request, error_handler, **kwargs):
+    if request.validated['asset_status'] not in ['draft', 'pending']:
+            raise_operation_error(
+                request,
+                error_handler,
+                'Can\'t update document of item in current ({}) asset status'.format(request.validated['asset_status'])
+            )
+
+
+def rectificationPeriod_item_document_validation(request, error_handler, **kwargs):
+    is_period_ended = bool(
+        request.validated['asset'].rectificationPeriod and
+        request.validated['asset'].rectificationPeriod.endDate < get_now()
+    )
+    if is_period_ended and request.method == 'POST':
+        request.errors.add(
+            'body',
+            'mode',
+            'You can\'t add documents to item after rectification period'
+        )
+        request.errors.status = 403
+        raise error_handler(request)
+
+    if is_period_ended and request.method in ['PUT', 'PATCH']:
+        request.errors.add('body', 'mode', 'You can\'t change documents after rectification period')
+        request.errors.status = 403
+        raise error_handler(request)
