@@ -10,6 +10,29 @@ from openregistry.assets.core.models import (
 from openregistry.assets.bounce.models import Asset
 
 
+def item_listing(self):
+    response = self.app.get('/{}/items'.format(self.resource_id))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(len(response.json['data']), len(self.initial_data['items']))
+
+    response = self.app.post_json('/{}/items'.format(self.resource_id),
+                                  headers=self.access_header,
+                                  params={'data': self.initial_item_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    item_id = response.json["data"]['id']
+    self.assertIn(item_id, response.headers['Location'])
+    self.assertEqual(self.initial_item_data['description'], response.json["data"]["description"])
+    self.assertEqual(self.initial_item_data['quantity'], response.json["data"]["quantity"])
+    self.assertEqual(self.initial_item_data['address'], response.json["data"]["address"])
+
+    response = self.app.get('/{}/items'.format(self.resource_id))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(len(response.json['data']), len(self.initial_data['items']) + 1)
+
+
 def create_item_resource(self):
     response = self.app.post_json('/{}/items'.format(self.resource_id),
                                   headers=self.access_header,
