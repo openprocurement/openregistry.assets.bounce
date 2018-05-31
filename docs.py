@@ -4,7 +4,10 @@ from copy import deepcopy
 
 from openregistry.assets.core.tests.base import DumpsTestAppwebtest, PrefixedRequestClass
 from openregistry.assets.bounce.tests.base import BaseAssetWebTest
-from openregistry.assets.bounce.tests.json_data import test_asset_bounce_data
+from openregistry.assets.bounce.tests.json_data import test_asset_bounce_data, test_item_data
+from openprocurement.api.config import DS
+from openprocurement.api.tests.base import test_config_data
+
 
 DumpsTestAppwebtest.hostname = "lb.api-sandbox.registry.ea2.openprocurement.net"
 
@@ -19,7 +22,12 @@ class AssetResourceTest(BaseAssetWebTest):
         self.db = self.app.app.registry.db
         self.initial_data = deepcopy(test_asset_bounce_data)
         self.app.app.registry.docservice_url = 'http://localhost'
-        docservice = True
+        self.initial_item_data = test_item_data
+        ds_config = deepcopy(test_config_data['config']['ds'])
+        docserv = DS(ds_config)
+        self.app.app.registry.docservice_key = dockey = docserv.signer
+        self.app.app.registry.keyring = docserv.init_keyring(dockey)
+        self.app.app.registry.use_docservice=True
 
     def test_docs_tutorial(self):
         request_path = '/?opt_pretty=1'
@@ -106,9 +114,20 @@ class AssetResourceTest(BaseAssetWebTest):
             })
             self.assertEqual(response.status, '200 OK')
 
+        item_id = response.json['data']['items'][0]['id']
+
         self.app.get(request_path)
         with open('docs/source/tutorial/asset-listing-after-patch.http', 'w') as self.app.file_obj:
             response = self.app.get(request_path)
+            self.assertEqual(response.status, '200 OK')
+
+        item_data = deepcopy(self.initial_item_data)
+        item_data['quantity'] = 42
+        # Update item
+        with open('docs/source/tutorial/update-item.http', 'w') as self.app.file_obj:
+            response = self.app.patch_json('/{}/items/{}'.format(asset_id, item_id),
+                                           headers=self.access_header,
+                                           params={'data': item_data})
             self.assertEqual(response.status, '200 OK')
 
         # Add cancellationDetails document

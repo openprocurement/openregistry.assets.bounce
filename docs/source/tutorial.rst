@@ -98,6 +98,11 @@ Checking the listing again reflects the new modification date:
 .. literalinclude:: tutorial/asset-listing-after-patch.http
    :language: javascript
 
+Let's modify one of the items added before:
+
+.. literalinclude:: tutorial/update-item.http
+   :language: javascript
+
 Deleting Asset
 --------------
 
