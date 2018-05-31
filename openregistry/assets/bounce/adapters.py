@@ -29,6 +29,7 @@ class BounceAssetManagerAdapter(AssetManagerAdapter):
 
     def create_asset(self, request):
         self._validate(request, self.create_validation)
+        request.validated['asset'].decisions[0].decisionOf = 'asset'
 
     def change_asset(self, request):
         self._validate(request, self.change_validation)

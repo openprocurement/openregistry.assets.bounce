@@ -28,7 +28,7 @@ from openregistry.assets.core.utils import (
 
 from openregistry.assets.bounce.roles import (
     asset_roles,
-    edit_role
+    decision_roles
 )
 
 
@@ -43,6 +43,12 @@ class IBounceAsset(IAsset):
 
 class Document(Document):
     documentOf = StringType(choices=['asset', 'item'])
+
+
+class Decision(Decision):
+    class Options:
+        roles = decision_roles
+    decisionOf = StringType(choices=['asset'])
 
 
 @implementer(IBounceAsset)
