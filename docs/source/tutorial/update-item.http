@@ -1,0 +1,67 @@
+PATCH /api/2.4/assets/c6f779c422954268b1bb2adf139e307d/items/50ffa36d59084905a520d8a1069565cd HTTP/1.0
+Authorization: Basic YnJva2VyOg==
+Content-Length: 748
+Content-Type: application/json
+Host: lb.api-sandbox.registry.ea2.openprocurement.net
+X-Access-Token: 7339b31b04cc44d8ad3c756e4b3545b4
+DATA:
+{
+  "data": {
+    "registrationDetails": {
+      "status": "unknown"
+    }, 
+    "description": "футляри до державних нагород", 
+    "classification": {
+      "scheme": "CAV-PS", 
+      "id": "06121000-6", 
+      "description": "Description"
+    }, 
+    "additionalClassifications": [
+      {
+        "scheme": "UA-EDR", 
+        "id": "17.21.1", 
+        "description": "папір і картон гофровані, паперова й картонна тара"
+      }
+    ], 
+    "address": {
+      "countryName": "Ukraine"
+    }, 
+    "unit": {
+      "code": "code"
+    }, 
+    "quantity": 42
+  }
+}
+
+Response: 200 OK
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+{
+  "data": {
+    "registrationDetails": {
+      "status": "unknown"
+    }, 
+    "description": "футляри до державних нагород", 
+    "classification": {
+      "scheme": "CAV-PS", 
+      "description": "Description", 
+      "id": "06121000-6"
+    }, 
+    "additionalClassifications": [
+      {
+        "scheme": "UA-EDR", 
+        "description": "папір і картон гофровані, паперова й картонна тара", 
+        "id": "17.21.1"
+      }
+    ], 
+    "address": {
+      "countryName": "Ukraine"
+    }, 
+    "id": "50ffa36d59084905a520d8a1069565cd", 
+    "unit": {
+      "code": "code"
+    }, 
+    "quantity": 42
+  }
+}
+
