@@ -282,6 +282,51 @@ def create_asset_with_items(self):
     self.assertEqual(response.json['errors'][0]['description'][0]['unit'], ['This field is required.'])
 
 
+def check_decisions(self):
+    self.app.authorization = ('Basic', ('broker', ''))
+    data = deepcopy(self.initial_data)
+    data['status'] = 'draft'
+    data['decisions'][0]['relatedItem'] = '1' * 32
+    response = self.app.post_json('/', params={'data': data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'draft')
+    self.assertEqual(response.json['data']['decisions'][0]['decisionOf'], 'asset')
+    self.assertNotIn('relatedItem', response.json['data']['decisions'][0])
+    asset = response.json['data']
+    token = response.json['access']['token']
+    access_header = {'X-Access-Token': str(token)}
+
+    decisions = [
+        {
+            'relatedItem': '1' *32
+        }
+    ]
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        params={'data': {'decisions':decisions}},
+        headers=access_header
+    )
+    self.assertEqual(response.json['data']['decisions'][0]['decisionOf'], 'asset')
+    self.assertNotIn('relatedItem', response.json['data']['decisions'][0])
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        params={'data': {'status': 'pending'}},
+        headers=access_header
+    )
+    self.assertEqual(response.json['data']['status'], 'pending')
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        params={'data': {'decisions':decisions}},
+        headers=access_header
+    )
+    self.assertEqual(response.json['data']['decisions'][0]['decisionOf'], 'asset')
+    self.assertNotIn('relatedItem', response.json['data']['decisions'][0])
+
+
+
 def change_pending_asset(self):
     response = self.app.get('/')
     self.assertEqual(response.status, '200 OK')
