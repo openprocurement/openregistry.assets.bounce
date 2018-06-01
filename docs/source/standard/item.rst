@@ -42,7 +42,8 @@ Schema
     This may also be used to present codes from an internal classification
     scheme.
 
-    E.g.`CPVS` and `DK018` can be chosen from the list.
+    E.g.`CPVS`, `DK018`, `cadastralNumber` & `UA-EDR` can be chosen from the list.
+    The codes are to be noted manually for `cadastralNumber` & `UA-EDR`.
 
 :unit:
     :ref:`Unit`, required
