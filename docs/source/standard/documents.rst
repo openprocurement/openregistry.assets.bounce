@@ -21,25 +21,25 @@ Schema
 
     Possible values are:
 
-    * `notice` - Asset Notice
+    * `notice` - **Asset Notice**
     
     The formal notice that gives details. This may be a link to a downloadable document, to a web page, or to an official gazette in which the notice is contained.
 
-    * `technicalSpecifications` - Technical Specifications
+    * `technicalSpecifications` - **Technical Specifications**
     
     Detailed technical information about goods or services to be provided.
 
-    * `illustration` - Illustrations
+    * `illustration` - **Illustrations**
 
-    * `x_presentation` - Presentation
+    * `x_presentation` - **Presentation**
 
     Presentation about the asset to be sold.
 
-    * `informationDetails` - Information Details
+    * `informationDetails` - **Information Details**
 
     Auto-generated type of document that will be attached to each of the assets automatically.
 
-    * `cancellationDetails` - Cancellation Details
+    * `cancellationDetails` - **Cancellation Details**
 
     Reasons why the asset has to be deleted.
     
