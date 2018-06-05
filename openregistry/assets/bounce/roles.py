@@ -11,6 +11,13 @@ view_role = (blacklist('owner_token', '_attachments', 'revisions') + assets_embe
 Administrator_role = whitelist('status', 'mode', 'relatedLot')
 concierge_role = (whitelist('status', 'relatedLot'))
 
+decision_roles = {
+    'create': blacklist('decisionOf', 'relatedItem'),
+    'edit': blacklist('decisionOf', 'relatedItem'),
+    'edit_draft': blacklist('decisionOf', 'relatedItem'),
+    'edit_pending': blacklist('decisionOf', 'relatedItem'),
+}
+
 asset_roles = {
     'create': create_role,
     # draft role

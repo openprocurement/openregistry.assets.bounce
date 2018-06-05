@@ -28,7 +28,7 @@ from openregistry.assets.core.utils import (
 
 from openregistry.assets.bounce.roles import (
     asset_roles,
-    edit_role
+    decision_roles
 )
 
 
@@ -41,8 +41,15 @@ class IBounceAsset(IAsset):
     """ Interface for bounce assets """
 
 
-class Document(Document):
+class AssetDocument(Document):
     documentOf = StringType(choices=['asset', 'item'])
+
+
+class AssetDecision(Decision):
+    class Options:
+        roles = decision_roles
+
+    decisionOf = StringType(choices=['asset'], default='asset')
 
 
 @implementer(IBounceAsset)
@@ -54,8 +61,8 @@ class Asset(BaseAsset):
     assetCustodian = ModelType(AssetCustodian, required=True)
     rectificationPeriod = ModelType(Period)
     items = ListType(ModelType(Item), default=list())
-    decisions = ListType(ModelType(Decision), min_size=1, max_size=1, required=True)
-    documents = ListType(ModelType(Document), default=list())   # All documents and attachments
+    decisions = ListType(ModelType(AssetDecision), min_size=1, max_size=1, required=True)
+    documents = ListType(ModelType(AssetDocument), default=list())   # All documents and attachments
                                                                 # related to the asset.
 
     create_accreditation = 3
