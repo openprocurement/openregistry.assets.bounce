@@ -25,7 +25,7 @@ from openregistry.assets.core.utils import (
     get_now,
     calculate_business_date
 )
-
+from openregistry.assets.core.validation import validate_items_uniq
 from openregistry.assets.bounce.roles import (
     asset_roles,
     decision_roles
@@ -60,7 +60,7 @@ class Asset(BaseAsset):
     assetHolder= ModelType(AssetHolder)
     assetCustodian = ModelType(AssetCustodian, required=True)
     rectificationPeriod = ModelType(Period)
-    items = ListType(ModelType(Item), default=list())
+    items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq])
     decisions = ListType(ModelType(AssetDecision), min_size=1, max_size=1, required=True)
     documents = ListType(ModelType(AssetDocument), default=list())   # All documents and attachments
                                                                 # related to the asset.
