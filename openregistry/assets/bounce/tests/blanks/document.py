@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
+from copy import deepcopy
 
 from openregistry.assets.core.utils import get_now, calculate_business_date
 from openregistry.assets.core.models import (
@@ -349,3 +350,25 @@ def rectificationPeriod_document_workflow(self):
     self.assertEqual(response.status, '403 Forbidden')
     self.assertEqual(response.json['errors'][0]['description'], 'You can\'t change documents after rectification period')
 
+
+def model_validation(self):
+    initial_document_data = deepcopy(self.initial_document_data)
+    del initial_document_data['url']
+    del initial_document_data['hash']
+    initial_document_data['documentType'] = 'x_dgfAssetFamiliarization'
+    response = self.app.post_json('/{}/documents'.format(self.resource_id),
+                                  headers=self.access_header,
+                                  params={'data': initial_document_data},
+                                  status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['status'], 'error')
+    self.assertEqual(response.json['errors'][0]['description'][0], u"This field is required.")
+
+    initial_document_data['accessDetails'] = u'Some access details'
+    response = self.app.post_json('/{}/documents'.format(self.resource_id),
+                                  headers=self.access_header,
+                                  params={'data': initial_document_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['accessDetails'], initial_document_data['accessDetails'])

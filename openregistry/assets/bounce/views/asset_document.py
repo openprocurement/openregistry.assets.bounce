@@ -3,8 +3,6 @@ from openregistry.assets.core.views.mixins import AssetDocumentResource
 from openregistry.assets.core.utils import opassetsresource
 
 from openregistry.assets.core.validation import (
-    validate_file_upload,
-    validate_document_data,
     validate_patch_document_data,
 )
 from openregistry.assets.core.utils import (
@@ -15,7 +13,11 @@ from openregistry.assets.core.validation import (
     validate_document_operation_in_not_allowed_asset_status,
     validate_asset_document_update_not_by_author_or_asset_owner,
 )
-from openregistry.assets.bounce.validation import rectificationPeriod_document_validation
+from openregistry.assets.bounce.validation import (
+    rectificationPeriod_document_validation,
+    validate_file_upload,
+    validate_document_data
+)
 
 
 post_document_validators = (

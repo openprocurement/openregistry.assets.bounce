@@ -14,8 +14,10 @@ from .document import (
     create_resource_document_json,
     put_resource_document_json,
     patch_resource_document,
-    rectificationPeriod_document_workflow
+    rectificationPeriod_document_workflow,
+    model_validation
 )
+
 
 class AssetBounceResourceDocumentTestMixin(object):
     """ Mixin with asset bounce tests for Asset and Lot documents
@@ -30,3 +32,4 @@ class AssetBounceResourceDocumentTestMixin(object):
     test_07_create_resource_document_json = snitch(create_resource_document_json)
     test_08_put_resource_document_json = snitch(put_resource_document_json)
     test_rectificationPeriod_document_workflow = snitch(rectificationPeriod_document_workflow)
+    test_model_validation = snitch(model_validation)
