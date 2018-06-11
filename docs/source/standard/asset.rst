@@ -42,6 +42,20 @@ Schema
     string, required
     
     The asset status within the Registry.
+
+    Possible values are:
+
+    * `draft`
+
+    * `pending`
+
+    * `verification`
+
+    * `active`
+
+    * `complete`
+
+    * `deleted`
     
 :relatedLot:
     string, required in `active` status
@@ -99,7 +113,7 @@ Schema
     The additional parameter with a value `test`.
 
 :assetType:
-    string, auto-generated, read-only
+    string, required
 
     Type of the given asset. The only value is domain.
     
@@ -124,6 +138,11 @@ Schema
     * ``title_en`` (English) - English title
     
     * ``title_ru`` (Russian) - Russian title
+
+:decisionOf:
+    string, auto-generated
+
+    The only possible value is `asset`.
 
 :decisionDate:
     :ref:`Date`, required

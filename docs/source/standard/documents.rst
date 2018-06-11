@@ -43,6 +43,10 @@ Schema
 
     Reasons why the asset has to be deleted.
     
+    * `x_dgfAssetFamiliarization` - **Asset Familiarization**
+
+    Goods examination procedure rules / Asset familiarization procedure in data room. Contains information on where and when a given document can be examined offline.
+    
 :title:
     string, multilingual, required
     
