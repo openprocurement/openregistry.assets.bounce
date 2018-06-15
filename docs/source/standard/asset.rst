@@ -26,8 +26,13 @@ Schema
     string, auto-generated, read-only
     
     The date of asset creation/undoing.
+
+:owner:  
+    string, auto-generated, read-only
+
+    The entity whom the asset has been created by.
     
-:dateModified:    
+:dateModified:
     string, auto-generated, read-only
     
     |ocdsDescription|
@@ -42,6 +47,20 @@ Schema
     string, required
     
     The asset status within the Registry.
+
+    Possible values are:
+
+    * `draft`
+
+    * `pending`
+
+    * `verification`
+
+    * `active`
+
+    * `complete`
+
+    * `deleted`
     
 :relatedLot:
     string, required in `active` status
@@ -99,9 +118,9 @@ Schema
     The additional parameter with a value `test`.
 
 :assetType:
-    string, auto-generated, read-only
+    string, required
 
-    Type of the given asset. The only value is domain.
+    Type of the given asset. The only value is `domain`.
     
 :sandboxParameters:
    string, optional
@@ -124,6 +143,11 @@ Schema
     * ``title_en`` (English) - English title
     
     * ``title_ru`` (Russian) - Russian title
+
+:decisionOf:
+    string, auto-generated
+
+    The given value is `asset`.
 
 :decisionDate:
     :ref:`Date`, required
