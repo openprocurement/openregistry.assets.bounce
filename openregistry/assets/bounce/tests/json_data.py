@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
+from copy import deepcopy
 
 from openregistry.assets.core.constants import SANDBOX_MODE, DEFAULT_ACCELERATION
-
-from copy import deepcopy
 from openregistry.assets.core.tests.blanks.json_data import (
     test_organization_loki,
     schema_properties,
     test_loki_item_data
 )
-from openregistry.assets.core.utils import (
-    get_now
-)
+from openregistry.assets.core.utils import get_now
 
 test_item_data = deepcopy(test_loki_item_data)
 del test_item_data['id']
