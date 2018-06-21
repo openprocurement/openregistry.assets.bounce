@@ -103,7 +103,7 @@ class Asset(BaseAsset):
             self.rectificationPeriod.startDate = get_now()
             self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate,
                                                                        RECTIFICATION_PERIOD_DURATION,
-                                                                       None)
+                                                                       self)
 
     def validate_documents(self, data, docs):
         if not docs:

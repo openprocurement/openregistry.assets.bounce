@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 
+from openregistry.assets.core.constants import SANDBOX_MODE, DEFAULT_ACCELERATION
+
 from copy import deepcopy
 from openregistry.assets.core.tests.blanks.json_data import (
     test_organization_loki,
@@ -27,5 +29,8 @@ test_asset_bounce_data = {
         'decisionID': '1111-4'
     }]
 }
+
+if SANDBOX_MODE:
+    test_asset_bounce_data['sandboxParameters'] = 'quick, accelerator={}'.format(DEFAULT_ACCELERATION)
 
 
