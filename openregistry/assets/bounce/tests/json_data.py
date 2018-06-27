@@ -2,7 +2,8 @@
 import os
 from copy import deepcopy
 
-from openregistry.assets.core.constants import SANDBOX_MODE, DEFAULT_ACCELERATION
+from openregistry.assets.core.constants import SANDBOX_MODE
+from openregistry.assets.core.tests.base import DEFAULT_ACCELERATION
 from openregistry.assets.core.tests.blanks.json_data import (
     test_organization_loki,
     schema_properties,
