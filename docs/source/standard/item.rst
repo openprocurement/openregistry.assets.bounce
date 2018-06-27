@@ -33,8 +33,10 @@ Schema
     It is required for `classification.scheme` to be `CAV-PS` or `CPV`. The
     `classification.id` should be valid `CAV-PS` or `CPV` code.
 
+    The CPV & CAV-PS codes accuracy should be equal to the class (XXXX0000-Y) at least.
+
 :additionalClassifications:
-    List of :ref:`Classification` objects, optional
+    List of :ref:`Classification`, optional
 
     |ocdsDescription|
     An array of additional classifications for the item. See the

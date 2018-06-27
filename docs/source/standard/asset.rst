@@ -26,8 +26,13 @@ Schema
     string, auto-generated, read-only
     
     The date of asset creation/undoing.
+
+:owner:  
+    string, auto-generated, read-only
+
+    The entity whom the asset has been created by.
     
-:dateModified:    
+:dateModified:
     string, auto-generated, read-only
     
     |ocdsDescription|
@@ -115,7 +120,7 @@ Schema
 :assetType:
     string, required
 
-    Type of the given asset. The only value is domain.
+    Type of the given asset. The only value is `domain`.
     
 :sandboxParameters:
    string, optional
@@ -142,7 +147,7 @@ Schema
 :decisionOf:
     string, auto-generated
 
-    The only possible value is `asset`.
+    The given value is `asset`.
 
 :decisionDate:
     :ref:`Date`, required

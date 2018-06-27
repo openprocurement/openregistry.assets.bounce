@@ -12,7 +12,7 @@ Schema
 ------
 
 :name:
-    string, multilingual, optional
+    string, multilingual, required
     
     Name of the organization.
     
@@ -22,13 +22,16 @@ Schema
     The primary identifier for this organization. 
     
 :additionalIdentifiers:
-    List of :ref:`identifier` objects, optional
+    Array of :ref:`identifier`, optional
     
 :address:
     :ref:`Address`, required for assetCustodian
     
 :contactPoint:
     :ref:`ContactPoint`, required for assetCustodian
+
+:additionalContactPoints:
+    Array of :ref:`ContactPoint`, optional
 
 :kind:
     string, optional 
