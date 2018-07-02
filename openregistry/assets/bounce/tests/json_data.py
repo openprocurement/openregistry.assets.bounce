@@ -21,14 +21,14 @@ test_asset_bounce_data = {
     "description": u"Опис землі для космодрому",
     "assetType": asset_type,
     "items": [test_item_data, test_item_data],
-    "assetCustodian": deepcopy(test_organization_loki),
-    "decisions": [{
-        'decisionDate': get_now().isoformat(),
-        'decisionID': '1111-4'
-    }]
+    "assetCustodian": deepcopy(test_organization_loki)
 }
 
 if SANDBOX_MODE:
     test_asset_bounce_data['sandboxParameters'] = 'quick, accelerator={}'.format(DEFAULT_ACCELERATION)
 
 
+test_decision_data = {
+    'decisionDate': get_now().isoformat(),
+    'decisionID': '1111-4'
+}
