@@ -10,20 +10,17 @@ from openregistry.assets.core.utils import (
 )
 from openregistry.assets.core.validation import (
     validate_decision_post,
-    validate_decision_after_rectificationPeriod,
     validate_decision_patch_data,
     validate_decision_update_in_not_allowed_status
 )
 
 post_validators = (
     validate_decision_post,
-    validate_decision_after_rectificationPeriod,
     validate_decision_update_in_not_allowed_status
 )
 patch_validators = (
     validate_decision_patch_data,
     validate_decision_update_in_not_allowed_status,
-    validate_decision_after_rectificationPeriod
 )
 
 

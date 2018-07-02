@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from openregistry.assets.core.utils import (
-    get_file,
     update_file_content_type,
     json_view,
     context_unpack,
@@ -10,7 +9,6 @@ from openregistry.assets.core.utils import (
     save_asset, opassetsresource, apply_patch,
 )
 from openregistry.assets.bounce.validation import (
-    rectificationPeriod_item_validation,
     validate_update_item_in_not_allowed_status,
     validate_item_data,
     validate_patch_item_data
@@ -18,12 +16,10 @@ from openregistry.assets.bounce.validation import (
 
 post_validators = [
     validate_item_data,
-    rectificationPeriod_item_validation,
     validate_update_item_in_not_allowed_status
 ]
 patch_validators = [
     validate_patch_item_data,
-    rectificationPeriod_item_validation,
     validate_update_item_in_not_allowed_status
 ]
 

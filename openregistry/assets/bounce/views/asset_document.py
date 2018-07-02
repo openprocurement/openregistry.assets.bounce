@@ -14,7 +14,6 @@ from openregistry.assets.core.validation import (
     validate_asset_document_update_not_by_author_or_asset_owner,
 )
 from openregistry.assets.bounce.validation import (
-    rectificationPeriod_document_validation,
     validate_file_upload,
     validate_document_data
 )
@@ -23,20 +22,17 @@ from openregistry.assets.bounce.validation import (
 post_document_validators = (
     validate_file_upload,
     validate_document_operation_in_not_allowed_asset_status,
-    rectificationPeriod_document_validation
 )
 put_document_validators = (
     validate_document_data,
     validate_document_operation_in_not_allowed_asset_status,
     validate_asset_document_update_not_by_author_or_asset_owner,
-    rectificationPeriod_document_validation
 )
 
 patch_document_validators = (
     validate_patch_document_data,
     validate_document_operation_in_not_allowed_asset_status,
     validate_asset_document_update_not_by_author_or_asset_owner,
-    rectificationPeriod_document_validation
 )
 
 @opassetsresource(name='bounce:Asset Documents',
