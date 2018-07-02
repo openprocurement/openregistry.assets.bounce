@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
 from datetime import timedelta
+from uuid import uuid4
 
 from openregistry.assets.core.tests.base import create_blacklist
 from openregistry.assets.core.tests.blanks.json_data import test_loki_item_data
@@ -534,3 +535,57 @@ def rectificationPeriod_workflow(self):
 
     add_cancellationDetails_document(self, asset)
     check_patch_status_200(self, asset['id'], 'deleted', self.access_header)
+
+
+def rectificationPeriod_autocreation(self):
+    data = deepcopy(self.initial_data)
+    data['items'] = [deepcopy(test_loki_item_data)]
+
+    response = self.app.post_json('/', params={'data': data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'draft')
+    asset = response.json['data']
+    token = response.json['access']['token']
+    access_header = {'X-Access-Token': str(token)}
+
+    # Add decision
+    decision_data = {
+        'decisionDate': get_now().isoformat(),
+        'decisionID': 'decisionLotID'
+    }
+    response = self.app.post_json(
+        '/{}/decisions'.format(asset['id']),
+        {"data": decision_data},
+        headers=access_header
+    )
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.json['data']['decisionDate'], decision_data['decisionDate'])
+    self.assertEqual(response.json['data']['decisionID'], decision_data['decisionID'])
+    self.decision_id = response.json['data']['id']
+
+    response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header)
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertIn('startDate', response.json['data']['rectificationPeriod'])
+    self.assertNotIn('endDate', response.json['data']['rectificationPeriod'])
+
+    rectificationPeriod_startDate = response.json['data']['rectificationPeriod']['startDate']
+
+    self.app.authorization = ('Basic', ('concierge', ''))
+    check_patch_status_200(self, asset['id'], 'verification')
+    check_patch_status_200(self, asset['id'], 'active', extra_data={'relatedLot': uuid4().hex})
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['rectificationPeriod']['startDate'], rectificationPeriod_startDate)
+    self.assertIn('endDate', response.json['data']['rectificationPeriod'])
+
+    check_patch_status_200(self, asset['id'], 'pending')
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['rectificationPeriod']['startDate'], rectificationPeriod_startDate)
+    self.assertNotIn('endDate', response.json['data']['rectificationPeriod'])
