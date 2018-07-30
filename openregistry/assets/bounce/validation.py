@@ -125,6 +125,7 @@ def validate_pending_status(request, error_handler, **kwargs):
                 'unless at least one item has been added.'
             )
             request.errors.status = 422
+            raise error_handler(request)
 
         if len(request.validated['asset'].decisions) == 0:
             request.errors.add(
@@ -134,3 +135,4 @@ def validate_pending_status(request, error_handler, **kwargs):
                 'unless at least one decision has been added.'
             )
             request.errors.status = 422
+            raise error_handler(request)

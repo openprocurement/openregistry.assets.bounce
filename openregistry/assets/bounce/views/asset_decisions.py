@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from openregistry.assets.core.utils import (
-    update_file_content_type,
     json_view,
     context_unpack,
     APIResource,
@@ -40,7 +39,7 @@ class AssetDecisionResource(APIResource):
         collection_data = [i.serialize("view") for i in self.context.decisions]
         return {'data': collection_data}
 
-    @json_view(content_type="application/json", permission='upload_asset_decisions', validators=post_validators)
+    @json_view(content_type="application/json", permission='edit_asset', validators=post_validators)
     def collection_post(self):
         """Asset Decision Upload"""
         decision = self.request.validated['decision']
@@ -66,11 +65,10 @@ class AssetDecisionResource(APIResource):
         decision = self.request.validated['decision']
         return {'data': decision.serialize("view")}
 
-    @json_view(content_type="application/json", permission='upload_asset_decisions', validators=patch_validators)
+    @json_view(content_type="application/json", permission='edit_asset', validators=patch_validators)
     def patch(self):
         """Asset Decision Update"""
         if apply_patch(self.request, src=self.request.context.serialize()):
-            update_file_content_type(self.request)
             self.LOGGER.info(
                 'Updated asset decision {}'.format(self.request.context.id),
                 extra=context_unpack(self.request, {'MESSAGE_ID': 'asset_decision_patch'})
