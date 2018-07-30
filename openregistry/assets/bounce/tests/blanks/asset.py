@@ -417,6 +417,20 @@ def change_pending_asset(self):
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
 
+    response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header, status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(
+        response.json['errors'][0]['description'],
+        'You cannot switch the asset status from draft to pending unless at least one decision has been added.'
+    )
+
+    response = self.app.post_json('/{}/decisions'.format(asset['id']),
+                                  headers=access_header,
+                                  params={'data': self.initial_decision_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+
     response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header)
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')

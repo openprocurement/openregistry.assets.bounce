@@ -23,6 +23,7 @@ def create_decision(self):
 
     response = self.app.get('/{}'.format(self.resource_id))
     old_decs_count = len(response.json['data'].get('decisions', []))
+    self.assertEqual(response.json['data']['status'], 'draft')
 
     decision_data.update({
         'relatedItem': '1' * 32
