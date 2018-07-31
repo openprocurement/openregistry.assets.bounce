@@ -6,7 +6,7 @@ BOUNCE_ASSET_DOC_TYPE = "informationDetails"
 
 INFORMATION_DETAILS = {
     'title': 'Інформація про оприлюднення інформаційного повідомлення',
-    'url': 'https://prozorro.sale/info/ssp_details ',
+    'url': 'https://prozorro.sale/info/ssp_details',
     'documentOf': "asset",
     'documentType': BOUNCE_ASSET_DOC_TYPE
 }

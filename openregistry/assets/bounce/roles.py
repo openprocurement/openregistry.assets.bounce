@@ -24,10 +24,9 @@ concierge_role = (whitelist('status', 'relatedLot'))
 
 decision_roles = {
     'view': (schematics_default_role + blacklist()),
-    'create': blacklist('decisionOf', 'relatedItem'),
-    'edit': blacklist('decisionOf', 'relatedItem'),
+    'create': blacklist('id', 'decisionOf', 'relatedItem'),
+    'edit': blacklist('id', 'decisionOf', 'relatedItem'),
     'not_edit': whitelist()
-
 }
 
 asset_roles = {

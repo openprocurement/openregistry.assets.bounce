@@ -12,7 +12,10 @@ from openregistry.assets.bounce.models import Asset as AssetBounce
 from openregistry.assets.bounce.tests.base import (
     test_asset_bounce_data, BaseAssetWebTest, #snitch
 )
-from openregistry.assets.bounce.tests.json_data import test_loki_item_data
+from openregistry.assets.bounce.tests.json_data import (
+    test_loki_item_data,
+    test_decision_data
+)
 
 from openregistry.assets.bounce.tests.blanks.asset import (
     patch_asset,
@@ -30,6 +33,7 @@ class AssetBounceResourceTest(BaseAssetWebTest, ResourceTestMixin, BaseAssetReso
     docservice = True
     initial_data = test_asset_bounce_data
     initial_item_data = deepcopy(test_loki_item_data)
+    initial_decision_data = deepcopy(test_decision_data)
     initial_status = 'pending'
     precision = 4
 

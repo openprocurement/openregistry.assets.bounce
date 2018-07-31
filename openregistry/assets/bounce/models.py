@@ -84,8 +84,7 @@ class Asset(BaseAsset):
         acl = [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_asset'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_documents'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_decisions'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items')
         ]
         return acl
 

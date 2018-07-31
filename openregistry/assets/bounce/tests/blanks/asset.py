@@ -418,6 +418,20 @@ def change_pending_asset(self):
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
 
+    response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header, status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(
+        response.json['errors'][0]['description'],
+        'You cannot switch the asset status from draft to pending unless at least one decision has been added.'
+    )
+
+    response = self.app.post_json('/{}/decisions'.format(asset['id']),
+                                  headers=access_header,
+                                  params={'data': self.initial_decision_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+
     response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header)
     self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
@@ -498,43 +512,6 @@ def patch_decimal_item_quantity(self):
         self.assertNotIsInstance(response.json['data']['quantity'], basestring)
         rounded_quantity = round(float(quantity), precision)
         self.assertEqual(response.json['data']['quantity'], rounded_quantity)
-
-
-def rectificationPeriod_workflow(self):
-    rectificationPeriod = Period()
-    rectificationPeriod.startDate = get_now() - timedelta(3)
-    rectificationPeriod.endDate = calculate_business_date(rectificationPeriod.startDate,
-                                                          timedelta(1),
-                                                          None)
-
-    asset = self.create_resource()
-
-    response = self.app.get('/{}'.format(asset['id']))
-    self.assertEqual(response.status, '200 OK')
-    self.assertEqual(response.json['data']['id'], asset['id'])
-
-    # Change rectification period in db
-    fromdb = self.db.get(asset['id'])
-    fromdb = self.asset_model(fromdb)
-
-    fromdb.status = 'pending'
-    fromdb.rectificationPeriod = rectificationPeriod
-    fromdb = fromdb.store(self.db)
-
-    self.assertEqual(fromdb.id, asset['id'])
-
-    response = self.app.get('/{}'.format(asset['id']))
-    self.assertEqual(response.status, '200 OK')
-    self.assertEqual(response.json['data']['id'], asset['id'])
-
-    response = self.app.patch_json('/{}'.format(asset['id']),
-                                   headers=self.access_header,
-                                   params={'data': {'title': ' PATCHED'}})
-    self.assertNotEqual(response.json['data']['title'], 'PATCHED')
-    self.assertEqual(asset['title'], response.json['data']['title'])
-
-    add_cancellationDetails_document(self, asset)
-    check_patch_status_200(self, asset['id'], 'deleted', self.access_header)
 
 
 def rectificationPeriod_autocreation(self):

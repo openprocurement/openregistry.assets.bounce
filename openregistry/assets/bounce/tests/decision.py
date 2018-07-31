@@ -17,6 +17,7 @@ from openregistry.assets.bounce.tests.blanks.decision import (
 
 
 class LotDecisionResourceTest(AssetContentWebTest):
+    initial_status = 'draft'
     initial_decision_data = deepcopy(test_decision_data)
 
     test_create_decision = snitch(create_decision)

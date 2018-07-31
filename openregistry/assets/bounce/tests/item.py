@@ -22,6 +22,7 @@ from openregistry.assets.bounce.tests.blanks.item import (
 
 
 class AssetItemResourceTest(AssetContentWebTest):
+    initial_status = 'draft'
     initial_item_data = deepcopy(test_loki_item_data)
     test_create_item_resource = snitch(create_item_resource)
     test_patch_item_resource = snitch(patch_item)
