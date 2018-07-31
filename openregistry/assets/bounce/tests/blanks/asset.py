@@ -9,11 +9,17 @@ from openregistry.assets.core.constants import STATUS_CHANGES, ASSET_STATUSES
 from openregistry.assets.core.models import (
     Period
 )
+from openregistry.assets.bounce.tests.base import (
+    check_patch_status_200,
+    check_patch_status_403
+)
+
 from openregistry.assets.core.utils import (
     get_now,
     calculate_business_date
 )
 # AssetResourceTest
+
 
 def add_cancellationDetails_document(self, asset):
     # Add cancellationDetails document
@@ -231,34 +237,6 @@ ROLES = ['asset_owner', 'Administrator', 'concierge', 'convoy']
 STATUS_BLACKLIST = create_blacklist(STATUS_CHANGES, ASSET_STATUSES, ROLES)
 
 
-def check_patch_status_200(self, asset_id, asset_status, headers=None, extra_data={}):
-    patch_data = {'status': asset_status}
-    patch_data = patch_data.update(extra_data) or patch_data
-    response = self.app.patch_json(
-        '/{}'.format(asset_id),
-        params={'data': patch_data},
-        headers=headers
-    )
-    self.assertEqual(response.status, '200 OK')
-    self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(response.json['data']['status'], patch_data['status'])
-    for field, value in extra_data.items():
-        self.assertEqual(response.json['data'][field], value)
-    return response
-
-
-def check_patch_status_403(self, asset_id, asset_status, headers=None):
-    response = self.app.patch_json(
-        '/{}'.format(asset_id),
-        params={'data': {'status': asset_status}},
-        headers=headers,
-        status=403
-    )
-    self.assertEqual(response.status, '403 Forbidden')
-    self.assertEqual(response.content_type, 'application/json')
-    return response
-
-
 def create_asset_with_items(self):
     data = deepcopy(self.initial_data)
     data['items'] = [deepcopy(test_loki_item_data)]
@@ -282,49 +260,61 @@ def create_asset_with_items(self):
     self.assertEqual(response.json['errors'][0]['description'][0]['unit'], ['This field is required.'])
 
 
-def check_decisions(self):
-    self.app.authorization = ('Basic', ('broker', ''))
-    data = deepcopy(self.initial_data)
-    data['status'] = 'draft'
-    data['decisions'][0]['relatedItem'] = '1' * 32
-    response = self.app.post_json('/', params={'data': data})
+def dateModified_resource(self):
+    response = self.app.get('/')
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(len(response.json['data']), 0)
+
+    response = self.app.post_json('/', {'data': self.initial_data})
     self.assertEqual(response.status, '201 Created')
+    resource = response.json['data']
+    token = str(response.json['access']['token'])
+    dateModified = resource['dateModified']
+
+    response = self.app.get('/{}'.format(resource['id']))
+    self.assertEqual(response.status, '200 OK')
     self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(response.json['data']['status'], 'draft')
-    self.assertEqual(response.json['data']['decisions'][0]['decisionOf'], 'asset')
-    self.assertNotIn('relatedItem', response.json['data']['decisions'][0])
-    asset = response.json['data']
-    token = response.json['access']['token']
-    access_header = {'X-Access-Token': str(token)}
+    self.assertEqual(response.json['data']['dateModified'], dateModified)
 
-    decisions = [
-        {
-            'relatedItem': '1' *32
-        }
-    ]
-    response = self.app.patch_json(
-        '/{}'.format(asset['id']),
-        params={'data': {'decisions':decisions}},
-        headers=access_header
-    )
-    self.assertEqual(response.json['data']['decisions'][0]['decisionOf'], 'asset')
-    self.assertNotIn('relatedItem', response.json['data']['decisions'][0])
+    # Add decision
+    response = self.app.get('/{}'.format(resource['id']))
+    old_decs_count = len(response.json['data'].get('decisions', []))
 
-    response = self.app.patch_json(
-        '/{}'.format(asset['id']),
-        params={'data': {'status': 'pending'}},
-        headers=access_header
+    decision_data = {
+        'decisionDate': get_now().isoformat(),
+        'decisionID': 'decisionLotID'
+    }
+    response = self.app.post_json(
+        '/{}/decisions'.format(resource['id']),
+        {"data": decision_data},
+        headers={'X-Access-Token': token}
     )
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.json['data']['decisionDate'], decision_data['decisionDate'])
+    self.assertEqual(response.json['data']['decisionID'], decision_data['decisionID'])
+
+    response = self.app.get('/{}'.format(resource['id']))
+    present_decs_count = len(response.json['data'].get('decisions', []))
+    self.assertEqual(old_decs_count + 1, present_decs_count)
+    resource = response.json['data']
+
+    response = self.app.patch_json('/{}'.format(resource['id']),
+        headers={'X-Access-Token': token}, params={
+            'data': {'status': 'pending'}
+    })
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['data']['status'], 'pending')
 
-    response = self.app.patch_json(
-        '/{}'.format(asset['id']),
-        params={'data': {'decisions':decisions}},
-        headers=access_header
-    )
-    self.assertEqual(response.json['data']['decisions'][0]['decisionOf'], 'asset')
-    self.assertNotIn('relatedItem', response.json['data']['decisions'][0])
+    self.assertNotEqual(response.json['data']['dateModified'], dateModified)
+    resource = response.json['data']
+    dateModified = resource['dateModified']
 
+    response = self.app.get('/{}'.format(resource['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data'], resource)
+    self.assertEqual(response.json['data']['dateModified'], dateModified)
 
 
 def change_pending_asset(self):
@@ -424,6 +414,20 @@ def change_pending_asset(self):
     response = self.app.post_json('/{}/items'.format(asset['id']),
                                   headers=access_header,
                                   params={'data': self.initial_item_data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+
+    response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header, status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(
+        response.json['errors'][0]['description'],
+        'You cannot switch the asset status from draft to pending unless at least one decision has been added.'
+    )
+
+    response = self.app.post_json('/{}/decisions'.format(asset['id']),
+                                  headers=access_header,
+                                  params={'data': self.initial_decision_data})
     self.assertEqual(response.status, '201 Created')
     self.assertEqual(response.content_type, 'application/json')
 

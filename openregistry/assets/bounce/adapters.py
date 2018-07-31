@@ -6,6 +6,7 @@ from openregistry.assets.bounce.validation import (
     validate_deleted_status,
     validate_pending_status
 )
+from openregistry.assets.bounce.constants import DECISION_EDITING_STATUSES
 
 
 class BounceAssetConfigurator(AssetConfigurator):
@@ -13,6 +14,7 @@ class BounceAssetConfigurator(AssetConfigurator):
 
     name = "Bounce Asset configurator"
     available_statuses = STATUS_CHANGES
+    decision_editing_allowed_statuses = DECISION_EDITING_STATUSES
 
 
 class BounceAssetManagerAdapter(AssetManagerAdapter):

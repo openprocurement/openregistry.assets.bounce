@@ -51,17 +51,26 @@ class AssetDecision(Decision):
 
     decisionOf = StringType(choices=['asset'], default='asset')
 
+    def get_role(self):
+        root = self.__parent__.__parent__
+        request = root.request
+        if request.validated['asset'].status in request.content_configurator.decision_editing_allowed_statuses:
+            role = 'edit'
+        else:
+            role = 'not_edit'
+        return role
+
 
 @implementer(IBounceAsset)
 class Asset(BaseAsset):
     description = StringType(required=True)
     _internal_type = 'bounce'
     assetType = StringType(default="bounce")
-    assetHolder= ModelType(AssetHolder)
+    assetHolder = ModelType(AssetHolder)
     assetCustodian = ModelType(AssetCustodian, required=True)
     rectificationPeriod = ModelType(Period)
     items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq])
-    decisions = ListType(ModelType(AssetDecision), min_size=1, max_size=1, required=True)
+    decisions = ListType(ModelType(AssetDecision), default=list())
     documents = ListType(ModelType(AssetDocument), default=list())   # All documents and attachments
                                                                 # related to the asset.
 
@@ -75,7 +84,7 @@ class Asset(BaseAsset):
         acl = [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_asset'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_documents'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items')
         ]
         return acl
 
