@@ -43,7 +43,6 @@ class AssetDecisionResource(APIResource):
     def collection_post(self):
         """Asset Decision Upload"""
         decision = self.request.validated['decision']
-        decision.decisionOf = 'asset'
         self.context.decisions.append(decision)
         if save_asset(self.request):
             self.LOGGER.info(

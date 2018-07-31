@@ -6,7 +6,7 @@ plain_role = (blacklist('_attachments', 'revisions', 'dateModified', 'rectificat
 
 create_role = (
     blacklist(
-        'owner_token', 'owner', '_attachments', 'revisions', 'date', 'decisions',
+        'owner_token', 'owner', '_attachments', 'revisions', 'date',
         'dateModified', 'doc_id', 'assetID', 'documents', 'status', 'rectificationPeriod'
     ) +
     assets_embedded_role
@@ -24,7 +24,7 @@ concierge_role = (whitelist('status', 'relatedLot'))
 
 decision_roles = {
     'view': (schematics_default_role + blacklist()),
-    'create': blacklist('id', 'decisionOf', 'relatedItem'),
+    'create': blacklist('decisionOf', 'relatedItem'),
     'edit': blacklist('id', 'decisionOf', 'relatedItem'),
     'not_edit': whitelist()
 
