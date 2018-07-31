@@ -96,12 +96,6 @@ class Asset(BaseAsset):
         elif request.authenticated_role == 'concierge':
             role = 'concierge'
         else:
-            after_rectificationPeriod = bool(
-                request.context.rectificationPeriod and
-                request.context.rectificationPeriod.endDate < get_now()
-            )
-            if request.context.status == 'pending' and after_rectificationPeriod:
-                return 'edit_pendingAfterRectificationPeriod'
             role = 'edit_{}'.format(request.context.status)
         return role
 
@@ -110,9 +104,6 @@ class Asset(BaseAsset):
         if self.status == 'pending' and not self.rectificationPeriod:
             self.rectificationPeriod = type(self).rectificationPeriod.model_class()
             self.rectificationPeriod.startDate = get_now()
-            self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate,
-                                                                       RECTIFICATION_PERIOD_DURATION,
-                                                                       self)
 
     def validate_documents(self, data, docs):
         if not docs:

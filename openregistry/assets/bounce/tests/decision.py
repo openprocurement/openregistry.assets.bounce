@@ -12,7 +12,6 @@ from openregistry.assets.bounce.tests.blanks.decision import (
     create_decision,
     patch_decision,
     patch_decisions_with_lot_by_broker,
-    rectificationPeriod_decision_workflow,
     create_or_patch_decision_in_not_allowed_status
 )
 
@@ -24,7 +23,6 @@ class LotDecisionResourceTest(AssetContentWebTest):
     test_create_decision = snitch(create_decision)
     test_patch_decision = snitch(patch_decision)
     test_patch_decisions_with_lot_by_broker = snitch(patch_decisions_with_lot_by_broker)
-    test_rectificationPeriod_decision_workflow = snitch(rectificationPeriod_decision_workflow)
     test_create_or_patch_decision_in_not_allowed_status = snitch(create_or_patch_decision_in_not_allowed_status)
 
 
