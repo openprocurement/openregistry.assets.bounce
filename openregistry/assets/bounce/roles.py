@@ -27,7 +27,6 @@ decision_roles = {
     'create': blacklist('decisionOf', 'relatedItem'),
     'edit': blacklist('id', 'decisionOf', 'relatedItem'),
     'not_edit': whitelist()
-
 }
 
 asset_roles = {
@@ -39,7 +38,6 @@ asset_roles = {
     'edit': edit_role,
     # pending role
     'edit_pending': edit_role,
-    'edit_pendingAfterRectificationPeriod': whitelist('status'),
     'pending': view_role,
     # verification role
     'verification': view_role,
