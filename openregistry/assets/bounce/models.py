@@ -25,7 +25,10 @@ from openregistry.assets.core.utils import (
     get_now,
     calculate_business_date
 )
-from openregistry.assets.core.validation import validate_items_uniq
+from openregistry.assets.core.validation import (
+    validate_items_uniq,
+    validate_decision_uniq
+)
 from openregistry.assets.bounce.roles import (
     asset_roles,
     decision_roles
@@ -51,17 +54,26 @@ class AssetDecision(Decision):
 
     decisionOf = StringType(choices=['asset'], default='asset')
 
+    def get_role(self):
+        root = self.__parent__.__parent__
+        request = root.request
+        if request.validated['asset'].status in request.content_configurator.decision_editing_allowed_statuses:
+            role = 'edit'
+        else:
+            role = 'not_edit'
+        return role
+
 
 @implementer(IBounceAsset)
 class Asset(BaseAsset):
     description = StringType(required=True)
     _internal_type = 'bounce'
     assetType = StringType(default="bounce")
-    assetHolder= ModelType(AssetHolder)
+    assetHolder = ModelType(AssetHolder)
     assetCustodian = ModelType(AssetCustodian, required=True)
     rectificationPeriod = ModelType(Period)
     items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq])
-    decisions = ListType(ModelType(AssetDecision), min_size=1, max_size=1, required=True)
+    decisions = ListType(ModelType(AssetDecision), default=list(), validators=[validate_decision_uniq])
     documents = ListType(ModelType(AssetDocument), default=list())   # All documents and attachments
                                                                 # related to the asset.
 
@@ -75,7 +87,7 @@ class Asset(BaseAsset):
         acl = [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_asset'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_documents'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items')
         ]
         return acl
 
@@ -87,12 +99,6 @@ class Asset(BaseAsset):
         elif request.authenticated_role == 'concierge':
             role = 'concierge'
         else:
-            after_rectificationPeriod = bool(
-                request.context.rectificationPeriod and
-                request.context.rectificationPeriod.endDate < get_now()
-            )
-            if request.context.status == 'pending' and after_rectificationPeriod:
-                return 'edit_pendingAfterRectificationPeriod'
             role = 'edit_{}'.format(request.context.status)
         return role
 
@@ -101,9 +107,6 @@ class Asset(BaseAsset):
         if self.status == 'pending' and not self.rectificationPeriod:
             self.rectificationPeriod = type(self).rectificationPeriod.model_class()
             self.rectificationPeriod.startDate = get_now()
-            self.rectificationPeriod.endDate = calculate_business_date(self.rectificationPeriod.startDate,
-                                                                       RECTIFICATION_PERIOD_DURATION,
-                                                                       None)
 
     def validate_documents(self, data, docs):
         if not docs:

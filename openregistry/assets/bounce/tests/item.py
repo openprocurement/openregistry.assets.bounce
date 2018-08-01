@@ -17,11 +17,12 @@ from openregistry.assets.bounce.tests.blanks.item import (
     delete_item_schema,
     item_listing,
     update_items_in_forbidden,
-    rectificationPeriod_item_workflow,
     patch_items_with_asset
 )
 
+
 class AssetItemResourceTest(AssetContentWebTest):
+    initial_status = 'draft'
     initial_item_data = deepcopy(test_loki_item_data)
     test_create_item_resource = snitch(create_item_resource)
     test_patch_item_resource = snitch(patch_item)
@@ -30,7 +31,6 @@ class AssetItemResourceTest(AssetContentWebTest):
     # test_create_bounce_with_item_schemas = snitch(create_bounce_with_item_schemas)
     # test_bad_item_schemas_code = snitch(bad_item_schemas_code)
     # test_delete_item_schema = snitch(delete_item_schema)
-    test_rectificaionPeriod_item_workflow = snitch(rectificationPeriod_item_workflow)
     test_patch_items_with_asset = snitch(patch_items_with_asset)
 
     forbidden_item_statuses_modification = ASSET_STATUSES[2:]
