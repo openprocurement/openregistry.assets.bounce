@@ -8,7 +8,7 @@ Features
 
 * Asset represents the initial information of an object to be privatized.
 * The object to be created should be switched from `draft` to `pending`.
-* Asset is being created with the automatically added `documentType: cancellationDetails`. 
+* Asset is being created with the automatically added `documentType: informationDetails`. 
 * Asset is a complicated entity the components of which are marked as items.
 * For the asset to be deleted, the specific document (`documentType: cancellationDetails`) has to be attached.
 
@@ -49,6 +49,12 @@ Documentation of related packages
 ---------------------------------
 
 * `OpenProcurement API <http://api-docs.openprocurement.org/en/latest/>`_
+
+* `Lots Registry <http://lotsloki.api-docs.registry.ea2.openprocurement.io/en/latest/>`_
+
+* `Sellout.english <http://sellout-english.api-docs.ea2.openprocurement.io/en/latest/>`_
+
+* `Contracting <http://ceasefire.api-docs.ea2.openprocurement.io/en/latest/standard/contract.html>`_
 
 API stability
 -------------

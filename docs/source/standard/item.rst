@@ -3,7 +3,7 @@
 
 .. index:: Item, Parameter, Classification, CAV, Unit, registrationDetails
 
-.. _Item:
+.. _Items:
 
 Item
 ====
@@ -12,11 +12,22 @@ Schema
 ------
 
 :id:
-    string, auto-generated
+    uuid, auto-generated, read-only
+
+    Internal identifier for this item.
 
 :description:
     string, multilingual, required
-
+    
+    |ocdsDescription|
+    A description of the goods, services to be provided.
+    
+    * Ukrainian by default - Ukrainian decription
+    
+    * ``decription_en`` (English) - English decription
+    
+    * ``decription_ru`` (Russian) - Russian decription
+    
     |ocdsDescription|
     A description of the goods, services to be provided.
     

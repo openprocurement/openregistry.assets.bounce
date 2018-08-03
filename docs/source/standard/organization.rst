@@ -174,4 +174,4 @@ Schema
     |ocdsDescription|
     A web address for the contact point/person.
 
-Either `email` or `telephone` field has to be provided.
+.. note:: Either `email` or `telephone` field has to be provided.

@@ -12,7 +12,9 @@ Schema
 ------
 
 :id:
-    string, auto-generated, read-only
+   uuid, auto-generated, read-only
+
+   Internal identifier for this asset.
     
 :assetID:
    string, auto-generated, read-only
@@ -20,26 +22,26 @@ Schema
    The asset identifier to refer to in the `paper` documentation. 
 
    |ocdsDescription|
-   AssetID is included to make the flattened data structure more convenient.
+   `AssetID` is included to make the flattened data structure more convenient.
    
 :date:
-    string, auto-generated, read-only
+    :ref:`Date`, auto-generated, read-only
     
     The date of asset creation/undoing.
 
-:owner:  
+:owner:
     string, auto-generated, read-only
 
     The entity whom the asset has been created by.
     
 :dateModified:
-    string, auto-generated, read-only
+    :ref:`Date`, auto-generated, read-only
     
     |ocdsDescription|
     Date when the asset was last modified.
     
 :rectificationPeriod:
-    :ref:`Period`, auto-generated
+    :ref:`Period`, auto-generated, read-only
 
     Period during which the owner of an asset can edit it.
 
@@ -50,22 +52,26 @@ Schema
 
     Possible values are:
 
-    * `draft`
-
-    * `pending`
-
-    * `verification`
-
-    * `active`
-
-    * `complete`
-
-    * `deleted`
++-------------------------+-------------------------------------+
+|        Status           |            Description              |
++=========================+=====================================+
+|  `draft`                | Asset created but not yet available |
++-------------------------+-------------------------------------+
+|  `pending`              | Asset entered in the register       |
++-------------------------+-------------------------------------+
+|  `verification`         | Asset availability check            |
++-------------------------+-------------------------------------+
+|  `active`               | Passes an auction on the asset      |
++-------------------------+-------------------------------------+
+|  `complete`             | Asset sold at auction               |
++-------------------------+-------------------------------------+
+|  `deleted`              | The asset has been deleted          |
++-------------------------+-------------------------------------+
     
 :relatedLot:
-    string, required in `active` status
+    uuid ,auto-generated, read-only
     
-    ID of the related Lot.
+    Internal id of the related Lot.
     
 :title:
     string, multilingual, required
@@ -76,7 +82,7 @@ Schema
     
     * ``title_ru`` (Russian) - Russian title
     
-    Oprionally can be mentioned in English/Russian.
+    Optionally can be mentioned in English/Russian.
     
 :description:
     string, multilingual, required
@@ -91,7 +97,7 @@ Schema
     * ``decription_ru`` (Russian) - Russian decription
     
 :documents:
-    array of :ref:`Documents`
+    Array of :ref:`Documents`, optional
     
     |ocdsDescription|
     All related documents and attachments.
@@ -99,7 +105,7 @@ Schema
 :assetCustodian:
    :ref:`Organization`, required
 
-   The entity managing the asset.
+   The entity managing the asset. For a small privatization, the role is carried out by the Privatization Authority.
 
 :assetHolder:
    :ref:`Organization`, optional
@@ -107,13 +113,18 @@ Schema
    The entity whom the asset was used to be owned by.
     
 :decisions:
-    array of :ref:`Decisions`, required
+    Array of :ref:`Decisions`, required
 
-:item:
-    array of :ref:`item`, required
+    The decision to privatize the asset. Approval of the terms of sale of the lot.
+
+:items:
+    Array of :ref:`items`, required
+
+    |ocdsDescription|
+    The goods, services, and any intangible outcomes in this contract.
 
 :mode:
-    optional
+    string, optional
 
     The additional parameter with a value `test`.
 
@@ -125,7 +136,7 @@ Schema
 :sandboxParameters:
    string, optional
 
-   Parameter that accelerates auction periods. Set quick, accelerator=1440 as text value for `sandboxParameters` for the time frames to be reduced in 1440 times.
+   Parameter that accelerates asset periods. Set quick, accelerator=1440 as text value for `sandboxParameters` for the time frames to be reduced in 1440 times.
 
 .. _decisions:
 
@@ -163,7 +174,7 @@ Schema
 .. _period:
 
 Period
-=======    
+======
 
 Schema
 ------
