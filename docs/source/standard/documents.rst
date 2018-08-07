@@ -12,7 +12,9 @@ Schema
 ------
 
 :id:
-    string, auto-generated
+    uuid, auto-generated, read-only
+
+    Internal identifier of the object within an array.
 
 :documentType:
     string, required
@@ -46,15 +48,36 @@ Schema
     * `x_dgfAssetFamiliarization` - **Asset Familiarization**
 
     Goods examination procedure rules / Asset familiarization procedure in data room. Contains information on where and when a given document can be examined offline.
-    
+
+    * `clarifications` - **Clarifications to bidders questions**
+
+    Documentation that provides replies to issues raised in pre-bid conferences or an enquiry processes.
+
 :title:
     string, multilingual, required
     
+    * Ukrainian by default (required) - Ukrainian title
+    
+    * ``title_en`` (English) - English title
+    
+    * ``title_ru`` (Russian) - Russian title
+    
+    Optionally can be mentioned in English/Russian.
+
     |ocdsDescription|
     The document title. 
     
 :description:
-    string, multilingual
+    string, multilingual, required
+    
+    |ocdsDescription|
+    A description of the goods, services to be provided.
+    
+    * Ukrainian by default - Ukrainian decription
+    
+    * ``decription_en`` (English) - English decription
+    
+    * ``decription_ru`` (Russian) - Russian decription
     
     |ocdsDescription|
     A short description of the document. In the event the document is not accessible online, the description field can be used to describe arrangements for obtaining a copy of the document.
@@ -66,19 +89,19 @@ Schema
     The format of the document taken from the `IANA Media Types code list <http://www.iana.org/assignments/media-types/>`_, with the addition of one extra value for 'offline/print', used when this document entry is being used to describe the offline publication of a document. 
     
 :url:
-    string, auto-generated
+    string, auto-generated, read-only
     
     |ocdsDescription|
     Direct link to the document or attachment. 
     
 :datePublished:
-    string, :ref:`date`, auto-generated
+    :ref:`date`, auto-generated, read-only
     
     |ocdsDescription|
     The date on which the document was first published. 
     
 :dateModified:
-    string, :ref:`date`, auto-generated
+    :ref:`date`, auto-generated, read-only
     
     |ocdsDescription|
     Date that the document was last modified
@@ -95,9 +118,10 @@ Schema
     Possible values are:
 
     * `asset`
+    * `item`
 
 :relatedItem:
-    string, optional
+    uuid, optional
 
     Id of related :ref:`asset` or :ref:`item`.
 
@@ -109,3 +133,6 @@ Schema
 
 :accessDetails:
     string, optional
+
+    Required for `x_dgfAssetFamiliarization` document.
+    
