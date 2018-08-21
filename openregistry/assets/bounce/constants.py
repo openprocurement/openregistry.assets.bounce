@@ -14,3 +14,7 @@ RECTIFICATION_PERIOD_DURATION = timedelta(days=1)
 DEFAULT_ASSET_BOUNCE_TYPE = 'bounce'
 
 DECISION_EDITING_STATUSES = ['draft', 'pending']
+
+
+DEFAULT_LEVEL_OF_ACCREDITATION = {'create': [3],
+                                  'edit': [4]}

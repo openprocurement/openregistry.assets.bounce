@@ -76,10 +76,6 @@ class Asset(BaseAsset):
     decisions = ListType(ModelType(AssetDecision), default=list(), validators=[validate_decision_uniq])
     documents = ListType(ModelType(AssetDocument), default=list())   # All documents and attachments
                                                                 # related to the asset.
-
-    create_accreditation = 3
-    edit_accreditation = 4
-
     class Options:
         roles = asset_roles
 
