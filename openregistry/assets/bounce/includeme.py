@@ -5,7 +5,10 @@ from pyramid.interfaces import IRequest
 from openregistry.assets.core.interfaces import IContentConfigurator, IAssetManager
 from openregistry.assets.bounce.models import Asset, IBounceAsset
 from openregistry.assets.bounce.adapters import BounceAssetConfigurator, BounceAssetManagerAdapter
-from openregistry.assets.bounce.constants import DEFAULT_ASSET_BOUNCE_TYPE
+from openregistry.assets.bounce.constants import (
+    DEFAULT_ASSET_BOUNCE_TYPE,
+    DEFAULT_LEVEL_OF_ACCREDITATION
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -28,4 +31,7 @@ def includeme(config, plugin_config=None):
     LOGGER.info("Included openregistry.assets.bounce plugin", extra={'MESSAGE_ID': 'included_plugin'})
 
     # add accreditation level
-    config.registry.accreditation['asset'][Asset._internal_type] = plugin_config['accreditation']
+    if not plugin_config.get('accreditation'):
+        config.registry.accreditation['asset'][Asset._internal_type] = DEFAULT_LEVEL_OF_ACCREDITATION
+    else:
+        config.registry.accreditation['asset'][Asset._internal_type] = plugin_config['accreditation']
