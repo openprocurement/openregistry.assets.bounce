@@ -8,5 +8,9 @@ def status_change_depending_actions(request):
 
     if current_status == 'active' and new_status == 'pending':
         request.context.rectificationPeriod.endDate = None
+        request.validated['data']['rectificationPeriod'] = {}
+        request.validated['data']['rectificationPeriod']['endDate'] = None
     elif current_status == 'verification' and new_status == 'active':
         request.context.rectificationPeriod.endDate = get_now()
+        request.validated['data']['rectificationPeriod'] = {}
+        request.validated['data']['rectificationPeriod']['endDate'] = request.context.rectificationPeriod.endDate
