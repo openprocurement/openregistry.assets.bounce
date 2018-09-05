@@ -566,3 +566,71 @@ def rectificationPeriod_autocreation(self):
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['data']['rectificationPeriod']['startDate'], rectificationPeriod_startDate)
     self.assertNotIn('endDate', response.json['data']['rectificationPeriod'])
+
+
+def rectificationPeriod_endDate_remove(self):
+    data = deepcopy(self.initial_data)
+    data['items'] = [deepcopy(test_loki_item_data)]
+
+    response = self.app.post_json('/', params={'data': data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'draft')
+    asset = response.json['data']
+    token = response.json['access']['token']
+    access_header = {'X-Access-Token': str(token)}
+
+    # Add decision
+    decision_data = {
+        'decisionDate': get_now().isoformat(),
+        'decisionID': 'decisionLotID'
+    }
+    response = self.app.post_json(
+        '/{}/decisions'.format(asset['id']),
+        {"data": decision_data},
+        headers=access_header
+    )
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.json['data']['decisionDate'], decision_data['decisionDate'])
+    self.assertEqual(response.json['data']['decisionID'], decision_data['decisionID'])
+    self.decision_id = response.json['data']['id']
+
+    response = self.app.patch_json('/{}'.format(asset['id']), params={'data': {'status': 'pending'}}, headers=access_header)
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertIn('startDate', response.json['data']['rectificationPeriod'])
+    self.assertNotIn('endDate', response.json['data']['rectificationPeriod'])
+
+    rectificationPeriod_startDate = response.json['data']['rectificationPeriod']['startDate']
+
+    self.app.authorization = ('Basic', ('concierge', ''))
+    check_patch_status_200(self, asset['id'], 'verification')
+    check_patch_status_200(self, asset['id'], 'active', extra_data={'relatedLot': uuid4().hex})
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['rectificationPeriod']['startDate'], rectificationPeriod_startDate)
+    self.assertIn('endDate', response.json['data']['rectificationPeriod'])
+
+    self.app.authorization = ('Basic', ('administrator', ''))
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        params={'data':
+                    {'rectificationPeriod':
+                         {
+                             'endDate': None
+                         }
+                    }
+                },
+    )
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertIn('startDate', response.json['data']['rectificationPeriod'])
+    self.assertNotIn('endDate', response.json['data']['rectificationPeriod'])
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertIn('startDate', response.json['data']['rectificationPeriod'])
+    self.assertNotIn('endDate', response.json['data']['rectificationPeriod'])
