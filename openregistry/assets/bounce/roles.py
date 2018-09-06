@@ -2,7 +2,7 @@
 from schematics.transforms import whitelist, blacklist
 from openregistry.assets.core.models import assets_embedded_role, listing_role, schematics_default_role
 
-plain_role = (blacklist('_attachments', 'revisions', 'dateModified', 'rectificationPeriod') + assets_embedded_role)
+plain_role = (blacklist('_attachments', 'revisions', 'dateModified') + assets_embedded_role)
 
 create_role = (
     blacklist(
@@ -19,7 +19,7 @@ edit_role = (
 )
 view_role = (blacklist('owner_token', '_attachments', 'revisions') + assets_embedded_role)
 
-Administrator_role = whitelist('status', 'mode', 'relatedLot')
+Administrator_role = whitelist('status', 'mode', 'relatedLot', 'rectificationPeriod')
 concierge_role = (whitelist('status', 'relatedLot'))
 
 decision_roles = {

@@ -24,7 +24,8 @@ from openregistry.assets.bounce.tests.blanks.asset import (
     patch_decimal_item_quantity,
     create_asset_with_items,
     dateModified_resource,
-    rectificationPeriod_autocreation
+    rectificationPeriod_autocreation,
+    rectificationPeriod_endDate_remove
 )
 
 
@@ -44,6 +45,7 @@ class AssetBounceResourceTest(BaseAssetWebTest, ResourceTestMixin, BaseAssetReso
     test_19_patch_decimal_with_items = snitch(patch_decimal_item_quantity)
     test_create_asset_with_items = snitch(create_asset_with_items)
     test_rectificationPeriod_autocreation = snitch(rectificationPeriod_autocreation)
+    test_rectificationPeriod_endDate_remove = snitch(rectificationPeriod_endDate_remove)
 
 
 def suite():
