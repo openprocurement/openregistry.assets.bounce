@@ -7,7 +7,8 @@ from openregistry.assets.core.tests.base import DEFAULT_ACCELERATION
 from openregistry.assets.core.tests.blanks.json_data import (
     test_organization_loki,
     schema_properties,
-    test_loki_item_data
+    test_loki_item_data,
+    test_related_process_data,
 )
 from openregistry.assets.core.utils import get_now
 
@@ -22,6 +23,13 @@ test_asset_bounce_data = {
     "assetType": asset_type,
     "items": [test_item_data, test_item_data],
     "assetCustodian": deepcopy(test_organization_loki)
+}
+test_asset_bounce_data_schema_0 = {
+    "title": u"Земля для космодрому-0",
+    "description": u"Опис землі для космодрому",
+    "assetType": asset_type,
+    "items": [test_item_data, test_item_data],
+    "assetCustodian": deepcopy(test_organization_loki),
 }
 
 if SANDBOX_MODE:
