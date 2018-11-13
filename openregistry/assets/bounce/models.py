@@ -111,3 +111,7 @@ class Asset(BaseAsset):
             raise ValidationError(u"First document should be "
                                   u"document with {}"
                                   "documentType".format(BOUNCE_ASSET_DOC_TYPE))
+
+    def validate_relatedLot(self, data, lot):
+        if data['status'] == 'active' and not lot:
+            raise ValidationError(u'This field is required.')
