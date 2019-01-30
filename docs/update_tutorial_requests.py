@@ -2,27 +2,38 @@
 from uuid import uuid4
 from copy import deepcopy
 
-from openregistry.assets.core.tests.base import DumpsTestAppwebtest, PrefixedRequestClass
-from openregistry.assets.bounce.tests.base import BaseAssetWebTest
-from openregistry.assets.bounce.tests.json_data import test_asset_bounce_data, test_item_data
+from openregistry.assets.bounce.tests.base import BaseAssetWebTest, MOCK_CONFIG
+from openregistry.assets.bounce.tests.json_data import (
+    test_asset_bounce_data,
+    test_item_data,
+    test_decision_data,
+)
 from openprocurement.api.config import DS
-from openprocurement.api.tests.base import test_config_data
+from openprocurement.api.tests.base import (
+    PrefixedRequestClass,
+    test_config_data,
+)
 
-
-DumpsTestAppwebtest.hostname = "lb.api-sandbox.registry.ea2.openprocurement.net"
 
 class AssetResourceTest(BaseAssetWebTest):
 
+    mock_config = MOCK_CONFIG
+    record_http = True
+    docservice = True
+
     def setUp(self):
-        self.app = DumpsTestAppwebtest(
-            "config:tests.ini", relative_to=self.relative_to)
+        super(AssetResourceTest, self).setUp()
         self.app.RequestClass = PrefixedRequestClass
         self.app.authorization = ('Basic', ('broker', ''))
+        self.app.app.registry.docservice_url = 'http://localhost'
+
         self.couchdb_server = self.app.app.registry.couchdb_server
         self.db = self.app.app.registry.db
+
         self.initial_data = deepcopy(test_asset_bounce_data)
-        self.app.app.registry.docservice_url = 'http://localhost'
+        self.initial_data['decisions'] = (test_decision_data,)
         self.initial_item_data = test_item_data
+
         ds_config = deepcopy(test_config_data['config']['ds'])
         docserv = DS(ds_config)
         self.app.app.registry.docservice_key = dockey = docserv.signer
@@ -160,29 +171,48 @@ class AssetResourceTest(BaseAssetWebTest):
         asset_id = response.json['data']['id']
         owner_token = response.json['access']['token']
 
-        response = self.app.patch_json('/{}?acc_token={}'.format(asset_id, owner_token),
-                                       {'data': {"status": 'pending'}})
+        asset_url = '/{0}'.format(asset_id)
+        token_param = '?acc_token={0}'.format(owner_token)
+        asset_url_with_token = asset_url + token_param
+
+        response = self.app.patch_json(asset_url_with_token, {'data': {"status": 'pending'}})
         self.assertEqual(response.status, '200 OK')
 
         # Switch to Verification
         #
+        # add a relatedProcess
+
         self.app.authorization = ('Basic', ('concierge', ''))
 
+        related_processes_collection_url = '{0}/related_processes{1}'.format(asset_url, token_param)
+        rp_data = {
+            'data': {
+                'relatedProcessID': uuid4().hex,
+                'type': 'lot'
+            }
+        }
+        response = self.app.post_json(related_processes_collection_url, rp_data)
+
+
         with open('docs/source/tutorial/asset_switch_to_verification.http', 'w') as self.app.file_obj:
-            response = self.app.patch_json('/{}'.format(asset_id),
-                                           {'data': {"status": 'verification',
-                                                     "relatedLot": uuid4().hex}})
+            response = self.app.patch_json(
+                '/{}'.format(asset_id),
+                {
+                    'data': {
+                        "status": 'verification',
+                    }
+                }
+            )
             self.assertEqual(response.status, '200 OK')
 
         # Switch to Active
         #
-        response = self.app.patch_json('/{}'.format(asset_id),
-                                       {'data': {"status": 'active'}})
+        response = self.app.patch_json(asset_url, {'data': {"status": 'active'}})
         self.assertEqual(response.status, '200 OK')
 
 
         with open('docs/source/tutorial/attached-to-lot-asset-view.http', 'w') as self.app.file_obj:
-            response = self.app.get('/{}'.format(asset_id))
+            response = self.app.get(asset_url)
             self.assertEqual(response.status, '200 OK')
 
         self.app.authorization = ('Basic', ('concierge', ''))
@@ -198,23 +228,24 @@ class AssetResourceTest(BaseAssetWebTest):
 
         self.app.authorization = ('Basic', ('concierge', ''))
 
-        response = self.app.patch_json('/{}'.format(asset_id),
-                                       {'data': {"status": 'verification',
-                                                 "relatedLot": uuid4().hex}})
+        response = self.app.patch_json(
+            asset_url,
+            {'data': {"status": 'verification', "relatedLot": uuid4().hex}}
+        )
         self.assertEqual(response.status, '200 OK')
 
         self.app.authorization = ('Basic', ('concierge', ''))
 
-        response = self.app.patch_json('/{}'.format(asset_id),
+        response = self.app.patch_json(asset_url,
                                        {'data': {"status": 'active'}})
         self.assertEqual(response.status, '200 OK')
 
         # Switch to Complete
         #
-        response = self.app.patch_json('/{}'.format(asset_id),
+        response = self.app.patch_json(asset_url,
                                        {'data': {"status": 'complete'}})
         self.assertEqual(response.status, '200 OK')
 
         with open('docs/source/tutorial/complete-asset-view.http', 'w') as self.app.file_obj:
-            response = self.app.get('/{}'.format(asset_id))
+            response = self.app.get(asset_url)
             self.assertEqual(response.status, '200 OK')

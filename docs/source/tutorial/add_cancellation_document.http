@@ -1,13 +1,13 @@
-POST /api/2.4/assets/5c8cd4c766c74f60b25b2b9cdbfb8ef7/documents HTTP/1.0
+POST /api/2.5/assets/863366f04c97422191da348f0776797d/documents HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 350
+Content-Length: 352
 Content-Type: application/json
-Host: lb.api-sandbox.registry.ea2.openprocurement.net
-X-Access-Token: f9954df58b5c4f40a7ba11f1eae6063c
+Host: lb.api-sandbox.registry.ea.openprocurement.net
+X-Access-Token: 1ea3dbc940594a65a75589286f7afad7
 DATA:
 {
   "data": {
-    "url": "http://localhost/get/d569aea176a947e5abaf289e583cf96b?KeyID=9f887607&Signature=b4DgGl2WRakYWuEwJAZGbjbvN3Bu3cslLQJmcwXZzO%2FstWuhw75ZouJ5R7qEOU46OvwnAA1TO0s%2FRFWHAHOBBw%3D%3D", 
+    "url": "http://localhost/get/aed1a56c6f494a05ab10f1c835003239?KeyID=172d32c8&Signature=dpWNbuMYhNRtb0B4Admyolz0emIv%2BWecLwesIc3rIemw2VFEPCK%2BWtZLHIKMt9%2BYeup6ymPBcxS6qid25i7EDA%3D%3D", 
     "title": "укр.doc", 
     "format": "application/msword", 
     "hash": "md5:00000000000000000000000000000000", 
@@ -17,20 +17,20 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://lb.api-sandbox.registry.ea2.openprocurement.net/api/2.4/assets/5c8cd4c766c74f60b25b2b9cdbfb8ef7/documents/c793551c2cdd483f89ac60d7ce36bc76
+Location: http://lb.api-sandbox.registry.ea.openprocurement.net/api/2.5/assets/863366f04c97422191da348f0776797d/documents/722caa1c29c143f5a5ee7f86bdddd4c3
 X-Content-Type-Options: nosniff
 {
   "data": {
-    "dateModified": "2018-05-22T13:40:23.403225+03:00", 
     "hash": "md5:00000000000000000000000000000000", 
-    "format": "application/msword", 
-    "url": "http://localhost/get/d569aea176a947e5abaf289e583cf96b?KeyID=9f887607&Signature=z3YrEXB8FwIR3ulRtu4lPjsEqD5kHKlH8rrCRG9kvJE6Ph%252Bjg%2FKou%252BxAsAhtlxFcKtYoAi8wMn0c1hf126IQDA%253D%253D", 
     "author": "asset_owner", 
-    "documentOf": "asset", 
-    "datePublished": "2018-05-22T13:40:23.403197+03:00", 
-    "documentType": "cancellationDetails", 
     "title": "укр.doc", 
-    "id": "c793551c2cdd483f89ac60d7ce36bc76"
+    "url": "http://localhost/get/aed1a56c6f494a05ab10f1c835003239?KeyID=172d32c8&Signature=cxwEo6tFApKOztFnfm4DQAIpi7OSQjYj32kBhMniEfKll%2FU4fODxYP4cuUJ1%252Bbn8gttFLYoITGEnE71ulmBPDg%253D%253D", 
+    "format": "application/msword", 
+    "documentOf": "asset", 
+    "datePublished": "2019-02-01T11:03:56.417139+02:00", 
+    "documentType": "cancellationDetails", 
+    "dateModified": "2019-02-01T11:03:56.417160+02:00", 
+    "id": "722caa1c29c143f5a5ee7f86bdddd4c3"
   }
 }
 

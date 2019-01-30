@@ -12,3 +12,16 @@ Documentation
 =============
 
 openregistry.assets.bounce contains the description of the Registry Data Base.
+
+How to build the docs
++++++++++++++++++++++
+
+To build the docs with existing sources, just run::
+
+./docs/makedocs.sh
+
+Build process could require you to install `sphinx_rtd_theme` package with `pip`. If it does - do that.
+
+To update request files, that will be used as source for the tutorial docs generation, run this::
+
+./docs/gen-requests.sh
