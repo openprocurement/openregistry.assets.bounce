@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 
-from schematics.types import StringType, URLType, IntType
+from schematics.types import StringType, URLType, IntType, MD5Type
 from schematics.transforms import whitelist, blacklist
 from schematics.types.compound import ListType, ModelType
 from schematics.exceptions import ValidationError
@@ -74,8 +74,9 @@ class Asset(BaseAsset):
     rectificationPeriod = ModelType(Period)
     items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq])
     decisions = ListType(ModelType(AssetDecision), default=list(), validators=[validate_decision_uniq])
-    documents = ListType(ModelType(AssetDocument), default=list())   # All documents and attachments
-                                                                # related to the asset.
+    documents = ListType(ModelType(AssetDocument), default=list())
+    relatedLot = MD5Type(serialize_when_none=False)
+
     class Options:
         roles = asset_roles
 
