@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.2.2'
+VERSION = '0.2.3'
 
 entry_points = {
     'openregistry.assets.core.plugins': [
@@ -25,7 +25,7 @@ docs_requires = requires + [
 ]
 
 setup(name='openregistry.assets.bounce',
-      version=version,
+      version=VERSION,
       description="",
       long_description=open("README.rst").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
