@@ -3,11 +3,8 @@ import logging
 
 from pyramid.interfaces import IRequest
 from openregistry.assets.core.interfaces import IContentConfigurator, IAssetManager
-from openregistry.assets.core.utils import add_related_processes_views
-from openregistry.assets.core.constants import ENDPOINTS
 from openregistry.assets.bounce.models import Asset, IBounceAsset
 from openregistry.assets.bounce.adapters import BounceAssetConfigurator, BounceAssetManagerAdapter
-from openregistry.assets.core.traversal import factory
 from openregistry.assets.bounce.constants import (
     DEFAULT_ASSET_BOUNCE_TYPE,
     DEFAULT_LEVEL_OF_ACCREDITATION
@@ -47,6 +44,3 @@ def includeme(config, plugin_config=None):
         config.registry.accreditation['asset'][Asset._internal_type] = DEFAULT_LEVEL_OF_ACCREDITATION
     else:
         config.registry.accreditation['asset'][Asset._internal_type] = plugin_config['accreditation']
-
-    # add related processes views
-    add_related_processes_views(config, ENDPOINTS['assets'], factory)
