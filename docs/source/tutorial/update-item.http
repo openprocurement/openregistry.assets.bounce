@@ -1,9 +1,9 @@
-PATCH /api/2.4/assets/c6f779c422954268b1bb2adf139e307d/items/50ffa36d59084905a520d8a1069565cd HTTP/1.0
+PATCH /api/2.5/assets/863366f04c97422191da348f0776797d/items/3d09b283ac1742ac8814ba8bdab16c00 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 748
 Content-Type: application/json
-Host: lb.api-sandbox.registry.ea2.openprocurement.net
-X-Access-Token: 7339b31b04cc44d8ad3c756e4b3545b4
+Host: lb.api-sandbox.registry.ea.openprocurement.net
+X-Access-Token: 1ea3dbc940594a65a75589286f7afad7
 DATA:
 {
   "data": {
@@ -57,7 +57,7 @@ X-Content-Type-Options: nosniff
     "address": {
       "countryName": "Ukraine"
     }, 
-    "id": "50ffa36d59084905a520d8a1069565cd", 
+    "id": "3d09b283ac1742ac8814ba8bdab16c00", 
     "unit": {
       "code": "code"
     }, 

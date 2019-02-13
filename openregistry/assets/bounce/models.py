@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import timedelta
-
-from schematics.types import StringType, URLType, IntType, MD5Type
-from schematics.transforms import whitelist, blacklist
+from schematics.types import StringType
 from schematics.types.compound import ListType, ModelType
 from schematics.exceptions import ValidationError
 from schematics.types.serializable import serializable
@@ -20,28 +17,30 @@ from openregistry.assets.core.models import (
     AssetHolder,
     AssetCustodian,
     Decision,
+    RelatedProcess,
 )
 from openregistry.assets.core.utils import (
     get_now,
-    calculate_business_date
+    search_list_with_dicts,
 )
 from openregistry.assets.core.validation import (
     validate_items_uniq,
     validate_decision_uniq
 )
 from openregistry.assets.bounce.roles import (
-    asset_roles,
-    decision_roles
+    decision_roles,
+    bounce_asset_roles,
 )
 
 
 from constants import (
-    BOUNCE_ASSET_DOC_TYPE, RECTIFICATION_PERIOD_DURATION
+    BOUNCE_ASSET_DOC_TYPE
 )
 
 
 class IBounceAsset(IAsset):
     """ Interface for bounce assets """
+    pass
 
 
 class AssetDocument(Document):
@@ -74,17 +73,21 @@ class Asset(BaseAsset):
     rectificationPeriod = ModelType(Period)
     items = ListType(ModelType(Item), default=list(), validators=[validate_items_uniq])
     decisions = ListType(ModelType(AssetDecision), default=list(), validators=[validate_decision_uniq])
+    # All documents and attachments related to the asset
     documents = ListType(ModelType(AssetDocument), default=list())
-    relatedLot = MD5Type(serialize_when_none=False)
+    relatedProcesses = ListType(ModelType(RelatedProcess), default=list(), max_size=1)
 
     class Options:
-        roles = asset_roles
+        roles = bounce_asset_roles
 
     def __acl__(self):
         acl = [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_asset'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_documents'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items')
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_asset_items'),
+            (Allow, 'g:concierge', 'create_related_process'),
+            (Allow, 'g:concierge', 'edit_related_process'),
+            (Allow, 'g:concierge', 'delete_related_process'),
         ]
         return acl
 
@@ -113,6 +116,7 @@ class Asset(BaseAsset):
                                   u"document with {}"
                                   "documentType".format(BOUNCE_ASSET_DOC_TYPE))
 
-    def validate_relatedLot(self, data, lot):
-        if data['status'] == 'active' and not lot:
-            raise ValidationError(u'This field is required.')
+    def validate_relatedProcesses(self, context, related_processes):
+        related_lots = search_list_with_dicts(related_processes, 'type', 'lot')
+        if context['status'] == 'active' and not related_lots:
+            raise ValidationError(u'Asset must have related lot to become active.')

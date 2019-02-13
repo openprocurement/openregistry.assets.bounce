@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 from copy import deepcopy
+from functools import partial
 
-from openregistry.assets.core.utils import get_now
+from openregistry.assets.core.utils import (
+    get_now,
+    read_json,
+)
 from openregistry.assets.core.tests.base import (
     BaseAssetWebTest as BaseAWT, #snitch
     connection_mock_config,
@@ -11,12 +15,15 @@ from openregistry.assets.core.tests.base import (
 )
 from json_data import test_asset_bounce_data
 from openregistry.assets.bounce.tests.fixtures import PARTIAL_MOCK_CONFIG
+from openregistry.assets.bounce.constants import SNAPSHOTS_DIR
 
 
 MOCK_CONFIG = connection_mock_config(PARTIAL_MOCK_CONFIG,
                                      base=BASE_MOCK_CONFIG,
                                      connector=('plugins', 'api', 'plugins',
                                                 'assets.core', 'plugins'))
+
+get_snapshot = partial(read_json, file_dir=SNAPSHOTS_DIR)
 
 
 def check_patch_status_200(self, asset_id, asset_status, headers=None, extra_data={}):

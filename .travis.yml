@@ -21,5 +21,6 @@ install:
   - bin/buildout -N
 script:
   - bin/nosetests
+  - bin/nosetests -sv docs/update_tutorial_requests.py
 after_success:
   - bin/coveralls

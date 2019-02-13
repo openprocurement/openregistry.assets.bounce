@@ -19,6 +19,20 @@ from openregistry.assets.core.utils import (
     get_now,
     calculate_business_date
 )
+
+
+def post_related_process(self, asset_id, related_process_id=uuid4().hex):
+    return self.app.post_json(
+        '/{0}/related_processes'.format(asset_id),
+        {
+            'data': {
+                'relatedProcessID': related_process_id,
+                'type': 'lot',
+            }
+        },
+        status=201
+    )
+
 # AssetResourceTest
 
 
@@ -551,7 +565,8 @@ def rectificationPeriod_autocreation(self):
 
     self.app.authorization = ('Basic', ('concierge', ''))
     check_patch_status_200(self, asset['id'], 'verification')
-    check_patch_status_200(self, asset['id'], 'active', extra_data={'relatedLot': uuid4().hex})
+    post_related_process(self, asset['id'])
+    check_patch_status_200(self, asset['id'], 'active')
 
     response = self.app.get('/{}'.format(asset['id']))
     self.assertEqual(response.status, '200 OK')
@@ -605,7 +620,10 @@ def rectificationPeriod_endDate_remove(self):
 
     self.app.authorization = ('Basic', ('concierge', ''))
     check_patch_status_200(self, asset['id'], 'verification')
-    check_patch_status_200(self, asset['id'], 'active', extra_data={'relatedLot': uuid4().hex})
+
+    post_related_process(self, asset['id'])
+
+    check_patch_status_200(self, asset['id'], 'active')
 
     response = self.app.get('/{}'.format(asset['id']))
     self.assertEqual(response.status, '200 OK')
@@ -634,3 +652,397 @@ def rectificationPeriod_endDate_remove(self):
     self.assertEqual(response.content_type, 'application/json')
     self.assertIn('startDate', response.json['data']['rectificationPeriod'])
     self.assertNotIn('endDate', response.json['data']['rectificationPeriod'])
+
+
+def asset_concierge_patch(self):
+    asset = self.create_resource()
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data'], asset)
+
+    # Move status from Draft to Pending
+    response = self.app.patch_json('/{}'.format(asset['id']),
+                                   headers=self.access_header,
+                                   params={'data': {'status': 'pending'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'pending')
+
+    self.app.authorization = ('Basic', ('concierge', ''))
+
+    # Move status from pending to verification
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'verification'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'verification')
+
+    # Move status from verification to Pending
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'pending'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'pending')
+
+    # Move status from pending to verification
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'verification'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'verification')
+
+    # Move status from verification to Active withour relatedProcess
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'active'}}, status=422)
+    self.assertEqual(response.status, '422 Unprocessable Entity')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(
+        response.json['errors'][0]['description'][0],
+        'Asset must have related lot to become active.'
+    )
+
+    # Move status from verification to Active
+    relatedLot_id = uuid4().hex
+    response = post_related_process(self, asset['id'], relatedLot_id)
+
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['relatedProcessID'], relatedLot_id)
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'active'}})
+    self.assertEqual(response.json['data']['status'], 'active')
+
+    # Move status from Active to Draft
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'draft'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't switch asset to draft status")
+
+    # Move status from Active to Deleted
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'deleted'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (active) status")
+
+    # Move status from Active to Pending
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'pending'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'pending')
+    self.assertNotIn('relatedLot', response.json['data'])
+
+    # Move status from Pending to Deleted
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'deleted'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (pending) status")
+
+    # Move status from Pending to Draft
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'draft'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't switch asset to draft status")
+
+    # Move status from Pending to Complete
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'complete'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (pending) status")
+
+
+    # Move status from pending to verification
+    response = self.app.patch_json('/{}'.format(asset['id']),
+                                   headers=self.access_header,
+                                   params={'data': {'status': 'verification'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'verification')
+
+
+    # Move status from verification to active
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'active'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'active')
+
+    # Move status from Active to Complete
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'complete'}})
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data']['status'], 'complete')
+
+    # Move status from Complete to Draft
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'deleted'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (complete) status")
+
+    # Move status from Complete to Pending
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'deleted'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (complete) status")
+
+    # Move status from Complete to Active
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'deleted'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (complete) status")
+
+    # Move status from Complete to Deleted
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'deleted'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (complete) status")
+
+
+def administrator_change_complete_status(self):
+    response = self.app.get('/')
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(len(response.json['data']), 0)
+
+    self.app.authorization = ('Basic', ('broker', ''))
+    asset = self.create_resource()
+
+    response = self.app.get('/{}'.format(asset['id']))
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['data'], asset)
+
+    self.app.authorization = ('Basic', ('administrator', ''))
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'pending'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'verification'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'pending'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'verification'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'pending'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'verification'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    relatedLot_id = uuid4().hex
+    self.app.authorization = ('Basic', ('concierge', ''))
+
+    post_related_process(self, asset['id'], relatedLot_id)
+
+    self.app.authorization = ('Basic', ('administrator', ''))
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'active'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    response = self.app.patch_json(
+        '/{}'.format(asset['id']),
+        {'data': {'status': 'complete'}}
+    )
+    self.assertEqual(response.status, '200 OK')
+
+    response = self.app.patch_json('/{}'.format(
+        asset['id']), {'data': {'status': 'deleted'}}, status=403)
+    self.assertEqual(response.status, '403 Forbidden')
+    self.assertEqual(response.content_type, 'application/json')
+    self.assertEqual(response.json['errors'][0]['name'], u'data')
+    self.assertEqual(response.json['errors'][0]['location'], u'body')
+    self.assertEqual(response.json['errors'][0]['description'], u"Can't update asset in current (complete) status")
+
+
+def change_verification_asset(self):
+    self.initial_status = 'verification'
+    response = self.app.get('/')
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(len(response.json['data']), 0)
+
+    asset = self.create_resource()
+
+
+    # Move from 'verification' to one of blacklist status
+    for status in STATUS_BLACKLIST['verification']['asset_owner']:
+        check_patch_status_403(self, asset['id'], status, self.access_header)
+
+
+    self.app.authorization = ('Basic', ('convoy', ''))
+
+    # Move from 'verification' to one of blacklist status
+    for status in STATUS_BLACKLIST['verification']['convoy']:
+        check_patch_status_403(self, asset['id'], status)
+
+
+    self.app.authorization = ('Basic', ('concierge', ''))
+
+    # Move from 'verification' to one of blacklist status
+    for status in STATUS_BLACKLIST['verification']['concierge']:
+        check_patch_status_403(self, asset['id'], status)
+
+
+    # Move from 'verification' to 'verification status
+    check_patch_status_200(self, asset['id'], 'verification')
+
+    # Move from 'verification to 'pending' status
+    check_patch_status_200(self, asset['id'], 'pending')
+
+    # Move from 'pending' to 'verification' status
+    check_patch_status_200(self, asset['id'], 'verification')
+
+    # Move from 'verification' to 'active' status
+    post_related_process(self, asset['id'])
+
+    check_patch_status_200(self, asset['id'], 'active')
+
+
+    self.app.authorization = ('Basic', ('broker', ''))
+    asset = self.create_resource()
+
+
+    self.app.authorization = ('Basic', ('administrator', ''))
+
+    # Move from 'verification' to one of blacklist status
+    for status in STATUS_BLACKLIST['verification']['Administrator']:
+        check_patch_status_403(self, asset['id'], status)
+
+    # Move from 'verification' to 'verification' status
+    check_patch_status_200(self, asset['id'], 'verification')
+
+    # Move from 'verification to 'pending' status
+    check_patch_status_200(self, asset['id'], 'pending')
+
+    # Move from 'pending' to 'verification' status
+    check_patch_status_200(self, asset['id'], 'verification')
+
+    # Move from 'verification' to 'active' status
+    self.app.authorization = ('Basic', ('concierge', ''))
+    post_related_process(self, asset['id'])
+
+    self.app.authorization = ('Basic', ('administrator', ''))
+    check_patch_status_200(self, asset['id'], 'active')
+
+
+def change_active_asset(self):
+    self.initial_status = 'active'
+    response = self.app.get('/')
+    self.assertEqual(response.status, '200 OK')
+    self.assertEqual(len(response.json['data']), 0)
+
+    asset = self.create_resource()
+
+
+    # Move from 'active' to one of blacklist status
+    for status in STATUS_BLACKLIST['active']['asset_owner']:
+        check_patch_status_403(self, asset['id'], status, self.access_header)
+
+
+    self.app.authorization = ('Basic', ('convoy', ''))
+
+    # Move from 'active' to one of blacklist status
+    for status in STATUS_BLACKLIST['active']['convoy']:
+        check_patch_status_403(self, asset['id'], status)
+
+
+    self.app.authorization = ('Basic', ('concierge', ''))
+
+    # Move from 'active' to one of blacklist status
+    for status in STATUS_BLACKLIST['active']['concierge']:
+        check_patch_status_403(self, asset['id'], status)
+
+    # Move from 'active' to 'active status
+    post_related_process(self, asset['id'])
+    check_patch_status_200(self, asset['id'], 'active')
+
+    # Move from 'active' to 'pending' status
+    check_patch_status_200(self, asset['id'], 'pending')
+
+    # Move from 'pending' to 'verification' status
+    check_patch_status_200(self, asset['id'], 'verification')
+
+    # Move from 'verification' to 'active' status
+    check_patch_status_200(self, asset['id'], 'active')
+
+    # Move from 'active' to 'complete' status
+    check_patch_status_200(self, asset['id'], 'complete')
+
+
+    self.app.authorization = ('Basic', ('broker', ''))
+    asset = self.create_resource()
+
+
+    self.app.authorization = ('Basic', ('administrator', ''))
+
+    # Move from 'active' to one of blacklist status
+    for status in STATUS_BLACKLIST['active']['Administrator']:
+        check_patch_status_403(self, asset['id'], status)
+
+    # Move from 'active' to 'active status
+    self.app.authorization = ('Basic', ('concierge', ''))
+    post_related_process(self, asset['id'])
+    self.app.authorization = ('Basic', ('administrator', ''))
+    check_patch_status_200(self, asset['id'], 'active')
+
+    # Move from 'active' to 'pending' status
+    check_patch_status_200(self, asset['id'], 'pending')
+
+    # Move from 'pending' to 'verification' status
+    check_patch_status_200(self, asset['id'], 'verification')
+
+    # Move from 'verification' to 'active' status
+    check_patch_status_200(self, asset['id'], 'active')
+
+    # Move from 'active' to 'complete' status
+    check_patch_status_200(self, asset['id'], 'complete')

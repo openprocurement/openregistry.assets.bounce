@@ -1,26 +1,11 @@
 # -*- coding: utf-8 -*-
 from schematics.transforms import whitelist, blacklist
-from openregistry.assets.core.models import assets_embedded_role, listing_role, schematics_default_role
-
-plain_role = (blacklist('_attachments', 'revisions', 'dateModified') + assets_embedded_role)
-
-create_role = (
-    blacklist(
-        'owner_token', 'owner', '_attachments', 'revisions', 'date',
-        'dateModified', 'doc_id', 'assetID', 'documents', 'status', 'rectificationPeriod'
-    ) +
-    assets_embedded_role
+from openregistry.assets.core.models import (
+    sensitive_embedded_role,
+    listing_role,
+    schematics_default_role,
 )
-edit_role = (
-    blacklist(
-        'assetType', 'owner_token', 'owner', '_attachments', 'revisions', 'date', 'decisions',
-        'dateModified', 'doc_id', 'assetID', 'documents', 'mode', 'rectificationPeriod') +
-    assets_embedded_role
-)
-view_role = (blacklist('owner_token', '_attachments', 'revisions') + assets_embedded_role)
 
-Administrator_role = whitelist('status', 'mode', 'relatedLot', 'rectificationPeriod')
-concierge_role = (whitelist('status', 'relatedLot'))
 
 decision_roles = {
     'view': (schematics_default_role + blacklist()),
@@ -29,32 +14,176 @@ decision_roles = {
     'not_edit': whitelist()
 }
 
-asset_roles = {
-    'create': create_role,
+
+bounce_asset_roles = {
+    'create': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'assetID',
+            'date',
+            'dateModified',
+            'doc_id',
+            'documents',
+            'owner',
+            'owner_token',
+            'rectificationPeriod',
+            'relatedLot',
+            'revisions',
+            'status',
+        )
+    ),
     # draft role
-    'draft': view_role,
-    'edit_draft': edit_role,
-    'plain': plain_role,
-    'edit': edit_role,
+    'draft': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'owner_token',
+            'relatedLot',
+            'revisions',
+        )
+    ),
+    'edit_draft': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'assetID',
+            'assetType',
+            'date',
+            'dateModified',
+            'decisions',
+            'doc_id',
+            'documents',
+            'mode',
+            'owner',
+            'owner_token',
+            'rectificationPeriod',
+            'relatedLot',
+            'revisions',
+        )
+    ),
+    'plain': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'dateModified',
+            'relatedLot',
+            'revisions',
+        )
+    ),
+    'edit': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'assetID',
+            'assetType',
+            'date',
+            'dateModified',
+            'decisions',
+            'doc_id',
+            'documents',
+            'mode',
+            'owner',
+            'owner_token',
+            'rectificationPeriod',
+            'relatedLot',
+            'revisions',
+        )
+    ),
     # pending role
-    'edit_pending': edit_role,
-    'pending': view_role,
+    'edit_pending': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'assetID',
+            'assetType',
+            'date',
+            'dateModified',
+            'decisions',
+            'doc_id',
+            'documents',
+            'mode',
+            'owner',
+            'owner_token',
+            'rectificationPeriod',
+            'relatedLot',
+            'revisions',
+        )
+    ),
+    'pending': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'owner_token',
+            'relatedLot',
+            'revisions',
+        )
+    ),
     # verification role
-    'verification': view_role,
+    'verification': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'owner_token',
+            'relatedLot',
+            'revisions',
+        )
+    ),
     'edit_verification': whitelist(),
     # active role
-    'active': view_role,
+    'active': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'owner_token',
+            'relatedLot',
+            'revisions',
+        )
+    ),
     'edit_active': whitelist(),
-    'view': view_role,
+    'view': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'owner_token',
+            'relatedLot',
+            'revisions',
+        )
+    ),
     'listing': listing_role,
-    'Administrator': Administrator_role,
+    'Administrator': (
+        whitelist('status',
+            'mode',
+            'rectificationPeriod',
+        )
+    ),
     # complete role
-    'complete': view_role,
+    'complete': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'owner_token',
+            'relatedLot',
+            'revisions',
+        )
+    ),
     'edit_complete': blacklist('revisions'),
     # deleted role  # TODO: replace with 'delete' view for asset, temporary solution for tests
-    'deleted': view_role,
-    'edit_deleted': blacklist('revisions'),
+    'deleted': (
+        sensitive_embedded_role +
+        blacklist(
+            '_attachments',
+            'owner_token',
+            'relatedLot',
+            'revisions',
+        )
+    ),
+    'edit_deleted': blacklist('revisions', 'relatedLot'),
     # concierge_role
-    'concierge': concierge_role,
+    'concierge': (
+        whitelist(
+            'status',
+        )
+    ),
     'default': schematics_default_role,
 }

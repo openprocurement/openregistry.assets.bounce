@@ -1,8 +1,8 @@
-PATCH /api/2.4/assets/5c8cd4c766c74f60b25b2b9cdbfb8ef7?acc_token=f9954df58b5c4f40a7ba11f1eae6063c HTTP/1.0
+PATCH /api/2.5/assets/863366f04c97422191da348f0776797d?acc_token=1ea3dbc940594a65a75589286f7afad7 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 31
 Content-Type: application/json
-Host: lb.api-sandbox.registry.ea2.openprocurement.net
+Host: lb.api-sandbox.registry.ea.openprocurement.net
 DATA:
 {
   "data": {
@@ -18,23 +18,22 @@ X-Content-Type-Options: nosniff
     "status": "pending", 
     "assetType": "bounce", 
     "rectificationPeriod": {
-      "startDate": "2018-05-22T13:39:54.509530+03:00", 
-      "endDate": "2018-05-23T13:39:54.509530+03:00"
+      "startDate": "2019-02-01T11:03:56.081694+02:00"
     }, 
     "documents": [
       {
         "title": "Інформація про оприлюднення інформаційного повідомлення", 
-        "url": "https://prozorro.sale/info/ssp_details ", 
+        "url": "https://prozorro.sale/info/ssp_details", 
         "documentOf": "asset", 
-        "datePublished": "2018-05-22T13:39:54.423035+03:00", 
+        "datePublished": "2019-02-01T11:03:56.017442+02:00", 
         "documentType": "informationDetails", 
-        "dateModified": "2018-05-22T13:39:54.423082+03:00", 
-        "id": "e5796e629edd4477a730aa732a425f9d"
+        "dateModified": "2019-02-01T11:03:56.017466+02:00", 
+        "id": "bd5b68af29824668bded2ad5e9d1a469"
       }
     ], 
     "description": "Опис землі для космодрому", 
     "title": "Земля для космодрому", 
-    "assetID": "UA-AR-DGF-2018-05-22-000001", 
+    "assetID": "UA-AR-DGF-2019-02-01-000001", 
     "items": [
       {
         "registrationDetails": {
@@ -56,7 +55,7 @@ X-Content-Type-Options: nosniff
         "address": {
           "countryName": "Ukraine"
         }, 
-        "id": "ca254ba6052947539d7bb26aaa163e8d", 
+        "id": "3d09b283ac1742ac8814ba8bdab16c00", 
         "unit": {
           "code": "code"
         }, 
@@ -82,23 +81,25 @@ X-Content-Type-Options: nosniff
         "address": {
           "countryName": "Ukraine"
         }, 
-        "id": "1a1cf1d83a424e7284976caef828d680", 
+        "id": "d4b3fe3628df4a21ab49b24d5ffd4dca", 
         "unit": {
           "code": "code"
         }, 
         "quantity": 5.0001
       }
     ], 
-    "dateModified": "2018-05-22T13:39:54.510132+03:00", 
+    "dateModified": "2019-02-01T11:03:56.082059+02:00", 
     "owner": "broker", 
-    "date": "2018-05-22T13:39:54.509861+03:00", 
+    "date": "2019-02-01T11:03:56.081884+02:00", 
     "decisions": [
       {
-        "decisionDate": "2018-05-22T13:39:53.504199+03:00", 
-        "decisionID": "1111-4"
+        "decisionDate": "2019-02-01T11:03:55.184232+02:00", 
+        "decisionID": "1111-4", 
+        "id": "a2799e7b35574c1d8854092b95e77fe6", 
+        "decisionOf": "asset"
       }
     ], 
-    "id": "5c8cd4c766c74f60b25b2b9cdbfb8ef7", 
+    "id": "863366f04c97422191da348f0776797d", 
     "assetCustodian": {
       "contactPoint": {
         "name": "Державне управління справами", 
@@ -106,17 +107,18 @@ X-Content-Type-Options: nosniff
       }, 
       "identifier": {
         "scheme": "UA-EDR", 
-        "id": "00037256", 
-        "uri": "http://www.dus.gov.ua/"
+        "id": "00037256"
       }, 
       "name": "Державне управління справами", 
       "address": {
-        "postalCode": "01220", 
-        "countryName": "Україна", 
-        "streetAddress": "вул. Банкова, 11, корпус 1", 
-        "region": "м. Київ", 
-        "locality": "м. Київ"
-      }
+        "countryName": "Україна"
+      }, 
+      "additionalContactPoints": [
+        {
+          "name": "name", 
+          "email": "some@mail.com"
+        }
+      ]
     }
   }
 }

@@ -9,6 +9,10 @@ from openregistry.assets.bounce.constants import (
     DEFAULT_ASSET_BOUNCE_TYPE,
     DEFAULT_LEVEL_OF_ACCREDITATION
 )
+from openregistry.assets.bounce.migration import (
+    BounceMigrationsRunner,
+    MIGRATION_STEPS,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -27,6 +31,11 @@ def includeme(config, plugin_config=None):
         asset_types.append(DEFAULT_ASSET_BOUNCE_TYPE)
     for at in asset_types:
         config.add_assetType(Asset, at)
+
+    # migrate data
+    if plugin_config.get('migration') is True:
+        runner = BounceMigrationsRunner(config.registry)
+        runner.migrate(MIGRATION_STEPS)
 
     LOGGER.info("Included openregistry.assets.bounce plugin", extra={'MESSAGE_ID': 'included_plugin'})
 
