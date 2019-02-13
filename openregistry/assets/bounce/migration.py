@@ -70,3 +70,8 @@ class AddRelatedProcessesStep(BaseMigrationStep):
 MIGRATION_STEPS = (
     AddRelatedProcessesStep,
 )
+
+
+def migrate(db):
+    runner = BounceMigrationsRunner(db)
+    runner.migrate(MIGRATION_STEPS)
