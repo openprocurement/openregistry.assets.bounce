@@ -9,6 +9,9 @@ entry_points = {
     ],
     'openregistry.tests': [
         'assets.bounce = openregistry.assets.bounce.tests.main:suite'
+    ],
+    'assets.bounce.migration': [
+        'main = openregistry.assets.bounce.migration:migrate'
     ]
 }
 
