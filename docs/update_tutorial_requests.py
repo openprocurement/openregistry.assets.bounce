@@ -218,8 +218,7 @@ class AssetResourceTest(BaseAssetWebTest):
         self.app.authorization = ('Basic', ('concierge', ''))
 
         response = self.app.patch_json('/{}'.format(asset_id),
-                                       {'data': {"status": 'pending',
-                                                 "relatedLot": None}})
+                                       {'data': {"status": 'pending'}})
         self.assertEqual(response.status, '200 OK')
 
         with open('docs/source/tutorial/detached-from-lot-asset-view.http', 'w') as self.app.file_obj:
@@ -230,7 +229,7 @@ class AssetResourceTest(BaseAssetWebTest):
 
         response = self.app.patch_json(
             asset_url,
-            {'data': {"status": 'verification', "relatedLot": uuid4().hex}}
+            {'data': {"status": 'verification'}}
         )
         self.assertEqual(response.status, '200 OK')
 
