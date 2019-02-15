@@ -72,6 +72,6 @@ MIGRATION_STEPS = (
 )
 
 
-def migrate(db):
-    runner = BounceMigrationsRunner(db)
+def migrate(resources):
+    runner = BounceMigrationsRunner(resources)
     runner.migrate(MIGRATION_STEPS)
