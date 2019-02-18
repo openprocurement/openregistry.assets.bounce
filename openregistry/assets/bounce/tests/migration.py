@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
+from openregistry.assets.core.tests.base import MigrationResourcesDTO_mock
 from openregistry.assets.bounce.tests.base import (
     BaseAssetWebTest,
     get_snapshot,
@@ -25,7 +26,8 @@ class AddRelatedProcessesMigrationStepTest(BaseAssetWebTest):
         # connect asset to the lot
         asset_data['relatedLot'] = self.lot_id
         self.asset_id = self.db.save(asset_data)[0]
-        self.runner = BounceMigrationsRunner(self.db)
+        migration_resources = MigrationResourcesDTO_mock(self.db)
+        self.runner = BounceMigrationsRunner(migration_resources)
 
     def test_ok(self):
         """General migration test"""

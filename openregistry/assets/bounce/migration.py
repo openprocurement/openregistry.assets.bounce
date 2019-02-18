@@ -35,7 +35,7 @@ class AddRelatedProcessesStep(BaseMigrationStep):
                 extra={'MESSAGE_ID': 'migrate_data_failed', 'ASSET_ID': asset.id}
             )
             return
-        related_lot = self.db.get(related_lot_id)
+        related_lot = self.resources.db.get(related_lot_id)
         if related_lot is None:
             LOGGER.warning(
                 'RelatedLot not found. AssetID: {0}'.format(asset.id),
