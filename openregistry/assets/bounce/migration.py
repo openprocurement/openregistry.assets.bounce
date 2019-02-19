@@ -56,7 +56,7 @@ class AddRelatedProcessesStep(BaseMigrationStep):
     def _skip_predicate(self, asset):
         """Returns True if asset should be skipped by migration"""
         if (
-            asset['assetType'] == 'bounce'
+            asset['assetType'] in self.resources.aliases_info.get_package_aliases('openregistry.assets.bounce')
             and asset['status'] in self.TARGET_STATUSES
             and not (
                 hasattr(asset, 'relatedProcesses')

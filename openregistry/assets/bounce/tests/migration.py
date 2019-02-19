@@ -26,7 +26,8 @@ class AddRelatedProcessesMigrationStepTest(BaseAssetWebTest):
         # connect asset to the lot
         asset_data['relatedLot'] = self.lot_id
         self.asset_id = self.db.save(asset_data)[0]
-        migration_resources = MigrationResourcesDTO_mock(self.db)
+        aliases_info = {'openregistry.assets.bounce': ('bounce', )}
+        migration_resources = MigrationResourcesDTO_mock(self.db, aliases_info)
         self.runner = BounceMigrationsRunner(migration_resources)
 
     def test_ok(self):
