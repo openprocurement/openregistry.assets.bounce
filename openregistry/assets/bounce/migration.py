@@ -35,7 +35,7 @@ class AddRelatedProcessesStep(BaseMigrationStep):
                 extra={'MESSAGE_ID': 'migrate_data_failed', 'ASSET_ID': asset.id}
             )
             return
-        related_lot = self.db.get(related_lot_id)
+        related_lot = self.resources.db.get(related_lot_id)
         if related_lot is None:
             LOGGER.warning(
                 'RelatedLot not found. AssetID: {0}'.format(asset.id),
@@ -56,7 +56,7 @@ class AddRelatedProcessesStep(BaseMigrationStep):
     def _skip_predicate(self, asset):
         """Returns True if asset should be skipped by migration"""
         if (
-            asset['assetType'] == 'bounce'
+            asset['assetType'] in self.resources.aliases_info.get_package_aliases('openregistry.assets.bounce')
             and asset['status'] in self.TARGET_STATUSES
             and not (
                 hasattr(asset, 'relatedProcesses')
@@ -72,6 +72,6 @@ MIGRATION_STEPS = (
 )
 
 
-def migrate(db):
-    runner = BounceMigrationsRunner(db)
+def migrate(resources):
+    runner = BounceMigrationsRunner(resources)
     runner.migrate(MIGRATION_STEPS)
